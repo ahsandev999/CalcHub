@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Age Calculator — Find Your Exact Age in Years, Months & Days</title>
+<meta name="description" content="Calculate your exact age in years, months, and days from your date of birth, plus days until your next birthday.">
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header class="site">
+  <a href="index.html" class="brand"><span class="dot"></span> CalcHub</a>
+  <nav class="site">
+    <a href="about.html">About</a>
+    <a href="privacy.html">Privacy</a>
+  </nav>
+</header>
+
+<div class="wrap">
+  <a href="index.html" class="back-link">&larr; Back to CalcHub</a>
+
+  <section class="hero">
+    <div class="eyebrow">Mod.02 · Age</div>
+    <h1 class="title">Age Calculator</h1>
+    <p class="lede">Enter a date of birth to get an exact age — down to the day — plus a countdown to the next birthday.</p>
+  </section>
+
+  <div class="console">
+
+    <div class="row">
+      <div class="field">
+        <label>Date of birth</label>
+        <input type="date" id="dob">
+      </div>
+      <div class="field">
+        <label>Calculate age as of</label>
+        <input type="date" id="asOf">
+      </div>
+    </div>
+
+    <button class="btn" onclick="calculate()">Calculate age</button>
+
+    <div class="readout" id="result">
+      <div class="label">Your age</div>
+      <div class="big" id="bigAge"></div>
+      <div class="slots" id="slots"></div>
+      <p class="sub" id="note"></p>
+    </div>
+
+  </div>
+
+</div>
+
+<footer class="site">
+  <span>© <span id="year"></span> CalcHub</span>
+  <span><a href="about.html">About</a> · <a href="privacy.html">Privacy Policy</a></span>
+</footer>
+
+<script>
+document.getElementById('year').textContent = new Date().getFullYear();
+
+const asOfInput = document.getElementById('asOf');
+asOfInput.valueAsDate = new Date();
+
+function calculate(){
+  const dobVal = document.getElementById('dob').value;
+  if (!dobVal){ alert('Please enter a date of birth.'); return; }
+
+  const dob = new Date(dobVal + 'T00:00:00');
+  const asOf = asOfInput.value ? new Date(asOfInput.value + 'T00:00:00') : new Date();
+
+  if (dob > asOf){ alert('Date of birth must be before the "as of" date.'); return; }
+
+  let years = asOf.getFullYear() - dob.getFullYear();
+  let months = asOf.getMonth() - dob.getMonth();
+  let days = asOf.getDate() - dob.getDate();
+
+  if (days < 0){
+    months -= 1;
+    const prevMonth = new Date(asOf.getFullYear(), asOf.getMonth(), 0);
+    days += prevMonth.getDate();
+  }
+  if (months < 0){
+    years -= 1;
+    months += 12;
+  }
+
+  const totalDays = Math.floor((asOf - dob) / 86400000);
+
+  document.getElementById('bigAge').innerHTML =
+    `${years}<span class="accent"> yrs</span> ${months}<span class="accent"> mo</span> ${days}<span class="accent"> d</span>`;
+
+  const slotsEl = document.getElementById('slots');
+  slotsEl.innerHTML = '';
+
+  const addSlot = (k, v) => {
+    const s = document.createElement('div');
+    s.className = 'slot';
+    s.innerHTML = `<span class="k">${k}</span>${v}`;
+    slotsEl.appendChild(s);
+  };
+
+  addSlot('Total days lived', totalDays.toLocaleString());
+  addSlot('Total weeks', Math.floor(totalDays/7).toLocaleString());
+  addSlot('Total months', (years*12+months).toLocaleString());
+
+  // next birthday countdown
+  let nextBday = new Date(asOf.getFullYear(), dob.getMonth(), dob.getDate());
+  if (nextBday < asOf) nextBday = new Date(asOf.getFullYear()+1, dob.getMonth(), dob.getDate());
+  const daysToNext = Math.ceil((nextBday - asOf) / 86400000);
+
+  document.getElementById('note').textContent =
+    daysToNext === 0 ? "It's the birthday today! 🎉" : `${daysToNext} day${daysToNext===1?'':'s'} until the next birthday.`;
+
+  document.getElementById('result').classList.add('show');
+}
+</script>
+</body>
+</html>

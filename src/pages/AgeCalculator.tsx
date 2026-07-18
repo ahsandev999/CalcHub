@@ -1,0 +1,284 @@
+import { useState, useRef } from 'react';
+import { Link } from 'react-router-dom';
+import { motion, AnimatePresence } from 'framer-motion';
+import PageTransition from '@/components/ui/PageTransition';
+import SEO from '@/components/ui/SEO';
+import Card from '@/components/ui/Card';
+import Button from '@/components/ui/Button';
+import Input from '@/components/ui/Input';
+import { useToast } from '@/context/ToastContext';
+import { useToolTracking } from '@/hooks/useScroll';
+import { calculateAge, calculateAgeDifference } from '@/lib/calculators/age';
+import { addHistory } from '@/lib/storage';
+import { Calendar, Users, Award, Star, Compass, Clock, ArrowLeft, Copy, Check } from 'lucide-react';
+import confetti from 'canvas-confetti';
+import '@/styles/components.css';
+
+function todayStr() {
+  return new Date().toISOString().split('T')[0];
+}
+
+export default function AgeCalculator() {
+  useToolTracking('age-calculator', 'Age Calculator');
+  const { showToast } = useToast();
+  const dobRef = useRef<HTMLInputElement>(null);
+
+  const [mode, setMode] = useState<'single' | 'compare'>('single');
+  const [dob, setDob] = useState('');
+  const [asOf, setAsOf] = useState(todayStr());
+  const [dob2, setDob2] = useState('');
+  const [result, setResult] = useState<ReturnType<typeof calculateAge> | null>(null);
+  const [diffResult, setDiffResult] = useState<ReturnType<typeof calculateAgeDifference> | null>(null);
+  const [error, setError] = useState('');
+  const [copied, setCopied] = useState(false);
+
+  const calculate = () => {
+    setError('');
+    if (!dob) {
+      setError('Please enter a date of birth');
+      dobRef.current?.focus();
+      return;
+    }
+
+    try {
+      if (mode === 'single') {
+        const r = calculateAge(dob, asOf);
+        setResult(r);
+        setDiffResult(null);
+        
+        addHistory({
+          tool: 'Age Calculator',
+          toolSlug: 'age-calculator',
+          expression: `Born ${dob}`,
+          result: `${r.years}y ${r.months}m ${r.days}d`,
+        });
+
+        // Trigger confetti on their birthday!
+        if (r.isBirthdayToday) {
+          confetti({
+            particleCount: 150,
+            spread: 80,
+            origin: { y: 0.6 }
+          });
+          showToast("Happy Birthday! 🎉 Enjoy some confetti!", "success");
+        } else {
+          showToast('Age calculated!', 'success');
+        }
+      } else {
+        if (!dob2) {
+          setError('Please enter second date of birth');
+          return;
+        }
+        const r = calculateAgeDifference(dob, dob2);
+        setDiffResult(r);
+        setResult(null);
+        showToast('Age difference calculated!', 'success');
+      }
+    } catch (e) {
+      setError((e as Error).message);
+      showToast((e as Error).message, 'error');
+    }
+  };
+
+  const copyResultText = async () => {
+    let text = '';
+    if (result) {
+      text = `Age: ${result.years} years, ${result.months} months, ${result.days} days.\nZodiac: ${result.zodiac} (${result.chineseZodiac})\nNext Birthday: ${result.nextBirthdayDays} days.\nTotal Days Alive: ${result.totalDays.toLocaleString()} days.`;
+    } else if (diffResult) {
+      text = `Age difference: ${diffResult.years} years, ${diffResult.months} months, ${diffResult.days} days.\nTotal Days Apart: ${diffResult.totalDays.toLocaleString()} days.`;
+    }
+    if (!text) return;
+    try {
+      await navigator.clipboard.writeText(text);
+      setCopied(true);
+      showToast('Results copied to clipboard', 'success');
+      setTimeout(() => setCopied(false), 2000);
+    } catch {
+      showToast('Failed to copy', 'error');
+    }
+  };
+
+  const slots = result ? [
+    { label: 'Total Days Alive', value: result.totalDays.toLocaleString(), animate: true },
+    { label: 'Total Weeks Alive', value: result.totalWeeks.toLocaleString(), animate: true },
+    { label: 'Total Months Alive', value: result.totalMonths.toLocaleString(), animate: true },
+    { label: 'Total Hours Alive', value: result.totalHours.toLocaleString(), animate: true },
+    { label: 'Total Minutes Alive', value: result.totalMinutes.toLocaleString(), animate: true },
+    { label: 'Leap Years Experienced', value: result.leapYears, animate: true },
+    { label: 'Zodiac Sign', value: result.zodiac },
+    { label: 'Chinese Zodiac', value: result.chineseZodiac },
+    { label: 'Day of Week Born', value: result.dayOfWeek },
+    { label: 'Next Birthday Countdown', value: result.isBirthdayToday ? 'Today! 🎉' : `${result.nextBirthdayDays} days` },
+    { label: 'Hours to Next Birthday', value: result.nextBirthdayHours.toLocaleString(), animate: true },
+  ] : [];
+
+  const diffSlots = diffResult ? [
+    { label: 'Older Person', value: diffResult.olderPerson === 'same' ? 'Same age' : diffResult.olderPerson === 'first' ? 'Person 1' : 'Person 2' },
+    { label: 'Total Days Difference', value: diffResult.totalDays.toLocaleString(), animate: true },
+  ] : [];
+
+  return (
+    <PageTransition className="page-medium">
+      <SEO
+        title="Age Calculator"
+        description="Calculate exact age in years, months, days, zodiac signs, birthday countdown and age comparison."
+        path="/age-calculator"
+      />
+      
+      <Link to="/" className="back-link">
+        <ArrowLeft size={16} />
+        Back to tools
+      </Link>
+
+      <div className="tool-header">
+        <div className="eyebrow">Time</div>
+        <h1 className="page-title text-gradient">Age Calculator</h1>
+        <p className="page-lede">Discover your exact lifetime statistics, countdowns, zodiac elements, or compare ages between two people.</p>
+      </div>
+
+      <div className="tabs" role="tablist">
+        <button
+          role="tab"
+          aria-selected={mode === 'single'}
+          className={`tab ${mode === 'single' ? 'active' : ''}`}
+          onClick={() => { setMode('single'); setResult(null); setDiffResult(null); }}
+        >
+          <Calendar size={14} style={{ marginRight: 6, display: 'inline-block', verticalAlign: 'text-bottom' }} />
+          Calculate Age
+        </button>
+        <button
+          role="tab"
+          aria-selected={mode === 'compare'}
+          className={`tab ${mode === 'compare' ? 'active' : ''}`}
+          onClick={() => { setMode('compare'); setResult(null); setDiffResult(null); }}
+        >
+          <Users size={14} style={{ marginRight: 6, display: 'inline-block', verticalAlign: 'text-bottom' }} />
+          Compare Ages
+        </button>
+      </div>
+
+      <Card padding="lg">
+        <div className="grid-2" style={{ marginBottom: 20 }}>
+          <Input
+            ref={dobRef}
+            label={mode === 'single' ? "Date of Birth" : "Person 1 Date of Birth"}
+            type="date"
+            value={dob}
+            onChange={(e) => setDob(e.target.value)}
+            max={todayStr()}
+            error={error && !dob ? error : undefined}
+          />
+          {mode === 'single' && (
+            <Input
+              label="Calculate Age As Of"
+              type="date"
+              value={asOf}
+              onChange={(e) => setAsOf(e.target.value)}
+            />
+          )}
+          {mode === 'compare' && (
+            <Input
+              label="Person 2 Date of Birth"
+              type="date"
+              value={dob2}
+              onChange={(e) => setDob2(e.target.value)}
+              max={todayStr()}
+              error={error && !dob2 ? error : undefined}
+            />
+          )}
+        </div>
+
+        <Button onClick={calculate} magnetic style={{ width: '100%', marginBottom: 16 }}>
+          Calculate Age
+        </Button>
+
+        <AnimatePresence>
+          {result && (
+            <motion.div
+              initial={{ opacity: 0, y: 15 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: 10 }}
+              transition={{ duration: 0.4 }}
+            >
+              <div className="result-display">
+                <div className="result-highlight-wrap">
+                  <h3 className="result-title">Exact Age</h3>
+                  <Button size="sm" variant="ghost" onClick={copyResultText} style={{ padding: '6px 10px', height: 'auto' }}>
+                    {copied ? <Check size={14} style={{ color: 'var(--success)' }} /> : <Copy size={14} />}
+                    <span style={{ marginLeft: 6 }}>Copy Stats</span>
+                  </Button>
+                </div>
+                <div className="result-highlight" style={{ fontSize: 'clamp(1.5rem, 4vw, 2.5rem)' }}>
+                  {result.years} years, {result.months} months, {result.days} days
+                </div>
+                <p className="result-subtitle" style={{ marginTop: 8 }}>
+                  {result.isBirthdayToday ? (
+                    <span style={{ fontWeight: 700, color: 'var(--accent)' }}>It's your birthday today! 🎉 Have an amazing day!</span>
+                  ) : (
+                    <span>🎂 Next Birthday: <strong>{result.nextBirthdayDays}</strong> days ({result.isBirthdayToday ? 'Today' : `${result.nextBirthdayHours.toLocaleString()} hours`})</span>
+                  )}
+                </p>
+
+                <div className="result-grid">
+                  {slots.map((s, idx) => (
+                    <div key={idx} className="result-slot">
+                      <span className="label">
+                        {s.label.includes('Zodiac') ? <Star size={12} style={{ marginRight: 6, color: 'var(--accent)' }} /> :
+                         s.label.includes('Day') ? <Compass size={12} style={{ marginRight: 6, color: 'var(--accent)' }} /> :
+                         s.label.includes('Leap') ? <Award size={12} style={{ marginRight: 6, color: 'var(--accent)' }} /> :
+                         <Clock size={12} style={{ marginRight: 6, color: 'var(--accent)' }} />}
+                        {s.label}
+                      </span>
+                      <span className="value">{s.value}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </motion.div>
+          )}
+
+          {diffResult && (
+            <motion.div
+              initial={{ opacity: 0, y: 15 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: 10 }}
+              transition={{ duration: 0.4 }}
+            >
+              <div className="result-display">
+                <div className="result-highlight-wrap">
+                  <h3 className="result-title">Age Difference</h3>
+                  <Button size="sm" variant="ghost" onClick={copyResultText} style={{ padding: '6px 10px', height: 'auto' }}>
+                    {copied ? <Check size={14} style={{ color: 'var(--success)' }} /> : <Copy size={14} />}
+                    <span style={{ marginLeft: 6 }}>Copy Difference</span>
+                  </Button>
+                </div>
+                <div className="result-highlight" style={{ fontSize: 'clamp(1.5rem, 4vw, 2.5rem)' }}>
+                  {diffResult.years} years, {diffResult.months} months, {diffResult.days} days apart
+                </div>
+                <p className="result-subtitle">
+                  {diffResult.olderPerson === 'same' ? (
+                    <span>Both people are exactly the same age.</span>
+                  ) : (
+                    <span>The older person is <strong>{diffResult.olderPerson === 'first' ? 'Person 1' : 'Person 2'}</strong>.</span>
+                  )}
+                </p>
+
+                <div className="result-grid">
+                  {diffSlots.map((s, idx) => (
+                    <div key={idx} className="result-slot">
+                      <span className="label">
+                        <Users size={12} style={{ marginRight: 6, color: 'var(--accent)' }} />
+                        {s.label}
+                      </span>
+                      <span className="value">{s.value}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </Card>
+    </PageTransition>
+  );
+}

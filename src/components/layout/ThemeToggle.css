@@ -1,0 +1,22 @@
+.theme-toggle { padding: 4px; cursor: pointer; }
+
+.theme-toggle-track {
+  width: 60px;
+  height: 32px;
+  border-radius: var(--radius-full);
+  border: 1px solid var(--border);
+  position: relative;
+  padding: 3px;
+}
+
+.theme-toggle-thumb {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: var(--bg-elevated);
+  box-shadow: var(--shadow-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.875rem;
+}

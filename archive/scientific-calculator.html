@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Scientific Calculator — Free Online Calculator</title>
+<meta name="description" content="A free online scientific calculator with trigonometry, logarithms, powers, roots and constants — works right in your browser.">
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header class="site">
+  <a href="index.html" class="brand"><span class="dot"></span> CalcHub</a>
+  <nav class="site">
+    <a href="about.html">About</a>
+    <a href="privacy.html">Privacy</a>
+  </nav>
+</header>
+
+<div class="wrap">
+  <a href="index.html" class="back-link">&larr; Back to CalcHub</a>
+
+  <section class="hero">
+    <div class="eyebrow">Mod.01 · Math</div>
+    <h1 class="title">Scientific Calculator</h1>
+    <p class="lede">Trig, logs, powers, roots and constants — plus everyday sums. No app to install, works right here.</p>
+  </section>
+
+  <div class="console" style="max-width:460px;">
+    <div class="calc-display" id="display">0</div>
+
+    <div class="keypad sci-row">
+      <button class="key fn" onclick="press('sin(')">sin</button>
+      <button class="key fn" onclick="press('cos(')">cos</button>
+      <button class="key fn" onclick="press('tan(')">tan</button>
+      <button class="key fn" onclick="press('log(')">log</button>
+      <button class="key fn" onclick="press('ln(')">ln</button>
+      <button class="key fn" onclick="press('√(')">√</button>
+    </div>
+    <div class="keypad sci-row">
+      <button class="key fn" onclick="press('(')">(</button>
+      <button class="key fn" onclick="press(')')">)</button>
+      <button class="key fn" onclick="press('^')">x^y</button>
+      <button class="key fn" onclick="press('π')">π</button>
+      <button class="key fn" onclick="press('e')">e</button>
+      <button class="key fn" id="degToggle" onclick="toggleDeg()">DEG</button>
+    </div>
+
+    <div class="keypad">
+      <button class="key secondary" onclick="clearAll()">C</button>
+      <button class="key op" onclick="backspace()">⌫</button>
+      <button class="key op" onclick="press('%')">%</button>
+      <button class="key op" onclick="press('/')">÷</button>
+
+      <button class="key" onclick="press('7')">7</button>
+      <button class="key" onclick="press('8')">8</button>
+      <button class="key" onclick="press('9')">9</button>
+      <button class="key op" onclick="press('*')">×</button>
+
+      <button class="key" onclick="press('4')">4</button>
+      <button class="key" onclick="press('5')">5</button>
+      <button class="key" onclick="press('6')">6</button>
+      <button class="key op" onclick="press('-')">−</button>
+
+      <button class="key" onclick="press('1')">1</button>
+      <button class="key" onclick="press('2')">2</button>
+      <button class="key" onclick="press('3')">3</button>
+      <button class="key op" onclick="press('+')">+</button>
+
+      <button class="key wide" onclick="press('0')">0</button>
+      <button class="key" onclick="press('.')">.</button>
+      <button class="key equals" onclick="doEquals()">=</button>
+    </div>
+  </div>
+
+  <div class="console doc" style="max-width:460px;">
+    <h2>Tips</h2>
+    <p><strong>DEG / RAD</strong> toggles whether sin, cos and tan treat numbers as degrees or radians — tap it to switch, the current mode is always shown on the button.</p>
+    <p><strong>x^y</strong> inserts a power operator: type <code>2 x^y 10</code> then <code>=</code> for 2 to the power of 10.</p>
+  </div>
+
+</div>
+
+<footer class="site">
+  <span>© <span id="year"></span> CalcHub</span>
+  <span><a href="about.html">About</a> · <a href="privacy.html">Privacy Policy</a></span>
+</footer>
+
+<script>
+document.getElementById('year').textContent = new Date().getFullYear();
+
+const display = document.getElementById('display');
+const degBtn = document.getElementById('degToggle');
+let expr = '';
+let justEvaluated = false;
+let isDeg = true;
+
+function toggleDeg(){
+  isDeg = !isDeg;
+  degBtn.textContent = isDeg ? 'DEG' : 'RAD';
+}
+
+function render(){
+  display.textContent = expr === '' ? '0' : expr.replace(/\*/g,'×').replace(/\//g,'÷');
+}
+
+function press(ch){
+  if (justEvaluated){
+    if (/[0-9.]/.test(ch) || ['sin(','cos(','tan(','log(','ln(','√(','(','π','e'].includes(ch)){
+      expr = '';
+    }
+    justEvaluated = false;
+  }
+  const opChars = ['+','-','*','/','%','^'];
+  const lastChar = expr.slice(-1);
+  if (opChars.includes(ch) && opChars.includes(lastChar)){
+    expr = expr.slice(0, -1) + ch;
+  } else {
+    expr += ch;
+  }
+  render();
+}
+
+function backspace(){
+  expr = expr.slice(0, -1);
+  render();
+}
+
+function clearAll(){
+  expr = '';
+  justEvaluated = false;
+  render();
+}
+
+function doEquals(){
+  if (!expr) return;
+  try{
+    let e = expr;
+
+    const openCount = (e.match(/\(/g) || []).length;
+    const closeCount = (e.match(/\)/g) || []).length;
+    if (openCount > closeCount) e += ')'.repeat(openCount - closeCount);
+
+    e = e.replace(/π/g, 'Math.PI');
+    e = e.replace(/(?<![a-zA-Z])e(?![a-zA-Z(])/g, 'Math.E');
+    e = e.replace(/\^/g, '**');
+    e = e.replace(/√\(/g, 'sqrt(');
+    e = e.replace(/sin\(/g, 'sinF(');
+    e = e.replace(/cos\(/g, 'cosF(');
+    e = e.replace(/tan\(/g, 'tanF(');
+    e = e.replace(/log\(/g, 'log10(');
+    e = e.replace(/ln\(/g, 'Math.log(');
+    e = e.replace(/%/g, '/100');
+
+    if (!/^[0-9+\-*/.()%\sA-Za-z]+$/.test(e)) throw new Error('invalid');
+
+    const toRad = x => x * Math.PI / 180;
+    const sinF = x => isDeg ? Math.sin(toRad(x)) : Math.sin(x);
+    const cosF = x => isDeg ? Math.cos(toRad(x)) : Math.cos(x);
+    const tanF = x => isDeg ? Math.tan(toRad(x)) : Math.tan(x);
+    const log10 = x => Math.log10(x);
+    const sqrt = x => Math.sqrt(x);
+
+    let result = Function('sinF','cosF','tanF','log10','sqrt','Math',
+      '"use strict"; return (' + e + ')'
+    )(sinF, cosF, tanF, log10, sqrt, Math);
+
+    if (typeof result !== 'number' || !isFinite(result)) throw new Error('math error');
+    result = Math.round(result * 1e10) / 1e10;
+    expr = String(result);
+    justEvaluated = true;
+    render();
+  } catch(err){
+    display.textContent = 'Error';
+    expr = '';
+    justEvaluated = true;
+  }
+}
+
+document.addEventListener('keydown', (e) => {
+  if (/[0-9.+\-*/%^()]/.test(e.key)) press(e.key);
+  else if (e.key === 'Enter' || e.key === '=') { e.preventDefault(); doEquals(); }
+  else if (e.key === 'Backspace') backspace();
+  else if (e.key === 'Escape') clearAll();
+});
+</script>
+</body>
+</html>

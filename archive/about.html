@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>About — CalcHub</title>
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header class="site">
+  <a href="index.html" class="brand"><span class="dot"></span> CalcHub</a>
+  <nav class="site">
+    <a href="about.html">About</a>
+    <a href="privacy.html">Privacy</a>
+  </nav>
+</header>
+
+<div class="wrap">
+  <section class="hero">
+    <div class="eyebrow">About</div>
+    <h1 class="title">Small tools, kept simple.</h1>
+    <p class="lede">CalcHub is a small set of free calculators built for quick, everyday questions — no sign-up, no app, no clutter.</p>
+  </section>
+
+  <div class="console doc">
+    <h2>What this site is</h2>
+    <p>Each tool on this site does one job well: the sleep calculator works out good bedtimes or wake times, the age calculator gives an exact age from a birth date, and the basic calculator handles quick everyday sums. That's it — no accounts, no tracking dashboards, nothing to install.</p>
+    <h2>Contact</h2>
+    <p>Questions or feedback about these tools can be sent via the contact details on this page once they're added — for now, this is a small independent project maintained by one person.</p>
+  </div>
+</div>
+
+<footer class="site">
+  <span>© <span id="year"></span> CalcHub</span>
+  <span><a href="about.html">About</a> · <a href="privacy.html">Privacy Policy</a></span>
+</footer>
+<script>document.getElementById('year').textContent = new Date().getFullYear();</script>
+</body>
+</html>

@@ -1,0 +1,89 @@
+.input-group { margin-bottom: 20px; }
+
+.input-wrapper {
+  position: relative;
+  background: var(--bg-subtle);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border);
+  transition: border-color var(--transition), box-shadow var(--transition);
+}
+
+.input-focused .input-wrapper {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-soft);
+}
+
+.input-error .input-wrapper { border-color: var(--error); box-shadow: 0 0 0 3px var(--error-soft); }
+
+.input-field {
+  width: 100%;
+  padding: 20px 16px 8px;
+  font-family: var(--font-sans);
+  font-size: 1rem;
+  color: var(--text);
+  background: transparent;
+  border: none;
+  outline: none;
+}
+
+.input-label {
+  position: absolute;
+  left: 16px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 1rem;
+  color: var(--text-muted);
+  pointer-events: none;
+  transition: all 0.2s var(--ease-out);
+}
+
+.input-label-float {
+  top: 10px;
+  transform: none;
+  font-size: 0.6875rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--accent);
+}
+
+.input-border {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  width: 0;
+  height: 2px;
+  background: var(--accent);
+  transition: width 0.3s var(--ease-out), left 0.3s var(--ease-out);
+  border-radius: 2px;
+}
+
+.input-focused .input-border { width: 100%; left: 0; }
+
+.input-message { font-size: 0.8125rem; margin-top: 6px; padding-left: 4px; color: var(--text-muted); }
+.input-message-error { color: var(--error); }
+
+select.input-select {
+  width: 100%;
+  padding: 16px;
+  font-family: var(--font-sans);
+  font-size: 1rem;
+  color: var(--text);
+  background: var(--bg-subtle);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  outline: none;
+  cursor: pointer;
+  transition: border-color var(--transition);
+}
+select.input-select:focus { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-soft); }
+
+.field-label {
+  display: block;
+  font-size: 0.6875rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-muted);
+  margin-bottom: 8px;
+}

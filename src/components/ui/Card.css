@@ -1,0 +1,93 @@
+.card { transition: box-shadow var(--transition), border-color var(--transition), transform var(--transition); }
+.card-pad-sm { padding: 16px; }
+.card-pad-md { padding: 24px; }
+.card-pad-lg { padding: 32px; }
+
+.card-hover:hover {
+  box-shadow: var(--shadow-lg), var(--shadow-glow);
+  border-color: var(--accent-soft);
+}
+
+.card-glow { box-shadow: var(--shadow-md), 0 0 60px var(--accent-glow); }
+
+.tool-card {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  text-decoration: none;
+  color: inherit;
+  position: relative;
+  overflow: hidden;
+}
+
+.tool-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, var(--accent-soft), transparent);
+  opacity: 0;
+  transition: opacity var(--transition);
+}
+
+.tool-card:hover::before { opacity: 1; }
+
+.tool-card-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: var(--radius-md);
+  background: var(--accent-soft);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  transition: transform 0.3s var(--ease-spring);
+}
+
+.tool-card:hover .tool-card-icon { transform: scale(1.1) rotate(-5deg); }
+
+.tool-card-tag {
+  font-size: 0.6875rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text-muted);
+}
+
+.tool-card h3 {
+  font-size: 1.125rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+.tool-card p {
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+  line-height: 1.5;
+  flex: 1;
+}
+
+.tool-card-go {
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: var(--accent);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  transition: gap 0.2s;
+}
+
+.tool-card:hover .tool-card-go { gap: 8px; }
+
+.featured-badge {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  font-size: 0.625rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  padding: 4px 8px;
+  border-radius: var(--radius-full);
+  background: linear-gradient(135deg, var(--gradient-1), var(--gradient-2));
+  color: white;
+}

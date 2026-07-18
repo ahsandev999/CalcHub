@@ -1,0 +1,63 @@
+.bg-effects {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.bg-gradient {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 80% 60% at 20% 10%, var(--accent-soft), transparent),
+    radial-gradient(ellipse 60% 50% at 80% 80%, rgba(139, 92, 246, 0.08), transparent),
+    var(--bg);
+}
+
+.bg-noise {
+  position: absolute;
+  inset: 0;
+  opacity: var(--noise-opacity);
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size: 128px;
+}
+
+.bg-blob {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(80px);
+  opacity: 0.4;
+}
+
+.bg-blob-1 {
+  width: 500px; height: 500px;
+  background: var(--gradient-1);
+  top: -10%; left: -10%;
+  opacity: 0.15;
+}
+
+.bg-blob-2 {
+  width: 400px; height: 400px;
+  background: var(--gradient-2);
+  bottom: -5%; right: -5%;
+  opacity: 0.12;
+}
+
+.bg-blob-3 {
+  width: 300px; height: 300px;
+  background: var(--gradient-3);
+  top: 50%; left: 50%;
+  opacity: 0.08;
+}
+
+.bg-particles { position: absolute; inset: 0; }
+
+.bg-particle {
+  position: absolute;
+  width: 3px;
+  height: 3px;
+  border-radius: 50%;
+  background: var(--accent);
+  opacity: 0.3;
+}

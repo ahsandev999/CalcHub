@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sleep Calculator — Find Your Best Bedtime or Wake Time</title>
+<meta name="description" content="Calculate the best time to sleep or wake up based on 90-minute sleep cycles, so you wake up feeling rested.">
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header class="site">
+  <a href="index.html" class="brand"><span class="dot"></span> CalcHub</a>
+  <nav class="site">
+    <a href="about.html">About</a>
+    <a href="privacy.html">Privacy</a>
+  </nav>
+</header>
+
+<div class="wrap">
+  <a href="index.html" class="back-link">&larr; Back to CalcHub</a>
+
+  <section class="hero">
+    <div class="eyebrow">Mod.03 · Sleep</div>
+    <h1 class="title">Sleep Calculator</h1>
+    <p class="lede">Sleep runs in ~90‑minute cycles. Waking up mid‑cycle is what makes you feel groggy — this works out times that land you between cycles instead.</p>
+  </section>
+
+  <!-- STEP 1: choose a path -->
+  <div class="console" id="stepChoose">
+
+    <div class="field">
+      <label>What time do you want to wake up?</label>
+      <div class="row" style="align-items:end;">
+        <input type="time" id="wakeTimeInput" value="07:00">
+        <button class="btn" onclick="showResults('wake')">Calculate bedtime</button>
+      </div>
+    </div>
+
+    <div class="field" style="margin-top:28px; border-top:1px dashed var(--line); padding-top:24px;">
+      <label>If you want to go to bed now…</label>
+      <button class="btn secondary" onclick="showResults('sleep')">Calculate wake-up time</button>
+    </div>
+
+  </div>
+
+  <!-- STEP 2: results -->
+  <div class="console" id="stepResult" style="display:none;">
+    <div class="readout show">
+      <div class="label" id="resultLabel">Result</div>
+      <p class="sub" id="resultNote" style="margin-bottom:16px;"></p>
+      <div class="slots" id="slots"></div>
+      <p class="sub" style="margin-top:18px;">If you go to sleep at one of the times above, you'll rise between 90‑minute sleep cycles. A good night's sleep is 5–6 complete cycles.</p>
+    </div>
+    <button class="btn secondary" style="margin-top:22px;" onclick="goBack()">← Go back</button>
+  </div>
+
+  <div class="console doc">
+    <h2>Why 90-minute cycles?</h2>
+    <p>A full sleep cycle — moving through light sleep, deep sleep, and REM — takes roughly 90 minutes. Waking up at the end of a completed cycle generally feels far more refreshing than waking up in the middle of one, even if the total hours slept are similar.</p>
+    <h2>The average time to fall asleep</h2>
+    <p>Most people take about 15 minutes to actually fall asleep after getting into bed. This calculator adds that on top of the cycle math automatically.</p>
+  </div>
+
+</div>
+
+<footer class="site">
+  <span>© <span id="year"></span> CalcHub</span>
+  <span><a href="about.html">About</a> · <a href="privacy.html">Privacy Policy</a></span>
+</footer>
+
+<script>
+document.getElementById('year').textContent = new Date().getFullYear();
+
+const FALL_ASLEEP_MIN = 15;
+
+function fmt(date){
+  let h = date.getHours();
+  const m = date.getMinutes();
+  const ampm = h >= 12 ? 'PM' : 'AM';
+  h = h % 12; if (h === 0) h = 12;
+  return `${h}:${m.toString().padStart(2,'0')} ${ampm}`;
+}
+
+function showResults(mode){
+  const slotsEl = document.getElementById('slots');
+  const resultLabel = document.getElementById('resultLabel');
+  const resultNote = document.getElementById('resultNote');
+  slotsEl.innerHTML = '';
+
+  const cycles = [6,5,4,3];
+
+  if (mode === 'wake'){
+    const [hh, mm] = document.getElementById('wakeTimeInput').value.split(':').map(Number);
+    const base = new Date();
+    base.setHours(hh, mm, 0, 0);
+
+    resultLabel.textContent = 'Bedtime';
+    resultNote.textContent = `To wake up refreshed at ${fmt(base)}, go to sleep at one of the following times:`;
+
+    cycles.forEach(c => {
+      const t = new Date(base.getTime() - (c*90 + FALL_ASLEEP_MIN)*60000);
+      const slot = document.createElement('div');
+      slot.className = 'slot';
+      slot.innerHTML = `<span class="k">${c} cycles · ${(c*1.5).toFixed(1)}h sleep</span>${fmt(t)}`;
+      slotsEl.appendChild(slot);
+    });
+  } else {
+    const base = new Date();
+    resultLabel.textContent = 'Wake-up time';
+    resultNote.textContent = `If you go to sleep right now (around ${fmt(base)}), you should try to wake up at one of the following times:`;
+
+    cycles.slice().reverse().forEach(c => {
+      const t = new Date(base.getTime() + (c*90 + FALL_ASLEEP_MIN)*60000);
+      const slot = document.createElement('div');
+      slot.className = 'slot';
+      slot.innerHTML = `<span class="k">${c} cycles · ${(c*1.5).toFixed(1)}h sleep</span>${fmt(t)}`;
+      slotsEl.appendChild(slot);
+    });
+  }
+
+  document.getElementById('stepChoose').style.display = 'none';
+  document.getElementById('stepResult').style.display = 'block';
+}
+
+function goBack(){
+  document.getElementById('stepResult').style.display = 'none';
+  document.getElementById('stepChoose').style.display = 'block';
+}
+</script>
+</body>
+</html>
