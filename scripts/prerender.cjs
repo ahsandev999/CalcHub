@@ -178,9 +178,9 @@ async function prerender() {
 
       if (route === '/stopwatch' || route === '/percentage-calculator') {
         console.log('  applying extra render wait for route', route);
-        await page.waitForTimeout(1000);
+        await new Promise((resolve) => setTimeout(resolve, 1000));
       } else {
-        await page.waitForTimeout(600);
+        await new Promise((resolve) => setTimeout(resolve, 600));
       }
 
       const html = await page.content();
