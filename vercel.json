@@ -1,5 +1,22 @@
 {
   "rewrites": [
-    { "source": "/(.*)", "destination": "/index.html" }
+    { "source": "/scientific-calculator", "destination": "/scientific-calculator/index.html" },
+    { "source": "/age-calculator", "destination": "/age-calculator/index.html" },
+    { "source": "/sleep-calculator", "destination": "/sleep-calculator/index.html" },
+    { "source": "/bmi-calculator", "destination": "/bmi-calculator/index.html" },
+    { "source": "/percentage-calculator", "destination": "/percentage-calculator/index.html" },
+    { "source": "/unit-converter", "destination": "/unit-converter/index.html" },
+    { "source": "/date-difference", "destination": "/date-difference/index.html" },
+    { "source": "/stopwatch", "destination": "/stopwatch/index.html" },
+    { "source": "/timer", "destination": "/timer/index.html" },
+    { "source": "/pomodoro", "destination": "/pomodoro/index.html" },
+    { "source": "/random-number", "destination": "/random-number/index.html" },
+    { "source": "/password-generator", "destination": "/password-generator/index.html" },
+    { "source": "/color-converter", "destination": "/color-converter/index.html" },
+    { "source": "/number-base-converter", "destination": "/number-base-converter/index.html" },
+    { "source": "/currency-converter", "destination": "/currency-converter/index.html" },
+    { "source": "/about", "destination": "/about/index.html" },
+    { "source": "/privacy", "destination": "/privacy/index.html" },
+    { "source": "(.*)", "destination": "/index.html" }
   ]
 }
