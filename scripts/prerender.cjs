@@ -31,6 +31,7 @@ const VERCEL_CONFIG_PATH = path.join(process.cwd(), 'vercel.json');
 const PORT = process.env.PRERENDER_PORT || 5173;
 const HOST = `http://localhost:${PORT}`;
 const IS_LINUX = process.platform === 'linux';
+const DEBUG_PRERENDER_LOCAL = process.env.DEBUG_PRERENDER_LOCAL === '1';
 
 function ensureDir(p) {
   if (!fs.existsSync(p)) fs.mkdirSync(p, { recursive: true });
@@ -106,8 +107,14 @@ function validateVercelRewrites() {
 
 async function startStaticServer() {
   return new Promise((resolve, reject) => {
-    // Start sirv-cli to serve the dist folder
-    const server = spawn('npx', ['sirv-cli', 'dist', '--single', '--port', String(PORT)], { stdio: 'inherit' });
+    let sirvCliPath;
+    try {
+      sirvCliPath = require.resolve('sirv-cli/bin.js');
+    } catch (err) {
+      return reject(new Error('Unable to resolve sirv-cli package. Make sure it is installed.'));
+    }
+
+    const server = spawn(process.execPath, [sirvCliPath, 'dist', '--single', '--port', String(PORT)], { stdio: 'inherit' });
 
     server.on('error', (err) => reject(err));
     // Give server a moment to start
@@ -116,7 +123,7 @@ async function startStaticServer() {
 }
 
 async function prerender() {
-  if (!IS_LINUX) {
+  if (!IS_LINUX && !DEBUG_PRERENDER_LOCAL) {
     console.warn('Skipping prerender on non-Linux environment. This script is intended for Linux CI like Vercel.');
     return;
   }
@@ -153,17 +160,35 @@ async function prerender() {
   const page = await browser.newPage();
 
   for (const route of ROUTES) {
+    const routeStart = Date.now();
     const url = route === '/' ? `${HOST}/` : `${HOST}${route}`;
-    console.log('Prerendering', url);
+    console.log(`Prerendering route=${route} url=${url}`);
     try {
-      await page.goto(url, { waitUntil: 'networkidle0', timeout: 60000 });
-      // Give React/Helmet a moment to update title/meta
-      if (typeof page.waitForTimeout === 'function') {
-        await page.waitForTimeout(300);
+      const waitOptions = {
+        waitUntil: 'domcontentloaded',
+        timeout: 120000,
+      };
+
+      const response = await page.goto(url, waitOptions);
+      console.log(`  response status=${response ? response.status() : 'no response'}`);
+
+      const selector = 'h1.page-title';
+      console.log(`  waiting for selector ${selector}`);
+      await page.waitForSelector(selector, { timeout: 120000 });
+
+      if (route === '/stopwatch' || route === '/percentage-calculator') {
+        console.log('  applying extra render wait for route', route);
+        await page.waitForTimeout(1000);
       } else {
-        await new Promise((r) => setTimeout(r, 300));
+        await page.waitForTimeout(600);
       }
+
       const html = await page.content();
+      const title = await page.title();
+      const description = await page.$eval('meta[name="description"]', (el) => el.getAttribute('content')).catch(() => 'missing');
+      console.log(`  page title=${title}`);
+      console.log(`  page description=${description}`);
+      console.log(`  route prerendered successfully in ${Date.now() - routeStart}ms`);
 
       // Determine output path
       if (route === '/') {
@@ -177,7 +202,9 @@ async function prerender() {
         console.log('Wrote', outPath);
       }
     } catch (e) {
-      console.error('Failed to prerender', route, e);
+      console.error(`Failed to prerender ${route}:`, e.message);
+      console.error(e.stack || e);
+      console.error(`Route ${route} failed after ${Date.now() - routeStart}ms`);
     }
   }
 
