@@ -1,5 +1,20 @@
 .input-group { margin-bottom: 20px; }
 
+.input-label {
+  display: block;
+  margin-bottom: 8px;
+  font-size: 0.6875rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-muted);
+  transition: color var(--transition);
+}
+
+.input-focused .input-label {
+  color: var(--accent);
+}
+
 .input-wrapper {
   position: relative;
   background: var(--bg-subtle);
@@ -17,34 +32,13 @@
 
 .input-field {
   width: 100%;
-  padding: 20px 16px 8px;
+  padding: 14px 16px;
   font-family: var(--font-sans);
   font-size: 1rem;
   color: var(--text);
   background: transparent;
   border: none;
   outline: none;
-}
-
-.input-label {
-  position: absolute;
-  left: 16px;
-  top: 50%;
-  transform: translateY(-50%);
-  font-size: 1rem;
-  color: var(--text-muted);
-  pointer-events: none;
-  transition: all 0.2s var(--ease-out);
-}
-
-.input-label-float {
-  top: 10px;
-  transform: none;
-  font-size: 0.6875rem;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
-  color: var(--accent);
 }
 
 .input-border {

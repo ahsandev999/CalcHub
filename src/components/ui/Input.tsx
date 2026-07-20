@@ -11,10 +11,12 @@ const Input = forwardRef<HTMLInputElement, InputProps>(function Input({ label, e
   const autoId = useId();
   const inputId = id || autoId;
   const [focused, setFocused] = useState(false);
-  const hasValue = value !== undefined && value !== '';
 
   return (
     <div className={`input-group ${error ? 'input-error shake' : ''} ${focused ? 'input-focused' : ''} ${className}`}>
+      <label htmlFor={inputId} className="input-label">
+        {label}
+      </label>
       <div className="input-wrapper">
         <input
           ref={ref}
@@ -23,14 +25,10 @@ const Input = forwardRef<HTMLInputElement, InputProps>(function Input({ label, e
           value={value}
           onFocus={(e) => { setFocused(true); props.onFocus?.(e); }}
           onBlur={(e) => { setFocused(false); props.onBlur?.(e); }}
-          placeholder=" "
           aria-invalid={!!error}
           aria-describedby={error ? `${inputId}-error` : hint ? `${inputId}-hint` : undefined}
           {...props}
         />
-        <label htmlFor={inputId} className={`input-label ${hasValue || focused ? 'input-label-float' : ''}`}>
-          {label}
-        </label>
         <span className="input-border" aria-hidden="true" />
       </div>
       {error && <p id={`${inputId}-error`} className="input-message input-message-error" role="alert">{error}</p>}

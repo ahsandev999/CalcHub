@@ -38,6 +38,27 @@ export default function App() {
     }
   }, [isHome]);
 
+  useEffect(() => {
+    const scrollToContent = () => {
+      const calculatorRoutes = ['scientific-calculator', 'age-calculator', 'sleep-calculator', 'bmi-calculator', 'percentage-calculator', 'unit-converter', 'date-difference', 'stopwatch', 'timer', 'pomodoro', 'random-number', 'password-generator', 'color-converter', 'number-base-converter', 'currency-converter'];
+      const isCalculatorRoute = calculatorRoutes.some((route) => location.pathname.endsWith(route));
+
+      if (!isCalculatorRoute) {
+        window.scrollTo({ top: 0, left: 0, behavior: 'auto' });
+        return;
+      }
+
+      const main = document.querySelector('main');
+      const target = main?.querySelector('.tool-header, .calc-wrapper, .card') as HTMLElement | null;
+      const topOffset = target ? target.getBoundingClientRect().top + window.scrollY - 88 : 0;
+
+      window.scrollTo({ top: topOffset, left: 0, behavior: 'auto' });
+    };
+
+    const id = window.setTimeout(scrollToContent, 0);
+    return () => window.clearTimeout(id);
+  }, [location.pathname]);
+
   return (
     <>
       {/* Background ambient effects only on non-home pages */}

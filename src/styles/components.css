@@ -917,37 +917,12 @@
     border-color 0.3s var(--ease-out);
 }
 
-/* Gradient border glow on hover — uses pseudo-element ring */
-.tool-card-light::before {
-  content: '';
-  position: absolute;
-  inset: -2px;
-  border-radius: calc(var(--radius-xl) + 2px);
-  background: linear-gradient(135deg, #6366f1, #8b5cf6, #ec4899);
-  opacity: 0;
-  z-index: -1;
-  transition: opacity 0.3s var(--ease-out);
-}
-
-.tool-card-light::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  border-radius: var(--radius-xl);
-  background: radial-gradient(ellipse at top left, rgba(99, 102, 241, 0.06), transparent 60%);
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 0.3s var(--ease-out);
-}
-
+/* Subtle hover state with indigo border and lift */
 .tool-card-light:hover {
-  transform: translateY(-8px);
-  box-shadow: var(--card-shadow-hover);
-  border-color: rgba(99, 102, 241, 0.15);
+  transform: translateY(-4px);
+  box-shadow: 0 10px 24px rgba(99, 102, 241, 0.12);
+  border-color: #6366f1;
 }
-
-.tool-card-light:hover::before { opacity: 1; }
-.tool-card-light:hover::after { opacity: 1; }
 
 /* Icon */
 .tool-card-light-icon {
