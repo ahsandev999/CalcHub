@@ -8,28 +8,28 @@ CalcHub helps users solve common numeric and utility problems quickly through a 
 
 ## Main tools
 
-- Age calculator
-- Scientific calculator
-- Sleep calculator
-- BMI calculator
-- Percentage calculator
-- Unit converter
-- Currency converter
-- Number base converter
-- Date difference calculator
-- Stopwatch, timer, and Pomodoro tools
-- Password generator
-- Random number generator
-- Color converter
+- [Age calculator](https://calccode.com/age-calculator)
+- [Scientific calculator](https://calccode.com/scientific-calculator)
+- [Sleep calculator](https://calccode.com/sleep-calculator)
+- [BMI calculator](https://calccode.com/bmi-calculator)
+- [Percentage calculator](https://calccode.com/percentage-calculator)
+- [Unit converter](https://calccode.com/unit-converter)
+- [Currency converter](https://calccode.com/currency-converter)
+- [Number base converter](https://calccode.com/number-base-converter)
+- [Date difference calculator](https://calccode.com/date-difference)
+- [Stopwatch, timer, and Pomodoro tools](https://calccode.com/stopwatch)
+- [Password generator](https://calccode.com/password-generator)
+- [Random number generator](https://calccode.com/random-number)
+- [Color converter](https://calccode.com/color-converter)
 
 ## Primary pages
 
-- Home: https://calccode.com/
-- About: https://calccode.com/about
-- Privacy: https://calccode.com/privacy
-- Scientific calculator: https://calccode.com/scientific-calculator
-- Age calculator: https://calccode.com/age-calculator
-- Sleep calculator: https://calccode.com/sleep-calculator
+- [Home](https://calccode.com/)
+- [About](https://calccode.com/about)
+- [Privacy](https://calccode.com/privacy)
+- [Scientific calculator](https://calccode.com/scientific-calculator)
+- [Age calculator](https://calccode.com/age-calculator)
+- [Sleep calculator](https://calccode.com/sleep-calculator)
 
 ## Content guidance
 
