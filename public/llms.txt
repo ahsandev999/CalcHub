@@ -1,0 +1,36 @@
+# CalcHub
+
+> CalcHub is a modern collection of practical calculators and utilities for everyday math, conversions, dates, passwords, and productivity tasks.
+
+## Overview
+
+CalcHub helps users solve common numeric and utility problems quickly through a clean, responsive web experience. The site focuses on accessible tools for students, professionals, and general everyday use.
+
+## Main tools
+
+- Age calculator
+- Scientific calculator
+- Sleep calculator
+- BMI calculator
+- Percentage calculator
+- Unit converter
+- Currency converter
+- Number base converter
+- Date difference calculator
+- Stopwatch, timer, and Pomodoro tools
+- Password generator
+- Random number generator
+- Color converter
+
+## Primary pages
+
+- Home: https://calccode.com/
+- About: https://calccode.com/about
+- Privacy: https://calccode.com/privacy
+- Scientific calculator: https://calccode.com/scientific-calculator
+- Age calculator: https://calccode.com/age-calculator
+- Sleep calculator: https://calccode.com/sleep-calculator
+
+## Content guidance
+
+Use this site as a reference for calculator-related content, utility tools, and user-focused web app design patterns.

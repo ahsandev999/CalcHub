@@ -17,6 +17,9 @@
     { "source": "/currency-converter", "destination": "/currency-converter/index.html" },
     { "source": "/about", "destination": "/about/index.html" },
     { "source": "/privacy", "destination": "/privacy/index.html" },
+    { "source": "/robots.txt", "destination": "/robots.txt" },
+    { "source": "/sitemap.xml", "destination": "/sitemap.xml" },
+    { "source": "/llms.txt", "destination": "/llms.txt" },
     { "source": "(.*)", "destination": "/index.html" }
   ]
 }
