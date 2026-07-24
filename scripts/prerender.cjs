@@ -3,28 +3,9 @@ const path = require('path');
 const { spawn } = require('child_process');
 const puppeteer = require('puppeteer-core');
 const chromium = require('@sparticuz/chromium').default;
+const { getAllRoutes, SITEMAP_HOST } = require('./site-data.cjs');
 
-// List of routes to prerender (match App.tsx)
-const ROUTES = [
-  '/',
-  '/scientific-calculator',
-  '/age-calculator',
-  '/sleep-calculator',
-  '/bmi-calculator',
-  '/percentage-calculator',
-  '/unit-converter',
-  '/date-difference',
-  '/stopwatch',
-  '/timer',
-  '/pomodoro',
-  '/random-number',
-  '/password-generator',
-  '/color-converter',
-  '/number-base-converter',
-  '/currency-converter',
-  '/about',
-  '/privacy'
-];
+const ROUTES = getAllRoutes();
 
 const DIST_DIR = path.join(process.cwd(), 'dist');
 const VERCEL_CONFIG_PATH = path.join(process.cwd(), 'vercel.json');
@@ -209,7 +190,6 @@ async function prerender() {
   }
 
   // Generate sitemap.xml using calccode.com as requested
-  const SITEMAP_HOST = 'https://calccode.com';
   const sitemapEntries = ROUTES.map((r) => {
     const loc = r === '/' ? `${SITEMAP_HOST}/` : `${SITEMAP_HOST}${r}`;
     return `  <url>\n    <loc>${loc}</loc>\n  </url>`;

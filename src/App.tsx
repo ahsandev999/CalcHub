@@ -5,6 +5,7 @@ import Layout from './components/layout/Layout';
 import PageLoader from './components/ui/PageLoader';
 import CustomCursor from './components/ui/CustomCursor';
 import Background from './components/ui/Background';
+import { TOOLS } from './lib/tools';
 
 const Home = lazy(() => import('./pages/Home'));
 const ScientificCalculator = lazy(() => import('./pages/ScientificCalculator'));
@@ -40,7 +41,7 @@ export default function App() {
 
   useEffect(() => {
     const scrollToContent = () => {
-      const calculatorRoutes = ['scientific-calculator', 'age-calculator', 'sleep-calculator', 'bmi-calculator', 'percentage-calculator', 'unit-converter', 'date-difference', 'stopwatch', 'timer', 'pomodoro', 'random-number', 'password-generator', 'color-converter', 'number-base-converter', 'currency-converter'];
+      const calculatorRoutes = TOOLS.map((tool) => tool.slug);
       const isCalculatorRoute = calculatorRoutes.some((route) => location.pathname.endsWith(route));
 
       if (!isCalculatorRoute) {

@@ -5,8 +5,8 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "tsc -b && vite build",
-    "postbuild": "node scripts/prerender.cjs",
+    "build": "node scripts/site-data.cjs && tsc -b && vite build",
+    "postbuild": "node scripts/site-data.cjs && node scripts/prerender.cjs",
     "preview": "vite preview"
   },
   "dependencies": {

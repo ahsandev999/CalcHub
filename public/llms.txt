@@ -8,19 +8,21 @@ CalcHub helps users solve common numeric and utility problems quickly through a 
 
 ## Main tools
 
-- [Age calculator](https://calccode.com/age-calculator)
-- [Scientific calculator](https://calccode.com/scientific-calculator)
-- [Sleep calculator](https://calccode.com/sleep-calculator)
-- [BMI calculator](https://calccode.com/bmi-calculator)
-- [Percentage calculator](https://calccode.com/percentage-calculator)
-- [Unit converter](https://calccode.com/unit-converter)
-- [Currency converter](https://calccode.com/currency-converter)
-- [Number base converter](https://calccode.com/number-base-converter)
-- [Date difference calculator](https://calccode.com/date-difference)
-- [Stopwatch, timer, and Pomodoro tools](https://calccode.com/stopwatch)
-- [Password generator](https://calccode.com/password-generator)
-- [Random number generator](https://calccode.com/random-number)
-- [Color converter](https://calccode.com/color-converter)
+- [Scientific Calculator](https://calccode.com/scientific-calculator)
+- [Age Calculator](https://calccode.com/age-calculator)
+- [Sleep Calculator](https://calccode.com/sleep-calculator)
+- [BMI Calculator](https://calccode.com/bmi-calculator)
+- [Percentage Calculator](https://calccode.com/percentage-calculator)
+- [Unit Converter](https://calccode.com/unit-converter)
+- [Date Difference](https://calccode.com/date-difference)
+- [Stopwatch](https://calccode.com/stopwatch)
+- [Timer](https://calccode.com/timer)
+- [Pomodoro Timer](https://calccode.com/pomodoro)
+- [Random Number](https://calccode.com/random-number)
+- [Password Generator](https://calccode.com/password-generator)
+- [Color Converter](https://calccode.com/color-converter)
+- [Base Converter](https://calccode.com/number-base-converter)
+- [Currency Converter](https://calccode.com/currency-converter)
 
 ## Primary pages
 
