@@ -23,6 +23,29 @@
   background-size: 128px;
 }
 
+@keyframes floatBlob1 {
+  0%, 100% { transform: translate(0, 0); }
+  33% { transform: translate(30px, -40px); }
+  66% { transform: translate(-20px, 20px); }
+}
+
+@keyframes floatBlob2 {
+  0%, 100% { transform: translate(0, 0); }
+  33% { transform: translate(-40px, 30px); }
+  66% { transform: translate(30px, -30px); }
+}
+
+@keyframes floatBlob3 {
+  0%, 100% { transform: translate(0, 0); }
+  33% { transform: translate(20px, -20px); }
+  66% { transform: translate(-30px, 40px); }
+}
+
+@keyframes floatBgParticle {
+  0%, 100% { transform: translateY(0); opacity: 0.2; }
+  50% { transform: translateY(-20px); opacity: 0.6; }
+}
+
 .bg-blob {
   position: absolute;
   border-radius: 50%;
@@ -35,6 +58,8 @@
   background: var(--gradient-1);
   top: -10%; left: -10%;
   opacity: 0.15;
+  animation: floatBlob1 20s ease-in-out infinite;
+  will-change: transform;
 }
 
 .bg-blob-2 {
@@ -42,6 +67,8 @@
   background: var(--gradient-2);
   bottom: -5%; right: -5%;
   opacity: 0.12;
+  animation: floatBlob2 25s ease-in-out infinite;
+  will-change: transform;
 }
 
 .bg-blob-3 {
@@ -49,6 +76,8 @@
   background: var(--gradient-3);
   top: 50%; left: 50%;
   opacity: 0.08;
+  animation: floatBlob3 18s ease-in-out infinite;
+  will-change: transform;
 }
 
 .bg-particles { position: absolute; inset: 0; }
@@ -60,4 +89,7 @@
   border-radius: 50%;
   background: var(--accent);
   opacity: 0.3;
+  animation: floatBgParticle var(--p-duration, 4s) ease-in-out infinite;
+  animation-delay: var(--p-delay, 0s);
+  will-change: transform, opacity;
 }

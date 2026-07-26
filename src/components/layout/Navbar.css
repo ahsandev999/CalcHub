@@ -6,10 +6,15 @@
   z-index: 1000;
   height: var(--nav-height);
   transition:
+    transform 0.3s cubic-bezier(0.16, 1, 0.3, 1),
     background var(--transition),
     backdrop-filter var(--transition),
     border-color var(--transition),
     box-shadow var(--transition);
+}
+
+.navbar-hidden {
+  transform: translateY(-100px);
 }
 
 /* On hero section — transparent glass */

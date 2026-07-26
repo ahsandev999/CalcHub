@@ -1,6 +1,5 @@
 import { lazy, Suspense, useEffect, useRef, useLayoutEffect } from 'react';
 import { Routes, Route, useLocation, useNavigationType } from 'react-router-dom';
-import { AnimatePresence } from 'framer-motion';
 import Layout from './components/layout/Layout';
 import PageLoader from './components/ui/PageLoader';
 import CustomCursor from './components/ui/CustomCursor';
@@ -193,43 +192,41 @@ export default function App() {
       <CustomCursor />
       <Layout isHome={isHome}>
         <Suspense fallback={<PageLoader />}>
-          <AnimatePresence mode="sync">
-            <Routes location={location} key={location.pathname}>
-              <Route path="/" element={<Home />} />
-              <Route path="/scientific-calculator" element={<ScientificCalculator />} />
-              <Route path="/age-calculator" element={<AgeCalculator />} />
-              <Route path="/sleep-calculator" element={<SleepCalculator />} />
-              <Route path="/bmi-calculator" element={<BMICalculator />} />
-              <Route path="/percentage-calculator" element={<PercentageCalculator />} />
-              <Route path="/unit-converter" element={<UnitConverter />} />
-              <Route path="/date-difference" element={<DateDifference />} />
-              <Route path="/stopwatch" element={<Stopwatch />} />
-              <Route path="/timer" element={<Timer />} />
-              <Route path="/pomodoro" element={<Pomodoro />} />
-              <Route path="/random-number" element={<RandomNumber />} />
-              <Route path="/password-generator" element={<PasswordGenerator />} />
-              <Route path="/color-converter" element={<ColorConverter />} />
-              <Route path="/number-base-converter" element={<NumberBaseConverter />} />
-              <Route path="/currency-converter" element={<CurrencyConverter />} />
-              <Route path="/loan-calculator" element={<LoanCalculator />} />
-              <Route path="/mortgage-calculator" element={<MortgageCalculator />} />
-              <Route path="/compound-interest-calculator" element={<CompoundInterestCalculator />} />
-              <Route path="/simple-interest-calculator" element={<SimpleInterestCalculator />} />
-              <Route path="/salary-calculator" element={<SalaryCalculator />} />
-              <Route path="/calorie-calculator" element={<CalorieCalculator />} />
-              <Route path="/body-fat-calculator" element={<BodyFatCalculator />} />
-              <Route path="/bmr-calculator" element={<BMRCalculator />} />
-              <Route path="/ideal-weight-calculator" element={<IdealWeightCalculator />} />
-              <Route path="/fraction-calculator" element={<FractionCalculator />} />
-              <Route path="/triangle-calculator" element={<TriangleCalculator />} />
-              <Route path="/standard-deviation-calculator" element={<StandardDeviationCalculator />} />
-              <Route path="/gpa-calculator" element={<GPACalculator />} />
-              <Route path="/grade-calculator" element={<GradeCalculator />} />
-              <Route path="/hours-calculator" element={<HoursCalculator />} />
-              <Route path="/about" element={<About />} />
-              <Route path="/privacy" element={<Privacy />} />
-            </Routes>
-          </AnimatePresence>
+          <Routes location={location} key={location.pathname}>
+            <Route path="/" element={<Home />} />
+            <Route path="/scientific-calculator" element={<ScientificCalculator />} />
+            <Route path="/age-calculator" element={<AgeCalculator />} />
+            <Route path="/sleep-calculator" element={<SleepCalculator />} />
+            <Route path="/bmi-calculator" element={<BMICalculator />} />
+            <Route path="/percentage-calculator" element={<PercentageCalculator />} />
+            <Route path="/unit-converter" element={<UnitConverter />} />
+            <Route path="/date-difference" element={<DateDifference />} />
+            <Route path="/stopwatch" element={<Stopwatch />} />
+            <Route path="/timer" element={<Timer />} />
+            <Route path="/pomodoro" element={<Pomodoro />} />
+            <Route path="/random-number" element={<RandomNumber />} />
+            <Route path="/password-generator" element={<PasswordGenerator />} />
+            <Route path="/color-converter" element={<ColorConverter />} />
+            <Route path="/number-base-converter" element={<NumberBaseConverter />} />
+            <Route path="/currency-converter" element={<CurrencyConverter />} />
+            <Route path="/loan-calculator" element={<LoanCalculator />} />
+            <Route path="/mortgage-calculator" element={<MortgageCalculator />} />
+            <Route path="/compound-interest-calculator" element={<CompoundInterestCalculator />} />
+            <Route path="/simple-interest-calculator" element={<SimpleInterestCalculator />} />
+            <Route path="/salary-calculator" element={<SalaryCalculator />} />
+            <Route path="/calorie-calculator" element={<CalorieCalculator />} />
+            <Route path="/body-fat-calculator" element={<BodyFatCalculator />} />
+            <Route path="/bmr-calculator" element={<BMRCalculator />} />
+            <Route path="/ideal-weight-calculator" element={<IdealWeightCalculator />} />
+            <Route path="/fraction-calculator" element={<FractionCalculator />} />
+            <Route path="/triangle-calculator" element={<TriangleCalculator />} />
+            <Route path="/standard-deviation-calculator" element={<StandardDeviationCalculator />} />
+            <Route path="/gpa-calculator" element={<GPACalculator />} />
+            <Route path="/grade-calculator" element={<GradeCalculator />} />
+            <Route path="/hours-calculator" element={<HoursCalculator />} />
+            <Route path="/about" element={<About />} />
+            <Route path="/privacy" element={<Privacy />} />
+          </Routes>
         </Suspense>
       </Layout>
     </>

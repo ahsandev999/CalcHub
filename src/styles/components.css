@@ -1,5 +1,21 @@
 /* CalcHub — Component Styles v3 */
 
+/* Page entrance animation */
+.page {
+  animation: pageFadeIn 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes pageFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 /* =============================================
    CALCULATOR PAGE COMPONENTS
    ============================================= */
@@ -770,12 +786,15 @@
   line-height: 0;
   margin-top: -2px;
   background: var(--hero-bg);
+  height: 80px;
+  aspect-ratio: 1440 / 80;
+  overflow: hidden;
 }
 
 .wave-divider svg {
   display: block;
   width: 100%;
-  height: auto;
+  height: 80px;
 }
 
 /* =============================================

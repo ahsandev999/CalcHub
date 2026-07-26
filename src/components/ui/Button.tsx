@@ -1,4 +1,3 @@
-import { motion } from 'framer-motion';
 import type { ReactNode, ButtonHTMLAttributes } from 'react';
 import './Button.css';
 
@@ -26,15 +25,13 @@ export default function Button({
   } = props as any;
 
   return (
-    <motion.button
+    <button
       className={`btn btn-${variant} btn-${size} ${className}`}
-      whileHover={{ scale: 1.02 }}
-      whileTap={{ scale: 0.97 }}
       data-magnetic={magnetic || undefined}
       {...cleanProps}
     >
       <span className="btn-ripple" aria-hidden="true" />
       <span className="btn-content">{children}</span>
-    </motion.button>
+    </button>
   );
 }

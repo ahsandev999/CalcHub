@@ -1,4 +1,3 @@
-import { motion } from 'framer-motion';
 import type { ReactNode, HTMLAttributes } from 'react';
 import './Card.css';
 
@@ -26,12 +25,11 @@ export default function Card({
   } = props as any;
 
   return (
-    <motion.div
+    <div
       className={`card glass-card card-pad-${padding} ${hover ? 'card-hover' : ''} ${glow ? 'card-glow' : ''} ${className}`}
-      whileHover={hover ? { y: -4, transition: { duration: 0.2 } } : undefined}
       {...cleanProps}
     >
       {children}
-    </motion.div>
+    </div>
   );
 }

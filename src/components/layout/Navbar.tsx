@@ -1,5 +1,4 @@
 import { Link, useLocation } from 'react-router-dom';
-import { motion } from 'framer-motion';
 import { useScrollDirection } from '@/hooks/useScroll';
 import ThemeToggle from './ThemeToggle';
 import './Navbar.css';
@@ -16,26 +15,18 @@ export default function Navbar() {
     scrolled ? 'navbar-scrolled' : '',
     isCurrentHome && !scrolled ? 'navbar-hero-mode' : '',
     isCurrentHome ? 'navbar-on-home' : '',
+    !visible ? 'navbar-hidden' : '',
   ]
     .filter(Boolean)
     .join(' ');
 
   return (
-    <motion.header
-      className={navClass}
-      initial={{ y: 0 }}
-      animate={{ y: visible ? 0 : -100 }}
-      transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
-    >
+    <header className={navClass}>
       <div className="navbar-inner container">
         <Link to="/" className="navbar-brand" aria-label="CalcHub Home">
-          <motion.span
-            className="navbar-logo"
-            whileHover={{ rotate: 180 }}
-            transition={{ duration: 0.5 }}
-          >
+          <span className="navbar-logo">
             ◈
-          </motion.span>
+          </span>
           <span className="navbar-name">CalcHub</span>
         </Link>
 
@@ -49,6 +40,6 @@ export default function Navbar() {
 
         <ThemeToggle heroMode={isCurrentHome && !scrolled} />
       </div>
-    </motion.header>
+    </header>
   );
 }

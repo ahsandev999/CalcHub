@@ -4,6 +4,7 @@
 .card-pad-lg { padding: 32px; }
 
 .card-hover:hover {
+  transform: translateY(-4px);
   box-shadow: var(--shadow-lg), var(--shadow-glow);
   border-color: var(--accent-soft);
 }

@@ -1,5 +1,4 @@
 import { createContext, useCallback, useContext, useState, type ReactNode } from 'react';
-import { AnimatePresence } from 'framer-motion';
 import Toast from '../components/ui/Toast';
 
 export type ToastType = 'success' | 'error' | 'info';
@@ -44,11 +43,9 @@ export function ToastProvider({ children }: { children: ReactNode }) {
     <ToastContext.Provider value={{ showToast }}>
       {children}
       <div className="toast-container" aria-live="polite">
-        <AnimatePresence>
-          {toasts.map((t) => (
-            <Toast key={t.id} message={t.message} type={t.type} onDismiss={() => dismiss(t.id)} />
-          ))}
-        </AnimatePresence>
+        {toasts.map((t) => (
+          <Toast key={t.id} message={t.message} type={t.type} onDismiss={() => dismiss(t.id)} />
+        ))}
       </div>
     </ToastContext.Provider>
   );

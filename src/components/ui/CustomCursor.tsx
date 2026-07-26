@@ -1,16 +1,11 @@
 import { useEffect, useRef } from 'react';
-import { motion, useSpring, useMotionValue } from 'framer-motion';
 import { useIsMobile, useReducedMotion } from '@/hooks/useScroll';
 import './CustomCursor.css';
 
 export default function CustomCursor() {
   const isMobile = useIsMobile();
   const reduced = useReducedMotion();
-  const cursorX = useMotionValue(-100);
-  const cursorY = useMotionValue(-100);
-  const ringX = useSpring(cursorX, { stiffness: 150, damping: 20 });
-  const ringY = useSpring(cursorY, { stiffness: 150, damping: 20 });
-  const scale = useSpring(1, { stiffness: 300, damping: 20 });
+  const dotRef = useRef<HTMLDivElement>(null);
   const ringRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -21,15 +16,39 @@ export default function CustomCursor() {
 
     document.body.classList.add('custom-cursor-active');
 
+    let mouseX = -100;
+    let mouseY = -100;
+    let ringX = -100;
+    let ringY = -100;
+    let currentScale = 1;
+    let targetScale = 1;
+    let rafId: number;
+
     const onMove = (e: MouseEvent) => {
-      cursorX.set(e.clientX);
-      cursorY.set(e.clientY);
+      mouseX = e.clientX;
+      mouseY = e.clientY;
     };
 
-    const onEnter = () => scale.set(1.8);
-    const onLeave = () => scale.set(1);
+    const onEnter = () => { targetScale = 1.8; };
+    const onLeave = () => { targetScale = 1; };
 
-    window.addEventListener('mousemove', onMove);
+    const loop = () => {
+      ringX += (mouseX - ringX) * 0.25;
+      ringY += (mouseY - ringY) * 0.25;
+      currentScale += (targetScale - currentScale) * 0.2;
+
+      if (dotRef.current) {
+        dotRef.current.style.transform = `translate3d(${mouseX}px, ${mouseY}px, 0) scale(${currentScale}) translate(-50%, -50%)`;
+      }
+      if (ringRef.current) {
+        ringRef.current.style.transform = `translate3d(${ringX}px, ${ringY}px, 0) scale(${currentScale}) translate(-50%, -50%)`;
+      }
+
+      rafId = requestAnimationFrame(loop);
+    };
+
+    window.addEventListener('mousemove', onMove, { passive: true });
+    rafId = requestAnimationFrame(loop);
 
     const attach = () => {
       const targets = document.querySelectorAll('a, button, [role="button"], input, select, textarea, [data-magnetic]');
@@ -51,6 +70,7 @@ export default function CustomCursor() {
     observer.observe(document.body, { childList: true, subtree: true });
 
     return () => {
+      cancelAnimationFrame(rafId);
       window.removeEventListener('mousemove', onMove);
       targets.forEach((el) => {
         el.removeEventListener('mouseenter', onEnter);
@@ -59,21 +79,14 @@ export default function CustomCursor() {
       observer.disconnect();
       document.body.classList.remove('custom-cursor-active');
     };
-  }, [isMobile, reduced, cursorX, cursorY, scale]);
+  }, [isMobile, reduced]);
 
   if (isMobile || reduced) return null;
 
   return (
     <>
-      <motion.div
-        className="cursor-dot"
-        style={{ x: cursorX, y: cursorY, scale, translateX: '-50%', translateY: '-50%' }}
-      />
-      <motion.div
-        ref={ringRef}
-        className="cursor-ring"
-        style={{ x: ringX, y: ringY, scale, translateX: '-50%', translateY: '-50%' }}
-      />
+      <div ref={dotRef} className="cursor-dot" />
+      <div ref={ringRef} className="cursor-ring" />
     </>
   );
 }
