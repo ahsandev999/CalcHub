@@ -176,8 +176,10 @@ export default function App() {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [location.pathname, navType]);
 
-  // Sync body class for homepage background
-  useEffect(() => {
+  // Sync body class for homepage background — useLayoutEffect fires before paint
+  // so the class is present on first render, preventing the body background
+  // transition from firing and causing CLS
+  useLayoutEffect(() => {
     if (isHome) {
       document.body.classList.add('is-home');
     } else {
