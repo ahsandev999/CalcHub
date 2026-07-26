@@ -474,8 +474,6 @@
   pointer-events: none;
   z-index: 0;
   overflow: hidden;
-  contain: strict;
-  isolation: isolate;
 }
 
 .hero-aurora-blob {
