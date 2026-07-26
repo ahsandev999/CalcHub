@@ -331,8 +331,8 @@ export default function Home() {
           {recent.length > 0 && (
             <motion.div
               id="recent-section"
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
+              initial={{ opacity: 0 }}
+              whileInView={{ opacity: 1 }}
               viewport={{ once: true }}
               transition={{ duration: 0.5 }}
               style={{ marginBottom: 56 }}
@@ -371,8 +371,8 @@ export default function Home() {
           {/* Section header */}
           <motion.div
             className="cards-section-header"
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
           >
@@ -432,9 +432,9 @@ export default function Home() {
               key={`${category}-${searchQuery}`}
               className="grid-3"
               style={{ minHeight: 480 }}
-              initial={{ opacity: 0, y: 16 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -8 }}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
               transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
             >
               {filtered.map((tool, i) => {
@@ -442,8 +442,8 @@ export default function Home() {
                 return (
                   <motion.div
                     key={tool.slug}
-                    initial={{ opacity: 0, y: 24 }}
-                    animate={{ opacity: 1, y: 0 }}
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
                     transition={{ delay: i * 0.04, duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
                   >
                     <Link
