@@ -93,3 +93,13 @@
   animation-delay: var(--p-delay, 0s);
   will-change: transform, opacity;
 }
+
+@media (max-width: 768px) {
+  .bg-blob {
+    animation: none !important;
+    filter: blur(40px) !important;
+  }
+  .bg-particles {
+    display: none;
+  }
+}
