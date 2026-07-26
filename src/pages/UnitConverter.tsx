@@ -4,7 +4,9 @@ import PageTransition from '@/components/ui/PageTransition';
 import SEO from '@/components/ui/SEO';
 import Card from '@/components/ui/Card';
 import Input from '@/components/ui/Input';
+import Button from '@/components/ui/Button';
 import { useToolTracking } from '@/hooks/useScroll';
+import { addHistory } from '@/lib/storage';
 import '@/styles/components.css';
 
 const UNITS: Record<string, { label: string; toBase: (v: number) => number; fromBase: (v: number) => number }> = {
@@ -66,6 +68,19 @@ export default function UnitConverter() {
     setToUnit(keys[1] || keys[0]);
   };
 
+  const handleConvert = () => {
+    if (result !== '—') {
+      const fromLabel = units[fromUnit as keyof typeof units]?.label || fromUnit;
+      const toLabel = units[toUnit as keyof typeof units]?.label || toUnit;
+      addHistory({
+        tool: 'Unit Converter',
+        toolSlug: 'unit-converter',
+        expression: `${value} ${fromLabel}`,
+        result: `${result} ${toLabel}`,
+      });
+    }
+  };
+
   return (
     <PageTransition className="page-medium">
       <SEO title="Unit Converter" description="Convert length, weight, and temperature units instantly." path="/unit-converter" />
@@ -96,6 +111,7 @@ export default function UnitConverter() {
             </select>
           </div>
         </div>
+        <Button onClick={handleConvert} magnetic style={{ width: '100%', marginTop: 16 }}>Convert Units</Button>
         <div className="result-display">
           <div className="result-highlight">{result}</div>
           <p className="result-subtitle">{value} {units[fromUnit as keyof typeof units].label} = {result} {units[toUnit as keyof typeof units].label}</p>

@@ -543,10 +543,22 @@
   pointer-events: none;
 }
 
+@keyframes floatParticle {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-24px);
+  }
+}
+
 .hero-particle {
   position: absolute;
   border-radius: 50%;
   background: rgba(255, 255, 255, 0.5);
+  animation: floatParticle var(--particle-duration, 8s) ease-in-out infinite;
+  animation-delay: var(--particle-delay, 0s);
+  will-change: transform;
 }
 
 /* Hero content */
@@ -703,6 +715,9 @@
   color: var(--hero-text);
   line-height: 1;
   margin-bottom: 6px;
+  font-variant-numeric: tabular-nums;
+  min-width: 3.5ch;
+  display: inline-block;
 }
 
 .hero-stat-label {

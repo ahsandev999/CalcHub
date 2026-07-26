@@ -4,7 +4,9 @@ import PageTransition from '@/components/ui/PageTransition';
 import SEO from '@/components/ui/SEO';
 import Card from '@/components/ui/Card';
 import Input from '@/components/ui/Input';
+import Button from '@/components/ui/Button';
 import { useToolTracking } from '@/hooks/useScroll';
+import { addHistory } from '@/lib/storage';
 import '@/styles/components.css';
 
 function hexToRgb(hex: string): { r: number; g: number; b: number } | null {
@@ -81,6 +83,15 @@ export default function ColorConverter() {
     setHex(toHex(c.r, c.g, c.b));
   };
 
+  const handleConvert = () => {
+    addHistory({
+      tool: 'Color Converter',
+      toolSlug: 'color-converter',
+      expression: hex,
+      result: `RGB(${rgb.r}, ${rgb.g}, ${rgb.b}) | HSL(${hsl.h}, ${hsl.s}%, ${hsl.l}%)`,
+    });
+  };
+
   return (
     <PageTransition className="page-medium">
       <SEO title="Color Converter" description="Convert between HEX, RGB, and HSL color formats." path="/color-converter" />
@@ -103,6 +114,7 @@ export default function ColorConverter() {
           <Input label="S %" type="number" value={String(hsl.s)} onChange={(e) => updateFromHsl('s', parseInt(e.target.value) || 0)} min="0" max="100" />
           <Input label="L %" type="number" value={String(hsl.l)} onChange={(e) => updateFromHsl('l', parseInt(e.target.value) || 0)} min="0" max="100" />
         </div>
+        <Button onClick={handleConvert} magnetic style={{ width: '100%', marginTop: 16 }}>Convert Color</Button>
         <div className="result-display">
           <p className="result-subtitle">CSS: <code>{preview}</code></p>
         </div>

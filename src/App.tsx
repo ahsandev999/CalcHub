@@ -108,29 +108,53 @@ export default function App() {
       if (didNavigateAway) {
         sessionStorage.removeItem('calchub_navigated_away');
         const lastClickedId = sessionStorage.getItem('calchub_last_clicked');
+        sessionStorage.removeItem('calchub_last_clicked');
 
-        let attempts = 0;
-        const maxAttempts = 30;
-        const poll = () => {
-          attempts++;
-          const el = lastClickedId ? document.getElementById(lastClickedId) : null;
-
-          if (el) {
+        if (lastClickedId) {
+          const performScroll = (el: HTMLElement) => {
             const headerOffset = 100;
             const top = el.getBoundingClientRect().top + window.scrollY - headerOffset;
             window.scrollTo({ top, left: 0, behavior: 'instant' as ScrollBehavior });
-            sessionStorage.removeItem('calchub_last_clicked');
-            return;
-          }
+          };
 
-          if (attempts < maxAttempts) {
-            setTimeout(poll, 100);
+          const existingEl = document.getElementById(lastClickedId);
+          if (existingEl) {
+            performScroll(existingEl);
           } else {
-            const saved = Number(sessionStorage.getItem(getScrollKey(currentPath)) || '0');
-            window.scrollTo({ top: saved, left: 0, behavior: 'instant' as ScrollBehavior });
+            let observer: MutationObserver | null = null;
+            let timeoutId: number | null = null;
+
+            const cleanup = () => {
+              if (observer) {
+                observer.disconnect();
+                observer = null;
+              }
+              if (timeoutId !== null) {
+                clearTimeout(timeoutId);
+                timeoutId = null;
+              }
+            };
+
+            observer = new MutationObserver(() => {
+              const target = document.getElementById(lastClickedId);
+              if (target) {
+                cleanup();
+                performScroll(target);
+              }
+            });
+
+            observer.observe(document.body, { childList: true, subtree: true });
+
+            timeoutId = window.setTimeout(() => {
+              cleanup();
+              const saved = Number(sessionStorage.getItem(getScrollKey(currentPath)) || '0');
+              window.scrollTo({ top: saved, left: 0, behavior: 'instant' as ScrollBehavior });
+            }, 3000);
           }
-        };
-        poll();
+        } else {
+          const saved = Number(sessionStorage.getItem(getScrollKey(currentPath)) || '0');
+          window.scrollTo({ top: saved, left: 0, behavior: 'instant' as ScrollBehavior });
+        }
       } else {
         // Fresh load, F5 refresh, or direct URL visit — scroll to top, clean up
         sessionStorage.removeItem('calchub_last_clicked');
@@ -169,7 +193,7 @@ export default function App() {
       <CustomCursor />
       <Layout isHome={isHome}>
         <Suspense fallback={<PageLoader />}>
-          <AnimatePresence mode="wait">
+          <AnimatePresence mode="sync">
             <Routes location={location} key={location.pathname}>
               <Route path="/" element={<Home />} />
               <Route path="/scientific-calculator" element={<ScientificCalculator />} />

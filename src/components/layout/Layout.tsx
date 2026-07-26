@@ -11,7 +11,7 @@ export default function Layout({ children }: LayoutProps) {
   return (
     <>
       <Navbar />
-      <main>{children}</main>
+      <main className="main-content" style={{ minHeight: 'calc(100vh - 140px)' }}>{children}</main>
       <Footer />
     </>
   );

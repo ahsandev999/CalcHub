@@ -23,7 +23,7 @@ const particles = Array.from({ length: PARTICLE_COUNT }, (_, i) => ({
 
 // ─── AnimatedCounter ─────────────────────────────────────────────────────────
 function AnimatedCounter({ value, suffix = '' }: { value: number; suffix?: string }) {
-  const [display, setDisplay] = useState(0);
+  const [display, setDisplay] = useState(value);
   const ref = useRef<HTMLSpanElement>(null);
   const started = useRef(false);
 
@@ -203,7 +203,7 @@ export default function Home() {
         {/* Floating particles */}
         <div className="hero-particles" aria-hidden="true">
           {particles.map(p => (
-            <motion.span
+            <span
               key={p.id}
               className="hero-particle"
               style={{
@@ -212,17 +212,9 @@ export default function Home() {
                 width: p.size,
                 height: p.size,
                 opacity: p.opacity,
-              }}
-              animate={{
-                y: [0, -24, 0],
-                opacity: [p.opacity, p.opacity * 2.5, p.opacity],
-              }}
-              transition={{
-                duration: p.duration,
-                repeat: Infinity,
-                delay: p.delay,
-                ease: 'easeInOut',
-              }}
+                '--particle-duration': `${p.duration}s`,
+                '--particle-delay': `${p.delay}s`,
+              } as React.CSSProperties}
             />
           ))}
         </div>
@@ -435,10 +427,11 @@ export default function Home() {
           </div>
 
           {/* Tool cards grid */}
-          <AnimatePresence mode="wait">
+          <AnimatePresence mode="popLayout">
             <motion.div
               key={`${category}-${searchQuery}`}
               className="grid-3"
+              style={{ minHeight: 480 }}
               initial={{ opacity: 0, y: 16 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -8 }}
