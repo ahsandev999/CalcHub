@@ -70,6 +70,10 @@ select.input-select {
   cursor: pointer;
   transition: border-color var(--transition);
 }
+select.input-select option {
+  color: var(--text);
+  background: var(--bg-elevated);
+}
 select.input-select:focus { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-soft); }
 
 .field-label {

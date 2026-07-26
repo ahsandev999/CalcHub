@@ -5,24 +5,24 @@ import SEO from '@/components/ui/SEO';
 import Card from '@/components/ui/Card';
 import Button from '@/components/ui/Button';
 import Input from '@/components/ui/Input';
-import { useToast } from '@/context/ToastContext';
 import { useToolTracking } from '@/hooks/useScroll';
 import { addHistory } from '@/lib/storage';
 import '@/styles/components.css';
 
 export default function RandomNumber() {
-  useToolTracking('random-number', 'Random Number');
-  const { showToast } = useToast();
-  const [min, setMin] = useState('1');
+  useToolTracking('random-number', 'Random Number');  const [min, setMin] = useState('1');
   const [max, setMax] = useState('100');
   const [count, setCount] = useState('1');
   const [results, setResults] = useState<number[]>([]);
+  const [validationError, setValidationError] = useState<string | null>(null);
 
   const generate = () => {
     const lo = parseInt(min);
     const hi = parseInt(max);
     const n = parseInt(count) || 1;
-    if (isNaN(lo) || isNaN(hi) || lo > hi) { showToast('Invalid range', 'error'); return; }
+    if (isNaN(lo) || isNaN(hi) || lo > hi) { setValidationError('Enter a valid range.'); return; }
+
+    setValidationError(null);
 
     const nums: number[] = [];
     for (let i = 0; i < Math.min(n, 100); i++) {
@@ -30,7 +30,7 @@ export default function RandomNumber() {
     }
     setResults(nums);
     addHistory({ tool: 'Random Number', toolSlug: 'random-number', expression: `${lo}–${hi}`, result: nums.join(', ') });
-    showToast('Generated!', 'success');
+    
   };
 
   return (
@@ -44,10 +44,11 @@ export default function RandomNumber() {
       </div>
       <Card padding="lg">
         <div className="grid-2">
-          <Input label="Minimum" type="number" value={min} onChange={(e) => setMin(e.target.value)} />
-          <Input label="Maximum" type="number" value={max} onChange={(e) => setMax(e.target.value)} />
+          <Input label="Minimum" type="number" value={min} onChange={(e) => { setMin(e.target.value); setValidationError(null); }} error={validationError ? 'Enter a valid minimum.' : undefined} />
+          <Input label="Maximum" type="number" value={max} onChange={(e) => { setMax(e.target.value); setValidationError(null); }} error={validationError ? 'Enter a valid maximum.' : undefined} />
         </div>
         <Input label="How many numbers" type="number" value={count} onChange={(e) => setCount(e.target.value)} min="1" max="100" />
+        {validationError && <p className="input-message input-message-error" role="alert">{validationError}</p>}
         <Button onClick={generate} magnetic style={{ width: '100%' }}>Generate</Button>
         {results.length > 0 && (
           <div className="result-display">

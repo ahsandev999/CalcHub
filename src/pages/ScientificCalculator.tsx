@@ -5,7 +5,6 @@ import PageTransition from '@/components/ui/PageTransition';
 import SEO from '@/components/ui/SEO';
 import Card from '@/components/ui/Card';
 import Button from '@/components/ui/Button';
-import { useToast } from '@/context/ToastContext';
 import { useToolTracking } from '@/hooks/useScroll';
 import { formatDisplay, formatResult, evaluate, pressKey } from '@/lib/calculators/scientific';
 import { addHistory } from '@/lib/storage';
@@ -14,8 +13,6 @@ import '@/styles/components.css';
 
 export default function ScientificCalculator() {
   useToolTracking('scientific-calculator', 'Scientific Calculator');
-  const { showToast } = useToast();
-
   const [expr, setExpr] = useState('');
   const [justEvaluated, setJustEvaluated] = useState(false);
   const [isDeg, setIsDeg] = useState(true);
@@ -63,7 +60,7 @@ export default function ScientificCalculator() {
       setExpr(formatted);
       setJustEvaluated(true);
     } catch {
-      showToast('Invalid expression', 'error');
+      
       // Shake animation effect is handled in class names
       const displayElement = document.getElementById('calc-display-box');
       if (displayElement) {
@@ -78,8 +75,8 @@ export default function ScientificCalculator() {
       const val = evaluate(expr || '0', isDeg);
       setMemory((m) => m + val);
       setHasMemory(true);
-      showToast('Added to memory', 'success');
-    } catch { showToast('Cannot add to memory', 'error'); }
+      
+    } catch {  }
   };
 
   const memorySub = () => {
@@ -87,8 +84,8 @@ export default function ScientificCalculator() {
       const val = evaluate(expr || '0', isDeg);
       setMemory((m) => m - val);
       setHasMemory(true);
-      showToast('Subtracted from memory', 'success');
-    } catch { showToast('Cannot subtract from memory', 'error'); }
+      
+    } catch {  }
   };
 
   const memoryRecall = () => {
@@ -101,7 +98,7 @@ export default function ScientificCalculator() {
   const memoryClear = () => {
     setMemory(0);
     setHasMemory(false);
-    showToast('Memory cleared', 'info');
+    
   };
 
   const copyToClipboard = async () => {
@@ -109,10 +106,10 @@ export default function ScientificCalculator() {
     try {
       await navigator.clipboard.writeText(expr);
       setCopied(true);
-      showToast('Result copied to clipboard', 'success');
+      
       setTimeout(() => setCopied(false), 2000);
     } catch {
-      showToast('Failed to copy', 'error');
+      
     }
   };
 

@@ -4,7 +4,6 @@ import PageTransition from '@/components/ui/PageTransition';
 import SEO from '@/components/ui/SEO';
 import Card from '@/components/ui/Card';
 import Input from '@/components/ui/Input';
-import { useToast } from '@/context/ToastContext';
 import { useToolTracking } from '@/hooks/useScroll';
 import '@/styles/components.css';
 
@@ -21,22 +20,23 @@ const BASE_LABELS: Record<Base, string> = { 2: 'Binary', 8: 'Octal', 10: 'Decima
 
 export default function NumberBaseConverter() {
   useToolTracking('number-base-converter', 'Base Converter');
-  const { showToast } = useToast();
   const [fromBase, setFromBase] = useState<Base>(10);
   const [input, setInput] = useState('255');
   const [results, setResults] = useState<Record<Base, string> | null>(null);
+  const [convertError, setConvertError] = useState<string | null>(null);
 
   const convert = () => {
     try {
+      setConvertError(null);
       const r: Record<Base, string> = { 2: '', 8: '', 10: '', 16: '' };
       const bases: Base[] = [2, 8, 10, 16];
       for (const b of bases) {
         r[b] = b === fromBase ? input.toUpperCase() : convertBase(input, fromBase, b);
       }
       setResults(r);
-      showToast('Converted!', 'success');
     } catch (e) {
-      showToast((e as Error).message, 'error');
+      setConvertError((e as Error).message);
+      setResults(null);
     }
   };
 
@@ -53,10 +53,10 @@ export default function NumberBaseConverter() {
         <label className="field-label">Input Base</label>
         <div className="tabs" style={{ marginBottom: 16 }}>
           {([2, 8, 10, 16] as Base[]).map((b) => (
-            <button key={b} className={`tab ${fromBase === b ? 'active' : ''}`} onClick={() => setFromBase(b)}>{BASE_LABELS[b]}</button>
+            <button key={b} className={`tab ${fromBase === b ? 'active' : ''}`} onClick={() => { setFromBase(b); setConvertError(null); }}>{BASE_LABELS[b]}</button>
           ))}
         </div>
-        <Input label="Number" value={input} onChange={(e) => setInput(e.target.value)} />
+        <Input label="Number" value={input} onChange={(e) => { setInput(e.target.value); setConvertError(null); }} error={convertError || undefined} />
         <button className="btn btn-primary btn-md" style={{ width: '100%', marginTop: 8 }} onClick={convert}>Convert</button>
         {results && (
           <div className="result-grid" style={{ marginTop: 24 }}>

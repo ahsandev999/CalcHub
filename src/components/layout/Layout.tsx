@@ -7,12 +7,12 @@ interface LayoutProps {
   isHome?: boolean;
 }
 
-export default function Layout({ children, isHome = false }: LayoutProps) {
+export default function Layout({ children }: LayoutProps) {
   return (
     <>
       <Navbar />
       <main>{children}</main>
-      {!isHome && <Footer />}
+      <Footer />
     </>
   );
 }

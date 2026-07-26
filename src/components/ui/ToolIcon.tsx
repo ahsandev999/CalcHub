@@ -15,7 +15,13 @@ import {
   Binary,
   Coins,
   Shield,
-  HelpCircle
+  HelpCircle,
+  House,
+  TrendingUp,
+  Wallet,
+  Scale,
+  BarChart3,
+  BookOpen
 } from 'lucide-react';
 
 const ICONS: Record<string, React.ComponentType<any>> = {
@@ -35,6 +41,12 @@ const ICONS: Record<string, React.ComponentType<any>> = {
   binary: Binary,
   currency: Coins,
   shield: Shield,
+  house: House,
+  'trending-up': TrendingUp,
+  wallet: Wallet,
+  scale: Scale,
+  chart: BarChart3,
+  'book-open': BookOpen,
 };
 
 interface ToolIconProps {

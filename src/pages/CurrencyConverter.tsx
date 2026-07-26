@@ -6,7 +6,6 @@ import SEO from '@/components/ui/SEO';
 import Card from '@/components/ui/Card';
 import Button from '@/components/ui/Button';
 import Input from '@/components/ui/Input';
-import { useToast } from '@/context/ToastContext';
 import { useToolTracking } from '@/hooks/useScroll';
 import { addHistory } from '@/lib/storage';
 import { ArrowLeftRight, ArrowLeft, RefreshCw, Copy, Check, Globe } from 'lucide-react';
@@ -52,8 +51,6 @@ const FALLBACK_RATES: Record<string, number> = {
 
 export default function CurrencyConverter() {
   useToolTracking('currency-converter', 'Currency Converter');
-  const { showToast } = useToast();
-
   const [amount, setAmount] = useState('100');
   const [fromCurrency, setFromCurrency] = useState('USD');
   const [toCurrency, setToCurrency] = useState('EUR');
@@ -61,6 +58,7 @@ export default function CurrencyConverter() {
   const [loading, setLoading] = useState(false);
   const [lastUpdated, setLastUpdated] = useState<string>('Offline Fallback');
   const [copied, setCopied] = useState(false);
+  const [amountError, setAmountError] = useState<string | null>(null);
 
   const fetchRates = useCallback(async (silent = false) => {
     if (!silent) setLoading(true);
@@ -72,16 +70,14 @@ export default function CurrencyConverter() {
         setRates(data.rates);
         const dateStr = new Date(data.time_last_update_utc).toLocaleString();
         setLastUpdated(dateStr);
-        if (!silent) showToast('Live exchange rates updated!', 'success');
       }
     } catch {
       setRates(FALLBACK_RATES);
       setLastUpdated('Offline Fallback');
-      if (!silent) showToast('Using fallback offline exchange rates', 'info');
     } finally {
       if (!silent) setLoading(false);
     }
-  }, [showToast]);
+  }, []);
 
   useEffect(() => {
     fetchRates(true);
@@ -109,9 +105,10 @@ export default function CurrencyConverter() {
   const handleCalculate = () => {
     const amt = parseFloat(amount);
     if (isNaN(amt) || amt <= 0) {
-      showToast('Please enter a valid amount', 'error');
+      setAmountError('Please enter a valid amount.');
       return;
     }
+    setAmountError(null);
 
     addHistory({
       tool: 'Currency Converter',
@@ -120,7 +117,7 @@ export default function CurrencyConverter() {
       result: `${POPULAR_CURRENCIES[toCurrency].symbol}${convertedAmount.toLocaleString()}`,
     });
     
-    showToast('Currency conversion added to history!', 'success');
+    
   };
 
   const copyResultText = async () => {
@@ -129,10 +126,10 @@ export default function CurrencyConverter() {
     try {
       await navigator.clipboard.writeText(text);
       setCopied(true);
-      showToast('Conversion copied!', 'success');
+      
       setTimeout(() => setCopied(false), 2000);
     } catch {
-      showToast('Failed to copy', 'error');
+      
     }
   };
 
@@ -174,9 +171,10 @@ export default function CurrencyConverter() {
             label="Amount to Convert"
             type="number"
             value={amount}
-            onChange={(e) => setAmount(e.target.value)}
+            onChange={(e) => { setAmount(e.target.value); setAmountError(null); }}
             min="0"
             style={{ marginBottom: 0 }}
+            error={amountError || undefined}
           />
 
           <div>

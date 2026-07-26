@@ -22,6 +22,13 @@ export function ToastProvider({ children }: { children: ReactNode }) {
   const [toasts, setToasts] = useState<ToastItem[]>([]);
 
   const showToast = useCallback((message: string, type: ToastType = 'info') => {
+    const normalized = message.trim().toLowerCase();
+    const shouldSuppressSuccessToast = type === 'success' && normalized.includes('calculated');
+
+    if (shouldSuppressSuccessToast) {
+      return;
+    }
+
     const id = ++toastId;
     setToasts((prev) => [...prev, { id, message, type }]);
     setTimeout(() => {

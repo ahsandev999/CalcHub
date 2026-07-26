@@ -17,19 +17,21 @@ function parseTools() {
     throw new Error('Unable to locate TOOLS export in src/lib/tools.ts');
   }
 
-  const entries = Array.from(
-    arrayMatch[1].matchAll(
-      /\{\s*slug:\s*'([^']+)',\s*name:\s*'([^']+)',\s*description:\s*'([^']+)',\s*category:\s*'([^']+)',\s*icon:\s*'([^']+)'[^}]*\}/gs
-    )
-  );
-
-  return entries.map(([, slug, name, description, category, icon]) => ({
-    slug,
-    name,
-    description,
-    category,
-    icon,
-  }));
+  const tools = [];
+  const slugMatches = [...arrayMatch[1].matchAll(/slug:\s*'([^']+)'/g)];
+  const nameMatches = [...arrayMatch[1].matchAll(/name:\s*'([^']+)'/g)];
+  
+  for (let i = 0; i < slugMatches.length; i++) {
+    tools.push({
+      slug: slugMatches[i][1],
+      name: nameMatches[i] ? nameMatches[i][1] : slugMatches[i][1],
+      description: '',
+      category: '',
+      icon: ''
+    });
+  }
+  
+  return tools;
 }
 
 function getToolRoutes() {

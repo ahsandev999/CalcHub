@@ -6,7 +6,7 @@ import Card from '@/components/ui/Card';
 import Button from '@/components/ui/Button';
 import Input from '@/components/ui/Input';
 import ResultDisplay from '@/components/ui/ResultDisplay';
-import { useToast } from '@/context/ToastContext';
+
 import { useToolTracking } from '@/hooks/useScroll';
 import { addHistory } from '@/lib/storage';
 import '@/styles/components.css';
@@ -33,19 +33,21 @@ function diffDates(start: string, end: string) {
 
 export default function DateDifference() {
   useToolTracking('date-difference', 'Date Difference');
-  const { showToast } = useToast();
+
   const [start, setStart] = useState('');
   const [end, setEnd] = useState(new Date().toISOString().split('T')[0]);
   const [result, setResult] = useState<ReturnType<typeof diffDates> | null>(null);
+  const [validationError, setValidationError] = useState<string | null>(null);
 
   const calculate = () => {
-    if (!start || !end) { showToast('Enter both dates', 'error'); return; }
+    if (!start || !end) { setValidationError('Enter both dates.'); return; }
+
+    setValidationError(null);
     try {
       const r = diffDates(start, end);
       setResult(r);
       addHistory({ tool: 'Date Difference', toolSlug: 'date-difference', expression: `${start} → ${end}`, result: `${r.totalDays} days` });
-      showToast('Calculated!', 'success');
-    } catch (e) { showToast((e as Error).message, 'error'); }
+    } catch (e) { setValidationError((e as Error).message); }
   };
 
   return (
@@ -58,8 +60,9 @@ export default function DateDifference() {
         <p className="page-lede">Calculate the exact time between any two dates.</p>
       </div>
       <Card padding="lg">
-        <Input label="Start Date" type="date" value={start} onChange={(e) => setStart(e.target.value)} />
-        <Input label="End Date" type="date" value={end} onChange={(e) => setEnd(e.target.value)} />
+        <Input label="Start Date" type="date" value={start} onChange={(e) => { setStart(e.target.value); setValidationError(null); }} error={validationError ? 'Select a start date.' : undefined} />
+        <Input label="End Date" type="date" value={end} onChange={(e) => { setEnd(e.target.value); setValidationError(null); }} error={validationError ? 'Select an end date.' : undefined} />
+        {validationError && <p className="input-message input-message-error" role="alert">{validationError}</p>}
         <Button onClick={calculate} magnetic style={{ width: '100%' }}>Calculate Difference</Button>
         <ResultDisplay
           visible={!!result}

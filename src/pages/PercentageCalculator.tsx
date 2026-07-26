@@ -6,7 +6,6 @@ import Card from '@/components/ui/Card';
 import Button from '@/components/ui/Button';
 import Input from '@/components/ui/Input';
 import ResultDisplay from '@/components/ui/ResultDisplay';
-import { useToast } from '@/context/ToastContext';
 import { useToolTracking } from '@/hooks/useScroll';
 import { addHistory } from '@/lib/storage';
 import '@/styles/components.css';
@@ -14,17 +13,18 @@ import '@/styles/components.css';
 type Mode = 'percent-of' | 'what-percent' | 'change' | 'increase';
 
 export default function PercentageCalculator() {
-  useToolTracking('percentage-calculator', 'Percentage Calculator');
-  const { showToast } = useToast();
-  const [mode, setMode] = useState<Mode>('percent-of');
+  useToolTracking('percentage-calculator', 'Percentage Calculator');  const [mode, setMode] = useState<Mode>('percent-of');
   const [a, setA] = useState('');
   const [b, setB] = useState('');
   const [result, setResult] = useState<string | null>(null);
+  const [validationError, setValidationError] = useState<string | null>(null);
 
   const calculate = () => {
     const na = parseFloat(a);
     const nb = parseFloat(b);
-    if (isNaN(na) || isNaN(nb)) { showToast('Enter valid numbers', 'error'); return; }
+    if (isNaN(na) || isNaN(nb)) { setValidationError('Enter valid numbers.'); return; }
+
+    setValidationError(null);
 
     let r: string;
     switch (mode) {
@@ -35,7 +35,7 @@ export default function PercentageCalculator() {
     }
     setResult(r);
     addHistory({ tool: 'Percentage Calculator', toolSlug: 'percentage-calculator', expression: `${a}, ${b}`, result: r });
-    showToast('Calculated!', 'success');
+    
   };
 
   const labels: Record<Mode, [string, string]> = {
@@ -60,8 +60,9 @@ export default function PercentageCalculator() {
             <button key={id} className={`tab ${mode === id ? 'active' : ''}`} onClick={() => setMode(id)}>{label}</button>
           ))}
         </div>
-        <Input label={labels[mode][0]} type="number" value={a} onChange={(e) => setA(e.target.value)} />
-        <Input label={labels[mode][1]} type="number" value={b} onChange={(e) => setB(e.target.value)} />
+        <Input label={labels[mode][0]} type="number" value={a} onChange={(e) => { setA(e.target.value); setValidationError(null); }} error={validationError ? 'Enter a valid number.' : undefined} />
+        <Input label={labels[mode][1]} type="number" value={b} onChange={(e) => { setB(e.target.value); setValidationError(null); }} error={validationError ? 'Enter a valid number.' : undefined} />
+        {validationError && <p className="input-message input-message-error" role="alert">{validationError}</p>}
         <Button onClick={calculate} magnetic style={{ width: '100%' }}>Calculate</Button>
         <ResultDisplay visible={!!result} highlight={result || undefined} slots={[]} />
       </Card>

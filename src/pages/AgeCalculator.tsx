@@ -6,7 +6,6 @@ import SEO from '@/components/ui/SEO';
 import Card from '@/components/ui/Card';
 import Button from '@/components/ui/Button';
 import Input from '@/components/ui/Input';
-import { useToast } from '@/context/ToastContext';
 import { useToolTracking } from '@/hooks/useScroll';
 import { calculateAge, calculateAgeDifference } from '@/lib/calculators/age';
 import { addHistory } from '@/lib/storage';
@@ -19,9 +18,7 @@ function todayStr() {
 }
 
 export default function AgeCalculator() {
-  useToolTracking('age-calculator', 'Age Calculator');
-  const { showToast } = useToast();
-  const dobRef = useRef<HTMLInputElement>(null);
+  useToolTracking('age-calculator', 'Age Calculator');  const dobRef = useRef<HTMLInputElement>(null);
 
   const [mode, setMode] = useState<'single' | 'compare'>('single');
   const [dob, setDob] = useState('');
@@ -60,9 +57,9 @@ export default function AgeCalculator() {
             spread: 80,
             origin: { y: 0.6 }
           });
-          showToast("Happy Birthday! 🎉 Enjoy some confetti!", "success");
+          
         } else {
-          showToast('Age calculated!', 'success');
+          
         }
       } else {
         if (!dob2) {
@@ -72,11 +69,10 @@ export default function AgeCalculator() {
         const r = calculateAgeDifference(dob, dob2);
         setDiffResult(r);
         setResult(null);
-        showToast('Age difference calculated!', 'success');
+        
       }
     } catch (e) {
       setError((e as Error).message);
-      showToast((e as Error).message, 'error');
     }
   };
 
@@ -91,10 +87,10 @@ export default function AgeCalculator() {
     try {
       await navigator.clipboard.writeText(text);
       setCopied(true);
-      showToast('Results copied to clipboard', 'success');
+      
       setTimeout(() => setCopied(false), 2000);
     } catch {
-      showToast('Failed to copy', 'error');
+      
     }
   };
 

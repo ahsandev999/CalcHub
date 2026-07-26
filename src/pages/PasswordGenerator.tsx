@@ -4,7 +4,6 @@ import PageTransition from '@/components/ui/PageTransition';
 import SEO from '@/components/ui/SEO';
 import Card from '@/components/ui/Card';
 import Button from '@/components/ui/Button';
-import { useToast } from '@/context/ToastContext';
 import { useToolTracking } from '@/hooks/useScroll';
 import '@/styles/components.css';
 
@@ -41,23 +40,25 @@ function getStrength(pw: string): { score: number; label: string } {
 }
 
 export default function PasswordGenerator() {
-  useToolTracking('password-generator', 'Password Generator');
-  const { showToast } = useToast();
-  const [length, setLength] = useState(16);
+  useToolTracking('password-generator', 'Password Generator');  const [length, setLength] = useState(16);
   const [opts, setOpts] = useState({ lowercase: true, uppercase: true, numbers: true, symbols: true });
   const [password, setPassword] = useState('');
+  const [validationError, setValidationError] = useState<string | null>(null);
 
   const generate = useCallback(() => {
     const pw = generatePassword(length, opts);
-    if (!pw) { showToast('Select at least one character type', 'error'); return; }
+    if (!pw) {
+      setValidationError('Select at least one character type.');
+      return;
+    }
+    setValidationError(null);
     setPassword(pw);
-    showToast('Password generated!', 'success');
-  }, [length, opts, showToast]);
+  }, [length, opts]);
 
   const copy = async () => {
     if (!password) return;
     await navigator.clipboard.writeText(password);
-    showToast('Copied to clipboard!', 'success');
+    
   };
 
   const strength = password ? getStrength(password) : null;
@@ -87,13 +88,14 @@ export default function PasswordGenerator() {
         <div className="grid-2" style={{ marginBottom: 24 }}>
           {Object.entries(opts).map(([key, val]) => (
             <label key={key} style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: '0.875rem', cursor: 'pointer' }}>
-              <input type="checkbox" checked={val} onChange={(e) => setOpts({ ...opts, [key]: e.target.checked })} />
+              <input type="checkbox" checked={val} onChange={(e) => { setOpts({ ...opts, [key]: e.target.checked }); setValidationError(null); }} />
               {key.charAt(0).toUpperCase() + key.slice(1)}
             </label>
           ))}
         </div>
+        {validationError && <p className="input-message input-message-error" role="alert">{validationError}</p>}
         <div className="time-controls">
-          <Button onClick={generate} magnetic>Generate</Button>
+          <Button onClick={generate} magnetic >Generate</Button>
           <Button onClick={copy} variant="secondary" disabled={!password}>Copy</Button>
         </div>
       </Card>

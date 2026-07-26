@@ -5,38 +5,46 @@ import './Footer.css';
 export default function Footer() {
   const year = new Date().getFullYear();
   const featured = TOOLS.filter((t) => t.featured);
+  const footerLimit = 4;
+  const grouped = [
+    { title: 'Featured', tools: featured.slice(0, footerLimit), extra: Math.max(featured.length - footerLimit, 0) },
+    { title: 'Math', tools: TOOLS.filter((t) => t.category === 'math').slice(0, footerLimit), extra: Math.max(TOOLS.filter((t) => t.category === 'math').length - footerLimit, 0) },
+    { title: 'Health', tools: TOOLS.filter((t) => t.category === 'health').slice(0, footerLimit), extra: Math.max(TOOLS.filter((t) => t.category === 'health').length - footerLimit, 0) },
+    { title: 'Time', tools: TOOLS.filter((t) => t.category === 'time').slice(0, footerLimit), extra: Math.max(TOOLS.filter((t) => t.category === 'time').length - footerLimit, 0) },
+    { title: 'Utility', tools: TOOLS.filter((t) => t.category === 'utility').slice(0, footerLimit), extra: Math.max(TOOLS.filter((t) => t.category === 'utility').length - footerLimit, 0) },
+    { title: 'Converters', tools: TOOLS.filter((t) => t.category === 'converter').slice(0, footerLimit), extra: Math.max(TOOLS.filter((t) => t.category === 'converter').length - footerLimit, 0) },
+    { title: 'Education', tools: TOOLS.filter((t) => t.category === 'education').slice(0, footerLimit), extra: Math.max(TOOLS.filter((t) => t.category === 'education').length - footerLimit, 0) },
+  ];
 
   return (
     <footer className="footer">
       <div className="container">
-        <div className="footer-grid">
-          <div className="footer-brand">
-            <Link to="/" className="footer-logo">
-              <span className="navbar-logo">◈</span>
-              <span>CalcHub</span>
-            </Link>
-            <p className="footer-tagline">
-              Premium calculators and tools — free, fast, and beautiful. No sign-up required.
-            </p>
-          </div>
+        {/* Brand sits in its own row above the column grid */}
+        <div className="footer-brand">
+          <Link to="/" className="footer-logo">
+            <span className="navbar-logo">◈</span>
+            <span>CalcHub</span>
+          </Link>
+          <p className="footer-tagline">
+            Premium calculators and tools — free, fast, and beautiful. No sign-up required.
+          </p>
+        </div>
 
-          <div className="footer-col">
-            <h4>Featured Tools</h4>
-            <ul>
-              {featured.map((t) => (
-                <li key={t.slug}><Link to={`/${t.slug}`}>{t.name}</Link></li>
-              ))}
-            </ul>
-          </div>
-
-          <div className="footer-col">
-            <h4>More Tools</h4>
-            <ul>
-              {TOOLS.filter((t) => !t.featured).slice(0, 5).map((t) => (
-                <li key={t.slug}><Link to={`/${t.slug}`}>{t.name}</Link></li>
-              ))}
-            </ul>
-          </div>
+        {/* All category columns in one flex-wrap row — Education & Company align cleanly */}
+        <div className="footer-cols">
+          {grouped.map((group) => (
+            <div className="footer-col" key={group.title}>
+              <h4>{group.title}</h4>
+              <ul>
+                {group.tools.map((t) => (
+                  <li key={t.slug}><Link to={`/${t.slug}`}>{t.name}</Link></li>
+                ))}
+                {group.extra > 0 && (
+                  <li className="footer-more"><Link to="/">+{group.extra} more</Link></li>
+                )}
+              </ul>
+            </div>
+          ))}
 
           <div className="footer-col">
             <h4>Company</h4>

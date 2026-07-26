@@ -4,7 +4,6 @@ import PageTransition from '@/components/ui/PageTransition';
 import SEO from '@/components/ui/SEO';
 import Card from '@/components/ui/Card';
 import Button from '@/components/ui/Button';
-import { useToast } from '@/context/ToastContext';
 import { useToolTracking } from '@/hooks/useScroll';
 import '@/styles/components.css';
 
@@ -19,9 +18,7 @@ function formatSec(s: number) {
 }
 
 export default function Pomodoro() {
-  useToolTracking('pomodoro', 'Pomodoro Timer');
-  const { showToast } = useToast();
-  const [phase, setPhase] = useState<Phase>('work');
+  useToolTracking('pomodoro', 'Pomodoro Timer');  const [phase, setPhase] = useState<Phase>('work');
   const [remaining, setRemaining] = useState(WORK);
   const [running, setRunning] = useState(false);
   const [sessions, setSessions] = useState(0);
@@ -39,19 +36,19 @@ export default function Pomodoro() {
       if (newSessions % 4 === 0) {
         setPhase('long');
         setRemaining(LONG);
-        showToast('Time for a long break!', 'info');
+        
       } else {
         setPhase('short');
         setRemaining(SHORT);
-        showToast('Take a short break!', 'info');
+        
       }
     } else {
       setPhase('work');
       setRemaining(WORK);
-      showToast('Back to work!', 'success');
+      
     }
     setRunning(false);
-  }, [phase, sessions, showToast]);
+  }, [phase, sessions]);
 
   useEffect(() => {
     if (running) {

@@ -6,7 +6,6 @@ import SEO from '@/components/ui/SEO';
 import Card from '@/components/ui/Card';
 import Button from '@/components/ui/Button';
 import Input from '@/components/ui/Input';
-import { useToast } from '@/context/ToastContext';
 import { useToolTracking } from '@/hooks/useScroll';
 import { calculateSleep, formatTime, type SleepMode } from '@/lib/calculators/sleep';
 import { addHistory } from '@/lib/storage';
@@ -15,8 +14,6 @@ import '@/styles/components.css';
 
 export default function SleepCalculator() {
   useToolTracking('sleep-calculator', 'Sleep Calculator');
-  const { showToast } = useToast();
-
   const [mode, setMode] = useState<SleepMode>('wake');
   const [wakeTime, setWakeTime] = useState('07:00');
   const [fallAsleep, setFallAsleep] = useState('15');
@@ -40,7 +37,7 @@ export default function SleepCalculator() {
       result: r.options[0] ? formatTime(r.options[0].time) : '',
     });
     
-    showToast('Sleep times calculated!', 'success');
+    
   };
 
   const copyResultText = async () => {
@@ -50,10 +47,10 @@ export default function SleepCalculator() {
     try {
       await navigator.clipboard.writeText(text);
       setCopied(true);
-      showToast('Calculated schedule copied!', 'success');
+      
       setTimeout(() => setCopied(false), 2000);
     } catch {
-      showToast('Failed to copy', 'error');
+      
     }
   };
 

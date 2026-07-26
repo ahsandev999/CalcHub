@@ -6,7 +6,7 @@ import ToolIcon from '@/components/ui/ToolIcon';
 import { TOOLS } from '@/lib/tools';
 import { getRecentTools, getToolStats, getHistory, toggleFavorite, clearHistory } from '@/lib/storage';
 import { Search, Star, Download, Trash2, Copy, Check, X, History, ChevronDown, ArrowRight, Zap } from 'lucide-react';
-import { useToast } from '@/context/ToastContext';
+
 import '@/styles/components.css';
 
 // ─── Particle data ────────────────────────────────────────────────────────────
@@ -65,11 +65,11 @@ const CATEGORY_CONFIG = [
   { id: 'time', label: 'Time' },
   { id: 'utility', label: 'Utility' },
   { id: 'converter', label: 'Converters' },
+  { id: 'education', label: 'Education' },
 ] as const;
 
 // ─── Main Component ───────────────────────────────────────────────────────────
 export default function Home() {
-  const { showToast } = useToast();
   const heroRef = useRef<HTMLDivElement>(null);
 
   // Mouse-follow glow
@@ -99,6 +99,8 @@ export default function Home() {
   // History
   const [calcHistory, setCalcHistory] = useState(() => getHistory());
   const [copiedId, setCopiedId] = useState<string | null>(null);
+  const [isExported, setIsExported] = useState(false);
+  const [isCleared, setIsCleared] = useState(false);
 
   const recent = getRecentTools();
   const stats = getToolStats();
@@ -110,7 +112,6 @@ export default function Home() {
     const next = isFav ? favoriteTools.filter(s => s !== slug) : [...favoriteTools, slug];
     setFavoriteTools(next);
     localStorage.setItem('calchub_favorite_tools', JSON.stringify(next));
-    showToast(isFav ? 'Removed from favorites' : 'Added to favorites ★', 'success');
   };
 
   const toggleFavCalc = (id: string, e: React.MouseEvent) => {
@@ -122,7 +123,8 @@ export default function Home() {
   const handleClearHistory = () => {
     clearHistory();
     setCalcHistory([]);
-    showToast('History cleared', 'info');
+    setIsCleared(true);
+    setTimeout(() => setIsCleared(false), 2000);
   };
 
   const handleExport = () => {
@@ -133,7 +135,8 @@ export default function Home() {
     a.download = `calchub-history-${new Date().toISOString().split('T')[0]}.json`;
     a.click();
     URL.revokeObjectURL(url);
-    showToast('History exported!', 'success');
+    setIsExported(true);
+    setTimeout(() => setIsExported(false), 2000);
   };
 
   const handleCopy = async (id: string, text: string, e: React.MouseEvent) => {
@@ -141,9 +144,8 @@ export default function Home() {
     try {
       await navigator.clipboard.writeText(text);
       setCopiedId(id);
-      showToast('Copied!', 'success');
       setTimeout(() => setCopiedId(null), 2000);
-    } catch { showToast('Copy failed', 'error'); }
+    } catch { /* silently fail */ }
   };
 
   const scrollToCards = () => {
@@ -358,7 +360,13 @@ export default function Home() {
                 {recent.map(r => {
                   const tool = TOOLS.find(t => t.slug === r.slug);
                   return (
-                    <Link key={r.slug} to={`/${r.slug}`} className="recent-chip-light">
+                    <Link
+                      key={r.slug}
+                      to={`/${r.slug}`}
+                      className="recent-chip-light"
+                      id={`recent-${r.slug}`}
+                      onClick={() => sessionStorage.setItem('calchub_last_clicked', `recent-${r.slug}`)}
+                    >
                       <ToolIcon icon={tool?.icon || 'calculator'} size={14} style={{ color: 'var(--cards-accent)' }} />
                       {r.name}
                     </Link>
@@ -445,7 +453,12 @@ export default function Home() {
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: i * 0.04, duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
                   >
-                    <Link to={`/${tool.slug}`} style={{ display: 'block', height: '100%' }}>
+                    <Link
+                      to={`/${tool.slug}`}
+                      style={{ display: 'block', height: '100%' }}
+                      id={`card-${tool.slug}`}
+                      onClick={() => sessionStorage.setItem('calchub_last_clicked', `card-${tool.slug}`)}
+                    >
                       <div className="tool-card-light">
                         {/* Featured badge */}
                         {tool.featured && (
@@ -517,12 +530,12 @@ export default function Home() {
             {calcHistory.length > 0 && (
               <div className="history-actions">
                 <button className="history-action-btn" onClick={handleExport}>
-                  <Download size={13} />
-                  Export JSON
+                  {isExported ? <Check size={13} style={{ color: '#10b981' }} /> : <Download size={13} />}
+                  {isExported ? 'Exported!' : 'Export JSON'}
                 </button>
                 <button className="history-action-btn danger" onClick={handleClearHistory}>
-                  <Trash2 size={13} />
-                  Clear All
+                  {isCleared ? <Check size={13} /> : <Trash2 size={13} />}
+                  {isCleared ? 'Cleared!' : 'Clear All'}
                 </button>
               </div>
             )}
@@ -585,41 +598,6 @@ export default function Home() {
         </div>
       </div>
 
-      {/* ═══════════════════════════════════════════════
-          FOOTER — Light section
-          ═══════════════════════════════════════════════ */}
-      <footer style={{
-        background: 'var(--cards-bg)',
-        borderTop: '1.5px solid var(--cards-border-strong)',
-        padding: '40px 0',
-      }}>
-        <div className="container" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 20 }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-            <div style={{
-              width: 30, height: 30, borderRadius: 8,
-              background: 'linear-gradient(135deg, #6366f1, #8b5cf6)',
-              display: 'flex', alignItems: 'center', justifyContent: 'center',
-              color: 'white', fontSize: '0.8125rem', boxShadow: '0 4px 12px rgba(99,102,241,0.3)',
-            }}>◈</div>
-            <span style={{ fontFamily: 'var(--font-display)', fontWeight: 700, fontSize: '0.9375rem', color: 'var(--cards-text)', letterSpacing: '-0.01em' }}>CalcHub</span>
-          </div>
-          <div style={{ display: 'flex', gap: 24, flexWrap: 'wrap' }}>
-            <Link to="/about" style={{ fontSize: '0.875rem', color: 'var(--cards-text-secondary)', fontWeight: 500, transition: 'color 0.2s' }}
-              onMouseEnter={e => (e.currentTarget.style.color = 'var(--cards-accent)')}
-              onMouseLeave={e => (e.currentTarget.style.color = 'var(--cards-text-secondary)')}>
-              About
-            </Link>
-            <Link to="/privacy" style={{ fontSize: '0.875rem', color: 'var(--cards-text-secondary)', fontWeight: 500, transition: 'color 0.2s' }}
-              onMouseEnter={e => (e.currentTarget.style.color = 'var(--cards-accent)')}
-              onMouseLeave={e => (e.currentTarget.style.color = 'var(--cards-text-secondary)')}>
-              Privacy
-            </Link>
-          </div>
-          <p style={{ fontSize: '0.8125rem', color: 'var(--cards-text-muted)' }}>
-            © {new Date().getFullYear()} CalcHub. All calculations run locally in your browser.
-          </p>
-        </div>
-      </footer>
     </>
   );
 }

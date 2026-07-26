@@ -6,7 +6,6 @@ import Card from '@/components/ui/Card';
 import Button from '@/components/ui/Button';
 import Input from '@/components/ui/Input';
 import ResultDisplay from '@/components/ui/ResultDisplay';
-import { useToast } from '@/context/ToastContext';
 import { useToolTracking } from '@/hooks/useScroll';
 import { addHistory } from '@/lib/storage';
 import '@/styles/components.css';
@@ -19,17 +18,18 @@ function getBMICategory(bmi: number): { label: string; color: string } {
 }
 
 export default function BMICalculator() {
-  useToolTracking('bmi-calculator', 'BMI Calculator');
-  const { showToast } = useToast();
-  const [weight, setWeight] = useState('');
+  useToolTracking('bmi-calculator', 'BMI Calculator');  const [weight, setWeight] = useState('');
   const [height, setHeight] = useState('');
   const [unit, setUnit] = useState<'metric' | 'imperial'>('metric');
   const [bmi, setBmi] = useState<number | null>(null);
+  const [validationError, setValidationError] = useState<string | null>(null);
 
   const calculate = () => {
     const w = parseFloat(weight);
     const h = parseFloat(height);
-    if (!w || !h || w <= 0 || h <= 0) { showToast('Enter valid weight and height', 'error'); return; }
+    if (!w || !h || w <= 0 || h <= 0) { setValidationError('Enter valid weight and height.'); return; }
+
+    setValidationError(null);
 
     let bmiVal: number;
     if (unit === 'metric') {
@@ -40,7 +40,7 @@ export default function BMICalculator() {
     bmiVal = Math.round(bmiVal * 10) / 10;
     setBmi(bmiVal);
     addHistory({ tool: 'BMI Calculator', toolSlug: 'bmi-calculator', expression: `${w}${unit === 'metric' ? 'kg' : 'lbs'}, ${h}${unit === 'metric' ? 'cm' : 'in'}`, result: String(bmiVal) });
-    showToast('BMI calculated!', 'success');
+    
   };
 
   const cat = bmi ? getBMICategory(bmi) : null;
@@ -62,8 +62,9 @@ export default function BMICalculator() {
           <button className={`tab ${unit === 'metric' ? 'active' : ''}`} onClick={() => setUnit('metric')}>Metric (kg/cm)</button>
           <button className={`tab ${unit === 'imperial' ? 'active' : ''}`} onClick={() => setUnit('imperial')}>Imperial (lbs/in)</button>
         </div>
-        <Input label={`Weight (${unit === 'metric' ? 'kg' : 'lbs'})`} type="number" value={weight} onChange={(e) => setWeight(e.target.value)} min="1" />
-        <Input label={`Height (${unit === 'metric' ? 'cm' : 'inches'})`} type="number" value={height} onChange={(e) => setHeight(e.target.value)} min="1" />
+        <Input label={`Weight (${unit === 'metric' ? 'kg' : 'lbs'})`} type="number" value={weight} onChange={(e) => { setWeight(e.target.value); setValidationError(null); }} min="1" error={validationError ? 'Enter a valid weight.' : undefined} />
+        <Input label={`Height (${unit === 'metric' ? 'cm' : 'inches'})`} type="number" value={height} onChange={(e) => { setHeight(e.target.value); setValidationError(null); }} min="1" error={validationError ? 'Enter a valid height.' : undefined} />
+        {validationError && <p className="input-message input-message-error" role="alert">{validationError}</p>}
         <Button onClick={calculate} magnetic style={{ width: '100%' }}>Calculate BMI</Button>
         <ResultDisplay
           visible={bmi !== null}

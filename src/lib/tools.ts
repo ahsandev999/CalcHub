@@ -2,7 +2,7 @@ export interface Tool {
   slug: string;
   name: string;
   description: string;
-  category: 'math' | 'health' | 'time' | 'utility' | 'converter';
+  category: 'math' | 'health' | 'time' | 'utility' | 'converter' | 'education';
   icon: string;
   featured?: boolean;
 }
@@ -23,6 +23,21 @@ export const TOOLS: Tool[] = [
   { slug: 'color-converter', name: 'Color Converter', description: 'Convert between HEX, RGB, HSL & CSS formats.', category: 'converter', icon: 'palette' },
   { slug: 'number-base-converter', name: 'Base Converter', description: 'Convert between decimal, binary, octal & hexadecimal.', category: 'converter', icon: 'binary' },
   { slug: 'currency-converter', name: 'Currency Converter', description: 'Convert between global currencies with live API rates.', category: 'converter', icon: 'currency' },
+  { slug: 'loan-calculator', name: 'Loan Calculator', description: 'Estimate monthly payments, interest, and total repayment for an amortized loan.', category: 'math', icon: 'currency' },
+  { slug: 'mortgage-calculator', name: 'Mortgage Calculator', description: 'Estimate monthly mortgage payments including taxes and insurance.', category: 'math', icon: 'house' },
+  { slug: 'compound-interest-calculator', name: 'Compound Interest Calculator', description: 'Project investment growth with compounding and recurring monthly contributions.', category: 'math', icon: 'trending-up' },
+  { slug: 'simple-interest-calculator', name: 'Simple Interest Calculator', description: 'Calculate interest earned and final balance using the simple interest formula.', category: 'math', icon: 'percent' },
+  { slug: 'salary-calculator', name: 'Salary Calculator', description: 'Convert hourly and annual salary into weekly, monthly, and yearly pay.', category: 'math', icon: 'wallet' },
+  { slug: 'calorie-calculator', name: 'Calorie Calculator', description: 'Estimate daily calorie needs from body metrics and activity level.', category: 'health', icon: 'heart' },
+  { slug: 'body-fat-calculator', name: 'Body Fat Calculator', description: 'Estimate body fat percentage using the US Navy formula.', category: 'health', icon: 'scale' },
+  { slug: 'bmr-calculator', name: 'BMR Calculator', description: 'Estimate your basal metabolic rate using the Mifflin-St Jeor equation.', category: 'health', icon: 'heart' },
+  { slug: 'ideal-weight-calculator', name: 'Ideal Weight Calculator', description: 'Find an ideal weight range using multiple body-weight formulas.', category: 'health', icon: 'shield' },
+  { slug: 'fraction-calculator', name: 'Fraction Calculator', description: 'Add, subtract, multiply, or divide fractions and simplify the result.', category: 'math', icon: 'calculator' },
+  { slug: 'triangle-calculator', name: 'Triangle Calculator', description: 'Solve triangle sides, angles, area, and perimeter from known values.', category: 'math', icon: 'ruler' },
+  { slug: 'standard-deviation-calculator', name: 'Standard Deviation Calculator', description: 'Calculate mean, variance, and population/sample standard deviation from a list.', category: 'math', icon: 'chart' },
+  { slug: 'gpa-calculator', name: 'GPA Calculator', description: 'Calculate weighted GPA from course grades and credit hours.', category: 'education', icon: 'book-open' },
+  { slug: 'grade-calculator', name: 'Grade Calculator', description: 'Calculate a weighted final grade percentage and letter grade.', category: 'education', icon: 'book-open' },
+  { slug: 'hours-calculator', name: 'Hours Calculator', description: 'Compute total hours worked between two times, including breaks.', category: 'time', icon: 'clock' },
 ];
 
 export function getToolBySlug(slug: string): Tool | undefined {
@@ -36,4 +51,5 @@ export const CATEGORIES = [
   { id: 'time', label: 'Time' },
   { id: 'utility', label: 'Utility' },
   { id: 'converter', label: 'Converters' },
+  { id: 'education', label: 'Education' },
 ] as const;

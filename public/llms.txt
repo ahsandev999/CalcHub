@@ -23,6 +23,21 @@ CalcHub helps users solve common numeric and utility problems quickly through a 
 - [Color Converter](https://calccode.com/color-converter)
 - [Base Converter](https://calccode.com/number-base-converter)
 - [Currency Converter](https://calccode.com/currency-converter)
+- [Loan Calculator](https://calccode.com/loan-calculator)
+- [Mortgage Calculator](https://calccode.com/mortgage-calculator)
+- [Compound Interest Calculator](https://calccode.com/compound-interest-calculator)
+- [Simple Interest Calculator](https://calccode.com/simple-interest-calculator)
+- [Salary Calculator](https://calccode.com/salary-calculator)
+- [Calorie Calculator](https://calccode.com/calorie-calculator)
+- [Body Fat Calculator](https://calccode.com/body-fat-calculator)
+- [BMR Calculator](https://calccode.com/bmr-calculator)
+- [Ideal Weight Calculator](https://calccode.com/ideal-weight-calculator)
+- [Fraction Calculator](https://calccode.com/fraction-calculator)
+- [Triangle Calculator](https://calccode.com/triangle-calculator)
+- [Standard Deviation Calculator](https://calccode.com/standard-deviation-calculator)
+- [GPA Calculator](https://calccode.com/gpa-calculator)
+- [Grade Calculator](https://calccode.com/grade-calculator)
+- [Hours Calculator](https://calccode.com/hours-calculator)
 
 ## Primary pages
 

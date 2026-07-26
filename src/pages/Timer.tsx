@@ -5,7 +5,6 @@ import SEO from '@/components/ui/SEO';
 import Card from '@/components/ui/Card';
 import Button from '@/components/ui/Button';
 import Input from '@/components/ui/Input';
-import { useToast } from '@/context/ToastContext';
 import { useToolTracking } from '@/hooks/useScroll';
 import '@/styles/components.css';
 
@@ -18,9 +17,7 @@ function formatSec(s: number) {
 }
 
 export default function Timer() {
-  useToolTracking('timer', 'Timer');
-  const { showToast } = useToast();
-  const [seconds, setSeconds] = useState(300);
+  useToolTracking('timer', 'Timer');  const [seconds, setSeconds] = useState(300);
   const [remaining, setRemaining] = useState(300);
   const [running, setRunning] = useState(false);
   const [inputMin, setInputMin] = useState('5');
@@ -31,13 +28,13 @@ export default function Timer() {
     setRemaining((r) => {
       if (r <= 1) {
         setRunning(false);
-        showToast("Time's up!", 'success');
+        
         try { new Audio('data:audio/wav;base64,UklGRnoGAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQoGAACBhYqFbF1fdH2Onp6hqq6xtLa3uLm6u7y9vr/AwcLDxMXGx8jJysvMzc7P0NHS09TV1tfY2drb3N3e3+Dh4uPk5ebn6Onq6+zt7u/w8fLz9PX29/j5+vv8/f7/').play(); } catch { /* */ }
         return 0;
       }
       return r - 1;
     });
-  }, [showToast]);
+  }, []);
 
   useEffect(() => {
     if (running) intervalRef.current = setInterval(tick, 1000);

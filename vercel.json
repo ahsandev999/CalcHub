@@ -61,6 +61,66 @@
       "destination": "/currency-converter/index.html"
     },
     {
+      "source": "/loan-calculator",
+      "destination": "/loan-calculator/index.html"
+    },
+    {
+      "source": "/mortgage-calculator",
+      "destination": "/mortgage-calculator/index.html"
+    },
+    {
+      "source": "/compound-interest-calculator",
+      "destination": "/compound-interest-calculator/index.html"
+    },
+    {
+      "source": "/simple-interest-calculator",
+      "destination": "/simple-interest-calculator/index.html"
+    },
+    {
+      "source": "/salary-calculator",
+      "destination": "/salary-calculator/index.html"
+    },
+    {
+      "source": "/calorie-calculator",
+      "destination": "/calorie-calculator/index.html"
+    },
+    {
+      "source": "/body-fat-calculator",
+      "destination": "/body-fat-calculator/index.html"
+    },
+    {
+      "source": "/bmr-calculator",
+      "destination": "/bmr-calculator/index.html"
+    },
+    {
+      "source": "/ideal-weight-calculator",
+      "destination": "/ideal-weight-calculator/index.html"
+    },
+    {
+      "source": "/fraction-calculator",
+      "destination": "/fraction-calculator/index.html"
+    },
+    {
+      "source": "/triangle-calculator",
+      "destination": "/triangle-calculator/index.html"
+    },
+    {
+      "source": "/standard-deviation-calculator",
+      "destination": "/standard-deviation-calculator/index.html"
+    },
+    {
+      "source": "/gpa-calculator",
+      "destination": "/gpa-calculator/index.html"
+    },
+    {
+      "source": "/grade-calculator",
+      "destination": "/grade-calculator/index.html"
+    },
+    {
+      "source": "/hours-calculator",
+      "destination": "/hours-calculator/index.html"
+    },
+    {
       "source": "/robots.txt",
       "destination": "/robots.txt"
     },
