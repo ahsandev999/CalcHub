@@ -1,7 +1,8 @@
 .footer {
   border-top: 1px solid var(--border);
   padding: 64px 0 32px;
-  margin-top: 40px;
+  content-visibility: auto;
+  contain-intrinsic-size: auto 400px;
 }
 
 /* Brand sits in its own row */
