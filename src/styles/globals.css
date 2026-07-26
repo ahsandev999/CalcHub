@@ -414,9 +414,9 @@ input, select, textarea {
 }
 
 @keyframes aurora-shift {
-  0%, 100% { transform: translate(0, 0) scale(1); }
-  33% { transform: translate(60px, -80px) scale(1.15); }
-  66% { transform: translate(-40px, 60px) scale(0.9); }
+  0%, 100% { transform: translate(0, 0); }
+  33% { transform: translate(60px, -80px); }
+  66% { transform: translate(-40px, 60px); }
 }
 
 @keyframes float-y {
