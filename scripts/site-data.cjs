@@ -86,6 +86,12 @@ function writeLlmsFile() {
   fs.writeFileSync(LLMS_OUTPUT_PATH, buildLlmsContent(), 'utf8');
 }
 
+function writePublicStaticFiles() {
+  const publicDir = path.join(ROOT_DIR, 'public');
+  fs.writeFileSync(path.join(publicDir, 'sitemap.xml'), buildSitemapContent(), 'utf8');
+  fs.writeFileSync(path.join(publicDir, 'robots.txt'), buildRobotsContent(), 'utf8');
+}
+
 function writeDistStaticFiles() {
   if (!fs.existsSync(DIST_DIR)) return;
 
@@ -97,8 +103,10 @@ function writeDistStaticFiles() {
 function main() {
   writeVercelConfig();
   writeLlmsFile();
+  writePublicStaticFiles();
   writeDistStaticFiles();
 }
+
 
 module.exports = {
   parseTools,

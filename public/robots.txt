@@ -1,4 +1,3 @@
 User-agent: *
 Allow: /
-
-Sitemap: https://calchub.app/sitemap.xml
+Sitemap: https://calccode.com/sitemap.xml

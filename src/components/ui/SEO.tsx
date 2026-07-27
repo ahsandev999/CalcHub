@@ -8,8 +8,9 @@ interface SEOProps {
   faqSchema?: { question: string; answer: string }[];
 }
 
-const SITE_URL = 'https://calchub.app';
+const SITE_URL = 'https://calccode.com';
 const SITE_NAME = 'CalcHub';
+
 
 export default function SEO({ title, description, path = '', type = 'website', faqSchema }: SEOProps) {
   const url = `${SITE_URL}${path}`;
