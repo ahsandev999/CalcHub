@@ -5,12 +5,13 @@ interface SEOProps {
   description: string;
   path?: string;
   type?: string;
+  faqSchema?: { question: string; answer: string }[];
 }
 
 const SITE_URL = 'https://calchub.app';
 const SITE_NAME = 'CalcHub';
 
-export default function SEO({ title, description, path = '', type = 'website' }: SEOProps) {
+export default function SEO({ title, description, path = '', type = 'website', faqSchema }: SEOProps) {
   const url = `${SITE_URL}${path}`;
   const fullTitle = path === '/' || path === '' ? title : `${title} — ${SITE_NAME}`;
 
@@ -24,6 +25,19 @@ export default function SEO({ title, description, path = '', type = 'website' }:
     operatingSystem: 'Any',
     offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
   };
+
+  const faqJsonLd = faqSchema && faqSchema.length > 0 ? {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: faqSchema.map(item => ({
+      '@type': 'Question',
+      name: item.question,
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: item.answer,
+      },
+    })),
+  } : null;
 
   return (
     <Helmet>
@@ -42,6 +56,10 @@ export default function SEO({ title, description, path = '', type = 'website' }:
       <meta name="twitter:description" content={description} />
 
       <script type="application/ld+json">{JSON.stringify(jsonLd)}</script>
+      {faqJsonLd && (
+        <script type="application/ld+json">{JSON.stringify(faqJsonLd)}</script>
+      )}
     </Helmet>
   );
 }
+

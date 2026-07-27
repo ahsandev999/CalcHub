@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
+import FAQAccordion, { type FAQItem } from '@/components/ui/FAQAccordion';
 import PageTransition from '@/components/ui/PageTransition';
 import SEO from '@/components/ui/SEO';
 import Card from '@/components/ui/Card';
@@ -10,6 +11,29 @@ import ResultDisplay from '@/components/ui/ResultDisplay';
 import { useToolTracking } from '@/hooks/useScroll';
 import { addHistory } from '@/lib/storage';
 import '@/styles/components.css';
+
+const loanCalculatorFAQ: FAQItem[] = [
+  {
+    "question": "What is the difference between APR and interest rate?",
+    "answer": "The interest rate is the cost of borrowing the principal only, expressed as an annual percentage. APR includes the interest rate plus any additional fees charged by the lender, making it a more complete measure of the total yearly cost."
+  },
+  {
+    "question": "Does paying extra each month reduce total interest?",
+    "answer": "Yes — any extra payment beyond the scheduled monthly amount goes directly toward reducing the principal balance, which compounds over the life of the loan and can save significant money."
+  },
+  {
+    "question": "What happens if I choose a shorter loan term?",
+    "answer": "A shorter term increases the monthly payment but dramatically reduces the total interest paid. The trade-off is higher monthly cash flow pressure in exchange for a lower total cost of borrowing."
+  },
+  {
+    "question": "Can I use this for mortgage calculations?",
+    "answer": "Yes — the underlying formula is identical. Enter the mortgage amount, interest rate, and term. Note that mortgages may also include property tax, insurance, and PMI on top of the principal and interest payment calculated here."
+  },
+  {
+    "question": "What is a good interest rate for a personal loan?",
+    "answer": "Personal loan rates typically range from 6% to 36% annually, depending on your credit score and the lender. Borrowers with excellent credit (750+) often qualify for rates under 12%."
+  }
+];
 
 export default function LoanCalculator() {
   useToolTracking('loan-calculator', 'Loan Calculator');
@@ -56,7 +80,7 @@ export default function LoanCalculator() {
 
   return (
     <PageTransition className="page-medium">
-      <SEO title="Loan Calculator" description="Estimate monthly payments and total cost for a standard loan." path="/loan-calculator" />
+      <SEO title="Loan Calculator" description="Estimate monthly payments and total cost for a standard loan." path="/loan-calculator" faqSchema={loanCalculatorFAQ} />
       <Link to="/" className="back-link">← Back to tools</Link>
       <div className="tool-header">
         <div className="eyebrow">Financial</div>
@@ -79,6 +103,42 @@ export default function LoanCalculator() {
           ] : []}
         />
       </Card>
+            {/* ── SEO Content Sections ── */}
+      <div className="seo-content">
+
+        <section className="seo-section">
+          <h2>How the Loan Calculator Works</h2>
+          <p>This calculator uses the standard amortization formula to compute your fixed monthly payment for a loan given its principal, annual interest rate, and repayment term in years. Amortization means each monthly payment covers both interest accrued that month and a portion of the principal.</p>
+        </section>
+
+        <section className="seo-section">
+          <h2>Formula Used</h2>
+          <div className="seo-formula" style={{ whiteSpace: 'pre-line' }}>
+            {"M = P × [r(1 + r)ⁿ] ÷ [(1 + r)ⁿ − 1]"}
+          </div>
+          <dl className="seo-formula-vars">
+            <dt>M</dt>
+            <dd>— fixed monthly payment amount</dd>
+            <dt>P</dt>
+            <dd>— loan principal (the amount borrowed)</dd>
+            <dt>r</dt>
+            <dd>— monthly interest rate = annual rate ÷ 12 ÷ 100</dd>
+            <dt>n</dt>
+            <dd>— total number of monthly payments = years × 12</dd>
+          </dl>
+        </section>
+
+        <section className="seo-section">
+          <h2>Example Calculation</h2>
+          <p>Suppose you borrow $20,000 at an annual interest rate of 6% over 5 years (60 months). The monthly rate r = 6 ÷ 12 ÷ 100 = 0.005. Applying the formula: M = 20,000 × [0.005 × (1.005)⁶⁰] ÷ [(1.005)⁶⁰ − 1] ≈ $386.66 per month. Total paid over 5 years = $386.66 × 60 = $23,199.60, with $3,199.60 paid in interest.</p>
+        </section>
+
+        <section className="seo-section">
+          <h2>Frequently Asked Questions</h2>
+          <FAQAccordion items={loanCalculatorFAQ} />
+        </section>
+
+      </div>
     </PageTransition>
   );
 }

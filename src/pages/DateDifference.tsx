@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
+import FAQAccordion, { type FAQItem } from '@/components/ui/FAQAccordion';
 import PageTransition from '@/components/ui/PageTransition';
 import SEO from '@/components/ui/SEO';
 import Card from '@/components/ui/Card';
@@ -31,6 +32,29 @@ function diffDates(start: string, end: string) {
   return { years, months, days, totalDays, totalWeeks, totalMonths, totalHours, totalMinutes };
 }
 
+const dateDifferenceFAQ: FAQItem[] = [
+  {
+    "question": "Does this calculator account for leap years?",
+    "answer": "Yes. The calculator fully accounts for leap years, adding an extra day (February 29) in years divisible by 4 (except years divisible by 100 but not 400)."
+  },
+  {
+    "question": "Is the end date included in the day count?",
+    "answer": "By default, date difference calculations exclude the starting day and include the ending day. If you want to include both days, simply add 1 to the final day count."
+  },
+  {
+    "question": "How many weeks are in the difference?",
+    "answer": "The calculator provides the total days, which can be divided by 7 to get weeks. For example, 14 days is exactly 2 weeks, while 15 days is 2 weeks and 1 day."
+  },
+  {
+    "question": "Can I calculate negative date differences?",
+    "answer": "If the starting date is after the ending date, the calculator will return a negative day count, indicating that the second date occurred in the past relative to the first."
+  },
+  {
+    "question": "Why do month differences vary in length?",
+    "answer": "Because months have different numbers of days (28, 29, 30, or 31), the calculator counts full calendar months elapsed rather than assuming a fixed 30-day month, ensuring calendar accuracy."
+  }
+];
+
 export default function DateDifference() {
   useToolTracking('date-difference', 'Date Difference');
 
@@ -52,7 +76,7 @@ export default function DateDifference() {
 
   return (
     <PageTransition className="page-medium">
-      <SEO title="Date Difference Calculator" description="Calculate the exact difference between two dates in years, months, days and more." path="/date-difference" />
+      <SEO title="Date Difference Calculator" description="Calculate the exact difference between two dates in years, months, days and more." path="/date-difference" faqSchema={dateDifferenceFAQ} />
       <Link to="/" className="back-link">← Back to tools</Link>
       <div className="tool-header">
         <div className="eyebrow">Time</div>
@@ -76,6 +100,40 @@ export default function DateDifference() {
           ] : []}
         />
       </Card>
+          {/* ── SEO Content Sections ── */}
+      <div className="seo-content">
+
+        <section className="seo-section">
+          <h2>How the Date Difference Calculator Works</h2>
+          <p>This calculator calculates the elapsed time between two calendar dates. It provides the total difference in days, as well as broken down into years, months, and days, helping you track deadlines, ages, or elapsed project times.</p>
+        </section>
+
+        <section className="seo-section">
+          <h2>Formula Used</h2>
+          <div className="seo-formula" style={{ whiteSpace: 'pre-line' }}>
+            {"Days Elapsed = Date 2 − Date 1"}
+          </div>
+          <dl className="seo-formula-vars">
+            <dt>Date 1</dt>
+            <dd>— the starting date in YYYY-MM-DD format</dd>
+            <dt>Date 2</dt>
+            <dd>— the ending date in YYYY-MM-DD format</dd>
+            <dt>Days Elapsed</dt>
+            <dd>— the total number of full 24-hour days between the two dates, accounting for leap years</dd>
+          </dl>
+        </section>
+
+        <section className="seo-section">
+          <h2>Example Calculation</h2>
+          <p>To find the difference between 1 January 2026 and 15 January 2026, enter the dates. The calculator subtracts the dates directly: 15 − 1 = 14 days difference (exactly 2 weeks).</p>
+        </section>
+
+        <section className="seo-section">
+          <h2>Frequently Asked Questions</h2>
+          <FAQAccordion items={dateDifferenceFAQ} />
+        </section>
+
+      </div>
     </PageTransition>
   );
 }

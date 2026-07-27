@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
+import FAQAccordion, { type FAQItem } from '@/components/ui/FAQAccordion';
 import PageTransition from '@/components/ui/PageTransition';
 import SEO from '@/components/ui/SEO';
 import Card from '@/components/ui/Card';
@@ -18,6 +19,29 @@ function bodyFatCategory(percent: number) {
   if (percent < 25) return 'Average';
   return 'Obese';
 }
+
+const bodyFatCalculatorFAQ: FAQItem[] = [
+  {
+    "question": "How accurate is the Navy body fat method?",
+    "answer": "The U.S. Navy method is highly accessible and usually accurate within 3-4% of professional methods like DEXA scans or hydrostatic weighing, provided measurements are taken carefully."
+  },
+  {
+    "question": "Where should I measure my waist?",
+    "answer": "For men, measure horizontally at the level of the navel. For women, measure horizontally at the narrowest part of the torso (above the navel and below the rib cage)."
+  },
+  {
+    "question": "What is a healthy body fat percentage?",
+    "answer": "A healthy range for men is typically 8% to 19% (under 25% is acceptable). For women, a healthy range is 21% to 31% (under 32% is acceptable) due to essential reproductive fat."
+  },
+  {
+    "question": "Why does the female formula require hip measurement?",
+    "answer": "Women naturally store more essential fat in the hip and thigh regions. Including hip circumference allows the formula to estimate female body density and fat distribution accurately."
+  },
+  {
+    "question": "How do I reduce my body fat percentage?",
+    "answer": "To lower body fat, combine a modest calorie deficit (nutrition) with strength training to preserve muscle mass and cardiovascular exercise to support overall energy expenditure."
+  }
+];
 
 export default function BodyFatCalculator() {
   useToolTracking('body-fat-calculator', 'Body Fat Calculator');
@@ -66,7 +90,7 @@ export default function BodyFatCalculator() {
 
   return (
     <PageTransition className="page-medium">
-      <SEO title="Body Fat Calculator" description="Estimate body fat percentage using the US Navy method." path="/body-fat-calculator" />
+      <SEO title="Body Fat Calculator" description="Estimate body fat percentage using the US Navy method." path="/body-fat-calculator" faqSchema={bodyFatCalculatorFAQ} />
       <Link to="/" className="back-link">← Back to tools</Link>
       <div className="tool-header">
         <div className="eyebrow">Fitness & Health</div>
@@ -93,6 +117,38 @@ export default function BodyFatCalculator() {
           slots={result ? [{ label: 'Body Fat Category', value: result.category }] : []}
         />
       </Card>
+          {/* ── SEO Content Sections ── */}
+      <div className="seo-content">
+
+        <section className="seo-section">
+          <h2>How the Body Fat Calculator Works</h2>
+          <p>This body fat calculator estimates your body fat percentage using the U.S. Navy circumference method. It requires height and circumference measurements of the neck and waist (and hips for females) to calculate body density.</p>
+        </section>
+
+        <section className="seo-section">
+          <h2>Formula Used</h2>
+          <div className="seo-formula" style={{ whiteSpace: 'pre-line' }}>
+            {"Body Fat % (Male) = 495 ÷ [1.0324 − 0.19077 × log₁₀(waist − neck) + 0.15456 × log₁₀(height)] − 450\nBody Fat % (Female) = 495 ÷ [1.29579 − 0.35004 × log₁₀(waist + hip − neck) + 0.22100 × log₁₀(height)] − 450"}
+          </div>
+          <dl className="seo-formula-vars">
+            <dt>waist / neck / hip / height</dt>
+            <dd>— measurements in centimetres (hip is required only for females)</dd>
+            <dt>log₁₀</dt>
+            <dd>— base-10 logarithm of the values</dd>
+          </dl>
+        </section>
+
+        <section className="seo-section">
+          <h2>Example Calculation</h2>
+          <p>For a male with waist = 90 cm, neck = 38 cm, and height = 180 cm: Body Fat % = 495 ÷ (1.0324 − 0.19077 × log₁₀(52) + 0.15456 × log₁₀(180)) − 450 = 495 ÷ 1.05362 − 450 ≈ 19.8%. This falls in the Average fitness category.</p>
+        </section>
+
+        <section className="seo-section">
+          <h2>Frequently Asked Questions</h2>
+          <FAQAccordion items={bodyFatCalculatorFAQ} />
+        </section>
+
+      </div>
     </PageTransition>
   );
 }

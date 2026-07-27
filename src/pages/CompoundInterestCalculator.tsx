@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
+import FAQAccordion, { type FAQItem } from '@/components/ui/FAQAccordion';
 import PageTransition from '@/components/ui/PageTransition';
 import SEO from '@/components/ui/SEO';
 import Card from '@/components/ui/Card';
@@ -16,6 +17,29 @@ const frequencyMap = {
   monthly: 12,
   daily: 365,
 } as const;
+
+const compoundInterestCalculatorFAQ: FAQItem[] = [
+  {
+    "question": "What is compound interest?",
+    "answer": "Compound interest is interest calculated on the initial principal and also on the accumulated interest of previous periods. It is essentially 'interest on interest' and causes investments to grow exponentially."
+  },
+  {
+    "question": "How does compounding frequency affect growth?",
+    "answer": "More frequent compounding (e.g., monthly or daily vs. yearly) increases the rate of growth because interest is added to the balance sooner, allowing it to start earning its own interest faster."
+  },
+  {
+    "question": "What is the Rule of 72?",
+    "answer": "The Rule of 72 is a quick mental formula to estimate when an investment will double. Divide 72 by the annual interest rate. For example, at a 6% interest rate, your money will double in approximately 12 years (72 ÷ 6)."
+  },
+  {
+    "question": "What is the difference between nominal and effective interest rate?",
+    "answer": "The nominal rate is the stated annual interest rate. The effective rate (APY) accounts for compounding within the year, representing the actual annual return."
+  },
+  {
+    "question": "Can compound interest work against me?",
+    "answer": "Yes — compound interest applies to debt as well. Credit cards use compound interest, which is why unpaid credit card balances can spiral out of control so quickly."
+  }
+];
 
 export default function CompoundInterestCalculator() {
   useToolTracking('compound-interest-calculator', 'Compound Interest Calculator');
@@ -63,7 +87,7 @@ export default function CompoundInterestCalculator() {
 
   return (
     <PageTransition className="page-medium">
-      <SEO title="Compound Interest Calculator" description="Estimate compounding growth with optional monthly contributions." path="/compound-interest-calculator" />
+      <SEO title="Compound Interest Calculator" description="Estimate compounding growth with optional monthly contributions." path="/compound-interest-calculator" faqSchema={compoundInterestCalculatorFAQ} />
       <Link to="/" className="back-link">← Back to tools</Link>
       <div className="tool-header">
         <div className="eyebrow">Financial</div>
@@ -92,6 +116,44 @@ export default function CompoundInterestCalculator() {
           ] : []}
         />
       </Card>
+          {/* ── SEO Content Sections ── */}
+      <div className="seo-content">
+
+        <section className="seo-section">
+          <h2>How the Compound Interest Calculator Works</h2>
+          <p>This calculator estimates the future value of an investment over time, taking compound interest and regular monthly contributions into account. Compounding means you earn interest on your principal plus the interest you have already accumulated.</p>
+        </section>
+
+        <section className="seo-section">
+          <h2>Formula Used</h2>
+          <div className="seo-formula" style={{ whiteSpace: 'pre-line' }}>
+            {"FV = P × (1 + r)ⁿ + C × [((1 + r)ⁿ − 1) ÷ r]"}
+          </div>
+          <dl className="seo-formula-vars">
+            <dt>FV</dt>
+            <dd>— Future Value of the investment</dd>
+            <dt>P</dt>
+            <dd>— Principal (initial investment amount)</dd>
+            <dt>r</dt>
+            <dd>— interest rate per compounding period (annual rate ÷ periods per year)</dd>
+            <dt>n</dt>
+            <dd>— total number of compounding periods (years × periods per year)</dd>
+            <dt>C</dt>
+            <dd>— regular contribution amount made at each compounding interval</dd>
+          </dl>
+        </section>
+
+        <section className="seo-section">
+          <h2>Example Calculation</h2>
+          <p>If you invest $10,000 at 5% annual interest compounded monthly (r = 0.05 / 12 = 0.004167) for 10 years (n = 120) with a $100 monthly contribution: Future value = $31,998.32. Total contributions were $22,000, and interest earned was $9,998.32.</p>
+        </section>
+
+        <section className="seo-section">
+          <h2>Frequently Asked Questions</h2>
+          <FAQAccordion items={compoundInterestCalculatorFAQ} />
+        </section>
+
+      </div>
     </PageTransition>
   );
 }

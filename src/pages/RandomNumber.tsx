@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
+import FAQAccordion, { type FAQItem } from '@/components/ui/FAQAccordion';
 import PageTransition from '@/components/ui/PageTransition';
 import SEO from '@/components/ui/SEO';
 import Card from '@/components/ui/Card';
@@ -8,6 +9,29 @@ import Input from '@/components/ui/Input';
 import { useToolTracking } from '@/hooks/useScroll';
 import { addHistory } from '@/lib/storage';
 import '@/styles/components.css';
+
+const randomNumberFAQ: FAQItem[] = [
+  {
+    "question": "Are these numbers truly random?",
+    "answer": "This tool uses JavaScript's Math.random() function, which is a pseudo-random number generator (PRNG). It is highly random and suitable for games, statistics, and decisions, but not for cryptographic purposes."
+  },
+  {
+    "question": "Can I generate negative numbers?",
+    "answer": "Yes. You can enter negative values in the Min and Max fields. For example, setting Min = -10 and Max = 10 will generate numbers between -10 and 10."
+  },
+  {
+    "question": "What does 'Allow Duplicates' mean?",
+    "answer": "If checked, the generator can output the same number multiple times when generating a list. If unchecked, all generated numbers in the list will be unique."
+  },
+  {
+    "question": "Is the maximum value inclusive?",
+    "answer": "Yes. The generated number can be equal to both the minimum and maximum values you enter."
+  },
+  {
+    "question": "How do I roll a standard six-sided die?",
+    "answer": "Simply set the Min value to 1 and the Max value to 6. Click generate to get a random roll."
+  }
+];
 
 export default function RandomNumber() {
   useToolTracking('random-number', 'Random Number');  const [min, setMin] = useState('1');
@@ -35,7 +59,7 @@ export default function RandomNumber() {
 
   return (
     <PageTransition className="page-medium">
-      <SEO title="Random Number Generator" description="Generate random numbers within any range." path="/random-number" />
+      <SEO title="Random Number Generator" description="Generate random numbers within any range." path="/random-number" faqSchema={randomNumberFAQ} />
       <Link to="/" className="back-link">← Back to tools</Link>
       <div className="tool-header">
         <div className="eyebrow">Utility</div>
@@ -56,6 +80,40 @@ export default function RandomNumber() {
           </div>
         )}
       </Card>
+          {/* ── SEO Content Sections ── */}
+      <div className="seo-content">
+
+        <section className="seo-section">
+          <h2>How the Random Number Generator Works</h2>
+          <p>This generator produces random integers within a user-defined minimum and maximum range. It can generate single numbers or a list of multiple numbers, with options to allow or disallow duplicates in the output.</p>
+        </section>
+
+        <section className="seo-section">
+          <h2>Formula Used</h2>
+          <div className="seo-formula" style={{ whiteSpace: 'pre-line' }}>
+            {"Random Integer = Math.floor(Math.random() × (Max − Min + 1)) + Min"}
+          </div>
+          <dl className="seo-formula-vars">
+            <dt>Math.random()</dt>
+            <dd>— a built-in JavaScript function that returns a pseudo-random decimal between 0 (inclusive) and 1 (exclusive)</dd>
+            <dt>Min</dt>
+            <dd>— the lower limit of the desired range (inclusive)</dd>
+            <dt>Max</dt>
+            <dd>— the upper limit of the desired range (inclusive)</dd>
+          </dl>
+        </section>
+
+        <section className="seo-section">
+          <h2>Example Calculation</h2>
+          <p>If you set Min = 1 and Max = 100, the formula scales the random decimal: Math.floor(random * 100) + 1. This returns a random integer such as 42.</p>
+        </section>
+
+        <section className="seo-section">
+          <h2>Frequently Asked Questions</h2>
+          <FAQAccordion items={randomNumberFAQ} />
+        </section>
+
+      </div>
     </PageTransition>
   );
 }

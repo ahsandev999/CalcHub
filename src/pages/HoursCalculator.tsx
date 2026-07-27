@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
+import FAQAccordion, { type FAQItem } from '@/components/ui/FAQAccordion';
 import PageTransition from '@/components/ui/PageTransition';
 import SEO from '@/components/ui/SEO';
 import Card from '@/components/ui/Card';
@@ -9,6 +10,29 @@ import ResultDisplay from '@/components/ui/ResultDisplay';
 import { useToolTracking } from '@/hooks/useScroll';
 import { addHistory } from '@/lib/storage';
 import '@/styles/components.css';
+
+const hoursCalculatorFAQ: FAQItem[] = [
+  {
+    "question": "How do I calculate decimal hours?",
+    "answer": "To convert minutes to decimal hours, divide the minutes by 60. For example, 45 minutes = 45 ÷ 60 = 0.75 hours. 8 hours and 45 minutes is written as 8.75 hours."
+  },
+  {
+    "question": "Does the calculator handle shifts spanning midnight?",
+    "answer": "Yes. If the end time is earlier than the start time (e.g. start at 10:00 PM, end at 6:00 AM), the calculator automatically assumes the shift crossed midnight into the next day and calculates the correct elapsed time."
+  },
+  {
+    "question": "What is the difference between decimal hours and minutes?",
+    "answer": "Decimal hours represent time as a decimal fraction (e.g. 7.5 hours). Hours and minutes format displays standard time units (e.g. 7 hours and 30 minutes)."
+  },
+  {
+    "question": "Can I log multiple days of work?",
+    "answer": "This simple calculator is designed for a single shift. For multi-day timesheets, calculate each day's hours individually and sum the decimal hours."
+  },
+  {
+    "question": "Does the calculator support 24-hour military time?",
+    "answer": "Yes. You can enter times using either 12-hour AM/PM format or 24-hour format depending on your system's clock configuration."
+  }
+];
 
 export default function HoursCalculator() {
   useToolTracking('hours-calculator', 'Hours Calculator');
@@ -54,7 +78,7 @@ export default function HoursCalculator() {
 
   return (
     <PageTransition className="page-medium">
-      <SEO title="Hours Calculator" description="Calculate total time worked between two times, including optional breaks." path="/hours-calculator" />
+      <SEO title="Hours Calculator" description="Calculate total time worked between two times, including optional breaks." path="/hours-calculator" faqSchema={hoursCalculatorFAQ} />
       <Link to="/" className="back-link">← Back to tools</Link>
       <div className="tool-header">
         <div className="eyebrow">Time</div>
@@ -77,6 +101,40 @@ export default function HoursCalculator() {
           ] : []}
         />
       </Card>
+          {/* ── SEO Content Sections ── */}
+      <div className="seo-content">
+
+        <section className="seo-section">
+          <h2>How the Hours Calculator Works</h2>
+          <p>This hours calculator tracks elapsed work time. Input your start time, end time, and any unpaid break duration to compute the total hours and minutes worked — useful for timesheet preparation and payroll checks.</p>
+        </section>
+
+        <section className="seo-section">
+          <h2>Formula Used</h2>
+          <div className="seo-formula" style={{ whiteSpace: 'pre-line' }}>
+            {"Hours Worked = (End Time − Start Time) − Break Duration"}
+          </div>
+          <dl className="seo-formula-vars">
+            <dt>Start Time / End Time</dt>
+            <dd>— the timestamps marking the beginning and end of the shift</dd>
+            <dt>Break Duration</dt>
+            <dd>— unpaid rest time in minutes, subtracted from the total time elapsed</dd>
+            <dt>Hours Worked</dt>
+            <dd>— the net duration of the shift, displayed in decimal hours and HH:MM format</dd>
+          </dl>
+        </section>
+
+        <section className="seo-section">
+          <h2>Example Calculation</h2>
+          <p>If you start work at 9:00 AM, finish at 5:30 PM, and take a 30-minute unpaid break: Total elapsed time = 8.5 hours (8 hours and 30 minutes). Subtracting the 30-minute break leaves 8.0 worked hours.</p>
+        </section>
+
+        <section className="seo-section">
+          <h2>Frequently Asked Questions</h2>
+          <FAQAccordion items={hoursCalculatorFAQ} />
+        </section>
+
+      </div>
     </PageTransition>
   );
 }

@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
+import FAQAccordion, { type FAQItem } from '@/components/ui/FAQAccordion';
 import PageTransition from '@/components/ui/PageTransition';
 import SEO from '@/components/ui/SEO';
 import Card from '@/components/ui/Card';
@@ -10,6 +11,29 @@ import ResultDisplay from '@/components/ui/ResultDisplay';
 import { useToolTracking } from '@/hooks/useScroll';
 import { addHistory } from '@/lib/storage';
 import '@/styles/components.css';
+
+const mortgageCalculatorFAQ: FAQItem[] = [
+  {
+    "question": "What is included in a monthly mortgage payment?",
+    "answer": "A standard monthly payment includes Principal and Interest (P&I), and often Property Taxes and Homeowners Insurance (held in an escrow account)."
+  },
+  {
+    "question": "How does the down payment affect my mortgage?",
+    "answer": "A larger down payment reduces the principal loan amount, which lowers your monthly payments and decreases the total interest paid over the life of the loan."
+  },
+  {
+    "question": "What is Private Mortgage Insurance (PMI)?",
+    "answer": "PMI is an extra monthly fee required by conventional lenders if your down payment is less than 20% of the home purchase price. It protects the lender if you default on the loan."
+  },
+  {
+    "question": "Should I choose a 15-year or 30-year mortgage?",
+    "answer": "A 30-year mortgage has lower monthly payments, making it more affordable month-to-month. A 15-year mortgage has higher monthly payments but lower interest rates, saving you substantial interest over time."
+  },
+  {
+    "question": "How does amortization work in a mortgage?",
+    "answer": "In early years, most of your monthly payment goes toward interest. Over time, the proportion shifts so that a larger portion goes toward reducing the principal balance until the loan is paid off."
+  }
+];
 
 export default function MortgageCalculator() {
   useToolTracking('mortgage-calculator', 'Mortgage Calculator');
@@ -73,7 +97,7 @@ export default function MortgageCalculator() {
 
   return (
     <PageTransition className="page-medium">
-      <SEO title="Mortgage Calculator" description="Estimate mortgage payments with taxes and insurance." path="/mortgage-calculator" />
+      <SEO title="Mortgage Calculator" description="Estimate mortgage payments with taxes and insurance." path="/mortgage-calculator" faqSchema={mortgageCalculatorFAQ} />
       <Link to="/" className="back-link">← Back to tools</Link>
       <div className="tool-header">
         <div className="eyebrow">Financial</div>
@@ -102,6 +126,42 @@ export default function MortgageCalculator() {
           ] : []}
         />
       </Card>
+          {/* ── SEO Content Sections ── */}
+      <div className="seo-content">
+
+        <section className="seo-section">
+          <h2>How the Mortgage Calculator Works</h2>
+          <p>This mortgage calculator estimates your total monthly home payment, including principal and interest, property taxes, and home insurance. By factoring in your down payment, interest rate, and term length, it helps you plan your home purchasing budget.</p>
+        </section>
+
+        <section className="seo-section">
+          <h2>Formula Used</h2>
+          <div className="seo-formula" style={{ whiteSpace: 'pre-line' }}>
+            {"M = P × [r(1 + r)ⁿ] ÷ [(1 + r)ⁿ − 1] + Monthly Tax + Monthly Insurance"}
+          </div>
+          <dl className="seo-formula-vars">
+            <dt>P (Principal)</dt>
+            <dd>— the loan amount (Home Price − Down Payment)</dd>
+            <dt>r</dt>
+            <dd>— monthly interest rate = annual interest rate ÷ 12 ÷ 100</dd>
+            <dt>n</dt>
+            <dd>— total number of monthly payments = term in years × 12</dd>
+            <dt>Monthly Tax / Insurance</dt>
+            <dd>— annual property tax and insurance divided by 12, added to the monthly payment</dd>
+          </dl>
+        </section>
+
+        <section className="seo-section">
+          <h2>Example Calculation</h2>
+          <p>For a $300,000 home with a $60,000 down payment (P = $240,000), a 6% interest rate over 30 years (360 months), with annual taxes of $3,000 and insurance of $1,200: Monthly mortgage principal and interest = $1,438.92. Plus monthly tax ($250) and insurance ($100) = $1,788.92 total monthly payment.</p>
+        </section>
+
+        <section className="seo-section">
+          <h2>Frequently Asked Questions</h2>
+          <FAQAccordion items={mortgageCalculatorFAQ} />
+        </section>
+
+      </div>
     </PageTransition>
   );
 }

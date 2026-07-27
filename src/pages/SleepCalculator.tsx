@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
+import FAQAccordion, { type FAQItem } from '@/components/ui/FAQAccordion';
 import PageTransition from '@/components/ui/PageTransition';
 import SEO from '@/components/ui/SEO';
 import Card from '@/components/ui/Card';
@@ -11,6 +12,29 @@ import { calculateSleep, formatTime, type SleepMode } from '@/lib/calculators/sl
 import { addHistory } from '@/lib/storage';
 import { Moon, Sun, Clock, Coffee, Sparkles, Check, Copy, ArrowLeft } from 'lucide-react';
 import '@/styles/components.css';
+
+const sleepCalculatorFAQ: FAQItem[] = [
+  {
+    "question": "Why do sleep cycles matter?",
+    "answer": "A typical sleep cycle lasts about 90 minutes and moves through stages of light, deep, and REM sleep. Waking up at the end of a completed cycle prevents grogginess (sleep inertia), helping you feel alert instantly."
+  },
+  {
+    "question": "How many hours of sleep do I need?",
+    "answer": "Most healthy adults require 7 to 9 hours of sleep per night. This equates to about 5 or 6 full sleep cycles. Children and teenagers require significantly more sleep."
+  },
+  {
+    "question": "Does this calculator account for personal differences?",
+    "answer": "This tool uses the standard 90-minute average cycle length and 15-minute sleep latency. While standard for most, individuals may vary, so adjust your schedule slightly if you find your cycles are shorter or longer."
+  },
+  {
+    "question": "What is sleep debt?",
+    "answer": "Sleep debt is the cumulative effect of not getting enough sleep over time. If you miss sleep cycles consistently, you build a deficit that can lead to physical fatigue, mental fog, and weakened immunity."
+  },
+  {
+    "question": "How long should a power nap be?",
+    "answer": "A power nap should last either 20 minutes (staying in light sleep) or a full 90 minutes (a complete sleep cycle). Napping for 45-60 minutes will land you in deep sleep, causing you to wake up feeling groggy."
+  }
+];
 
 export default function SleepCalculator() {
   useToolTracking('sleep-calculator', 'Sleep Calculator');
@@ -63,11 +87,7 @@ export default function SleepCalculator() {
 
   return (
     <PageTransition className="page-medium">
-      <SEO 
-        title="Sleep Calculator" 
-        description="Calculate optimal bedtimes, wake times, and nap durations based on 90-minute sleep cycles." 
-        path="/sleep-calculator" 
-      />
+      <SEO title="Sleep Calculator" description="Calculate optimal bedtimes, wake times, and nap durations based on 90-minute sleep cycles." path="/sleep-calculator" faqSchema={sleepCalculatorFAQ} />
       
       <Link to="/" className="back-link">
         <ArrowLeft size={16} />
@@ -195,6 +215,40 @@ export default function SleepCalculator() {
           )}
         </AnimatePresence>
       </Card>
+          {/* ── SEO Content Sections ── */}
+      <div className="seo-content">
+
+        <section className="seo-section">
+          <h2>How the Sleep Calculator Works</h2>
+          <p>This calculator helps you determine the best times to go to bed or wake up by planning your sleep around 90-minute sleep cycles. Waking up at the end of a sleep cycle leaves you feeling refreshed and alert, whereas waking up mid-cycle can cause grogginess and sleep inertia.</p>
+        </section>
+
+        <section className="seo-section">
+          <h2>Formula Used</h2>
+          <div className="seo-formula" style={{ whiteSpace: 'pre-line' }}>
+            {"Wake Time = Sleep Time + (n × 90 minutes) + 15 minutes\nBedtime = Wake Time − (n × 90 minutes) − 15 minutes"}
+          </div>
+          <dl className="seo-formula-vars">
+            <dt>n</dt>
+            <dd>— the number of completed sleep cycles (typically 5 or 6 cycles is optimal, equivalent to 7.5 or 9 hours of sleep)</dd>
+            <dt>90 minutes</dt>
+            <dd>— the average length of a human sleep cycle, spanning light sleep, deep sleep, and REM sleep states</dd>
+            <dt>15 minutes</dt>
+            <dd>— the average latency period (time it takes to fall asleep) added to the calculation</dd>
+          </dl>
+        </section>
+
+        <section className="seo-section">
+          <h2>Example Calculation</h2>
+          <p>If you need to wake up at 7:00 AM, the calculator computes Bedtime options by subtracting sleep cycles. For 6 sleep cycles (9 hours of sleep) plus 15 minutes to fall asleep: 7:00 AM − 9 hours = 10:00 PM, then minus 15 minutes = 9:45 PM. Going to bed at 9:45 PM will help you wake up naturally at 7:00 AM.</p>
+        </section>
+
+        <section className="seo-section">
+          <h2>Frequently Asked Questions</h2>
+          <FAQAccordion items={sleepCalculatorFAQ} />
+        </section>
+
+      </div>
     </PageTransition>
   );
 }

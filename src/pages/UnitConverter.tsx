@@ -1,5 +1,6 @@
 import { useState, useMemo } from 'react';
 import { Link } from 'react-router-dom';
+import FAQAccordion, { type FAQItem } from '@/components/ui/FAQAccordion';
 import PageTransition from '@/components/ui/PageTransition';
 import SEO from '@/components/ui/SEO';
 import Card from '@/components/ui/Card';
@@ -40,6 +41,29 @@ const CATEGORIES = {
 };
 
 type Cat = keyof typeof CATEGORIES;
+
+const unitConverterFAQ: FAQItem[] = [
+  {
+    "question": "Are these conversions exact?",
+    "answer": "Most unit conversions are based on exact scientific definitions (for example, 1 inch is defined as exactly 2.54 cm). Temperature conversions are also exact algebraic formulas."
+  },
+  {
+    "question": "What is the difference between mass and weight?",
+    "answer": "Mass measures the amount of matter in an object and is constant. Weight is the force exerted on that mass by gravity. On Earth, mass and weight units like kilograms and pounds are used interchangeably in daily life."
+  },
+  {
+    "question": "How does the temperature converter work?",
+    "answer": "Unlike other units that use a simple multiplier, temperature units have different zero points. The calculator uses formulas: Celsius to Fahrenheit is (C × 9/5) + 32, and Celsius to Kelvin is C + 273.15."
+  },
+  {
+    "question": "What is the metric system?",
+    "answer": "The metric system (SI) is a decimal-based system of measurement used globally. It scales by powers of 10 using prefixes like milli-, centi-, and kilo-, making conversions simple."
+  },
+  {
+    "question": "Why do some unit conversions have rounding differences?",
+    "answer": "The calculator rounds results to 6 decimal places to prevent long floating-point precision errors (like 0.0000000000002) inherent to computer arithmetic, while preserving practical accuracy."
+  }
+];
 
 export default function UnitConverter() {
   useToolTracking('unit-converter', 'Unit Converter');
@@ -83,7 +107,7 @@ export default function UnitConverter() {
 
   return (
     <PageTransition className="page-medium">
-      <SEO title="Unit Converter" description="Convert length, weight, and temperature units instantly." path="/unit-converter" />
+      <SEO title="Unit Converter" description="Convert length, weight, and temperature units instantly." path="/unit-converter" faqSchema={unitConverterFAQ} />
       <Link to="/" className="back-link">← Back to tools</Link>
       <div className="tool-header">
         <div className="eyebrow">Converter</div>
@@ -117,6 +141,40 @@ export default function UnitConverter() {
           <p className="result-subtitle">{value} {units[fromUnit as keyof typeof units].label} = {result} {units[toUnit as keyof typeof units].label}</p>
         </div>
       </Card>
+          {/* ── SEO Content Sections ── */}
+      <div className="seo-content">
+
+        <section className="seo-section">
+          <h2>How the Unit Converter Works</h2>
+          <p>This tool converts measurements across common categories including length, mass/weight, area, volume, and temperature. Simply select a measurement category, select the input and output units, and type the value to see the converted result instantly.</p>
+        </section>
+
+        <section className="seo-section">
+          <h2>Formula Used</h2>
+          <div className="seo-formula" style={{ whiteSpace: 'pre-line' }}>
+            {"Result = Input Value × Conversion Factor\n(For temperature: °F = °C × 1.8 + 32, etc.)"}
+          </div>
+          <dl className="seo-formula-vars">
+            <dt>Input Value</dt>
+            <dd>— the numeric magnitude of the measurement in the starting unit</dd>
+            <dt>Conversion Factor</dt>
+            <dd>— the mathematical constant multiplier between the two selected units</dd>
+            <dt>Result</dt>
+            <dd>— the equivalent measurement magnitude expressed in the destination unit</dd>
+          </dl>
+        </section>
+
+        <section className="seo-section">
+          <h2>Example Calculation</h2>
+          <p>To convert 10 inches to centimetres, select Length. The conversion factor from inches to cm is 2.54. Result = 10 × 2.54 = 25.4 cm. The calculator displays this exact conversion.</p>
+        </section>
+
+        <section className="seo-section">
+          <h2>Frequently Asked Questions</h2>
+          <FAQAccordion items={unitConverterFAQ} />
+        </section>
+
+      </div>
     </PageTransition>
   );
 }

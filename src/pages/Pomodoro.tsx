@@ -1,5 +1,6 @@
 import { useState, useRef, useEffect, useCallback } from 'react';
 import { Link } from 'react-router-dom';
+import FAQAccordion, { type FAQItem } from '@/components/ui/FAQAccordion';
 import PageTransition from '@/components/ui/PageTransition';
 import SEO from '@/components/ui/SEO';
 import Card from '@/components/ui/Card';
@@ -16,6 +17,29 @@ type Phase = 'work' | 'short' | 'long';
 function formatSec(s: number) {
   return `${Math.floor(s / 60).toString().padStart(2, '0')}:${(s % 60).toString().padStart(2, '0')}`;
 }
+
+const pomodoroFAQ: FAQItem[] = [
+  {
+    "question": "What is the Pomodoro Technique?",
+    "answer": "Developed by Francesco Cirillo in the late 1980s, the technique uses a timer to break work down into intervals, traditionally 25 minutes, separated by short breaks. It is designed to reduce the impact of internal and external distractions."
+  },
+  {
+    "question": "Why is it called Pomodoro?",
+    "answer": "'Pomodoro' is the Italian word for tomato. The creator named the technique after the tomato-shaped kitchen timer he used to track his work sessions."
+  },
+  {
+    "question": "Can I customise the session lengths?",
+    "answer": "The traditional Pomodoro uses 25-minute work and 5-minute break intervals. However, you can adjust these durations in the settings to suit your personal concentration span (e.g., 50-minute work, 10-minute break)."
+  },
+  {
+    "question": "What should I do during the breaks?",
+    "answer": "Step away from your screen. Walk around, stretch, get a glass of water, or rest your eyes. Avoid checking social media or emails, as this does not give your brain a true break."
+  },
+  {
+    "question": "How many Pomodoros should I do in a day?",
+    "answer": "A typical productive workday contains about 6 to 8 complete Pomodoro cycles (focus + break). Don't force yourself to do more, as mental fatigue will decrease your overall work quality."
+  }
+];
 
 export default function Pomodoro() {
   useToolTracking('pomodoro', 'Pomodoro Timer');  const [phase, setPhase] = useState<Phase>('work');
@@ -70,7 +94,7 @@ export default function Pomodoro() {
 
   return (
     <PageTransition className="page-medium">
-      <SEO title="Pomodoro Timer" description="Focus timer with work/break cycles using the Pomodoro Technique." path="/pomodoro" />
+      <SEO title="Pomodoro Timer" description="Focus timer with work/break cycles using the Pomodoro Technique." path="/pomodoro" faqSchema={pomodoroFAQ} />
       <Link to="/" className="back-link">← Back to tools</Link>
       <div className="tool-header">
         <div className="eyebrow">Time</div>
@@ -104,6 +128,40 @@ export default function Pomodoro() {
           ))}
         </div>
       </Card>
+          {/* ── SEO Content Sections ── */}
+      <div className="seo-content">
+
+        <section className="seo-section">
+          <h2>How the Pomodoro Timer Works</h2>
+          <p>The Pomodoro Technique is a time-management method that breaks work into intervals, traditionally 25 minutes in length, separated by short breaks. This timer automates these intervals, cycling through work sessions and breaks to sustain mental focus.</p>
+        </section>
+
+        <section className="seo-section">
+          <h2>Formula Used</h2>
+          <div className="seo-formula" style={{ whiteSpace: 'pre-line' }}>
+            {"Session Cycle: Focus (25m) → Short Break (5m) → Focus (25m) → ... → Long Break (15m) after 4 sessions"}
+          </div>
+          <dl className="seo-formula-vars">
+            <dt>Focus Session</dt>
+            <dd>— 25 minutes of uninterrupted work on a single task</dd>
+            <dt>Short Break</dt>
+            <dd>— 5-minute break to rest, stretch, or hydrate</dd>
+            <dt>Long Break</dt>
+            <dd>— 15 to 30-minute break after completing 4 consecutive focus sessions to recharge</dd>
+          </dl>
+        </section>
+
+        <section className="seo-section">
+          <h2>Example Calculation</h2>
+          <p>Click Start to begin a 25-minute focus countdown. When the timer hits 0:00, an alarm plays, and the timer automatically prompts a 5-minute short break before starting the next focus session.</p>
+        </section>
+
+        <section className="seo-section">
+          <h2>Frequently Asked Questions</h2>
+          <FAQAccordion items={pomodoroFAQ} />
+        </section>
+
+      </div>
     </PageTransition>
   );
 }

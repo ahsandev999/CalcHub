@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
+import FAQAccordion, { type FAQItem } from '@/components/ui/FAQAccordion';
 import PageTransition from '@/components/ui/PageTransition';
 import SEO from '@/components/ui/SEO';
 import Card from '@/components/ui/Card';
@@ -17,6 +18,29 @@ const letterGrade = (percentage: number) => {
   if (percentage >= 60) return 'D';
   return 'F';
 };
+
+const gradeCalculatorFAQ: FAQItem[] = [
+  {
+    "question": "How does a weighted grade work?",
+    "answer": "A weighted grade means different assessments have different impacts on your final score. For example, a final exam worth 50% affects your grade as much as five homework assignments worth 10% each."
+  },
+  {
+    "question": "What does it mean if my weights don't sum to 100%?",
+    "answer": "If your category weights do not sum to 100%, the calculator normalises the weights so they proportionally sum to 100% based on the relative weights you entered."
+  },
+  {
+    "question": "How do I calculate what I need on my final exam?",
+    "answer": "Subtract your current weighted grade from your target course grade, and divide by the weight of the final exam. This tells you the minimum exam score required to achieve your goal."
+  },
+  {
+    "question": "What is a GP / grade point?",
+    "answer": "A grade point is a numeric value (usually 0 to 4.0) assigned to your final letter grade, which is then used to calculate your overall Grade Point Average (GPA)."
+  },
+  {
+    "question": "How do I input a category grade that is not out of 100?",
+    "answer": "Convert the score to a percentage first. For example, if you scored 18 out of 25 on a quiz, enter the score as 72% (18 ÷ 25 × 100)."
+  }
+];
 
 export default function GradeCalculator() {
   useToolTracking('grade-calculator', 'Grade Calculator');
@@ -55,7 +79,7 @@ export default function GradeCalculator() {
 
   return (
     <PageTransition className="page-medium">
-      <SEO title="Grade Calculator" description="Calculate a final weighted grade percentage and letter grade." path="/grade-calculator" />
+      <SEO title="Grade Calculator" description="Calculate a final weighted grade percentage and letter grade." path="/grade-calculator" faqSchema={gradeCalculatorFAQ} />
       <Link to="/" className="back-link">← Back to tools</Link>
       <div className="tool-header">
         <div className="eyebrow">Education</div>
@@ -83,6 +107,40 @@ export default function GradeCalculator() {
           ] : []}
         />
       </Card>
+          {/* ── SEO Content Sections ── */}
+      <div className="seo-content">
+
+        <section className="seo-section">
+          <h2>How the Grade Calculator Works</h2>
+          <p>This grade calculator computes your overall course grade by calculating a weighted average of your scores across different assessment categories (such as assignments, exams, and quizzes). Select the weight percentage for each category and input your score.</p>
+        </section>
+
+        <section className="seo-section">
+          <h2>Formula Used</h2>
+          <div className="seo-formula" style={{ whiteSpace: 'pre-line' }}>
+            {"Weighted Grade = Σ (Score × Weight) ÷ Σ (Weight)"}
+          </div>
+          <dl className="seo-formula-vars">
+            <dt>Score</dt>
+            <dd>— the score received in a grading category (expressed as a percentage)</dd>
+            <dt>Weight</dt>
+            <dd>— the percentage weight the category contributes to the final grade (e.g. 40%)</dd>
+            <dt>Σ (sum)</dt>
+            <dd>— the sum of all weighted scores, divided by the total active weights</dd>
+          </dl>
+        </section>
+
+        <section className="seo-section">
+          <h2>Example Calculation</h2>
+          <p>Suppose a student has an Exam score of 85 (weighted at 40%) and a Homework score of 90 (weighted at 60%). Weighted Grade = (85 × 0.40) + (90 × 0.60) = 34 + 54 = 88%.</p>
+        </section>
+
+        <section className="seo-section">
+          <h2>Frequently Asked Questions</h2>
+          <FAQAccordion items={gradeCalculatorFAQ} />
+        </section>
+
+      </div>
     </PageTransition>
   );
 }

@@ -1,5 +1,6 @@
 import { useState, useMemo } from 'react';
 import { Link } from 'react-router-dom';
+import FAQAccordion, { type FAQItem } from '@/components/ui/FAQAccordion';
 import PageTransition from '@/components/ui/PageTransition';
 import SEO from '@/components/ui/SEO';
 import Card from '@/components/ui/Card';
@@ -51,6 +52,29 @@ function toHex(r: number, g: number, b: number) {
   return '#' + [r, g, b].map((v) => v.toString(16).padStart(2, '0')).join('');
 }
 
+const colorConverterFAQ: FAQItem[] = [
+  {
+    "question": "What is HEX color format?",
+    "answer": "HEX is a hexadecimal code used in web design to represent colors. It consists of a '#' followed by three bytes representing Red, Green, and Blue intensities in base-16 (from 00 to FF)."
+  },
+  {
+    "question": "What does HSL stand for?",
+    "answer": "HSL stands for Hue, Saturation, and Lightness. Hue is the color type represented as an angle on the color wheel (0-360°). Saturation is the intensity or purity (0-100%). Lightness is the brightness (0-100%)."
+  },
+  {
+    "question": "Which color format is best for CSS?",
+    "answer": "All three formats are supported in modern CSS. HEX is popular for static colors. HSL is often preferred by designers because it is easier to adjust brightness or saturation dynamically using variables."
+  },
+  {
+    "question": "What is RGB color model?",
+    "answer": "RGB is an additive color model where red, green, and blue light are added together in various proportions to produce a broad array of colors. It is the standard format for digital displays."
+  },
+  {
+    "question": "Why do some conversions look slightly different?",
+    "answer": "Floating-point rounding when converting between base-256 RGB values and base-100 HSL percentages can cause minor rounding differences, but they are visually identical."
+  }
+];
+
 export default function ColorConverter() {
   useToolTracking('color-converter', 'Color Converter');
   const [hex, setHex] = useState('#6366f1');
@@ -94,7 +118,7 @@ export default function ColorConverter() {
 
   return (
     <PageTransition className="page-medium">
-      <SEO title="Color Converter" description="Convert between HEX, RGB, and HSL color formats." path="/color-converter" />
+      <SEO title="Color Converter" description="Convert between HEX, RGB, and HSL color formats." path="/color-converter" faqSchema={colorConverterFAQ} />
       <Link to="/" className="back-link">← Back to tools</Link>
       <div className="tool-header">
         <div className="eyebrow">Converter</div>
@@ -119,6 +143,40 @@ export default function ColorConverter() {
           <p className="result-subtitle">CSS: <code>{preview}</code></p>
         </div>
       </Card>
+          {/* ── SEO Content Sections ── */}
+      <div className="seo-content">
+
+        <section className="seo-section">
+          <h2>How the Color Converter Works</h2>
+          <p>This color converter translates color codes between HEX, RGB (Red, Green, Blue), and HSL (Hue, Saturation, Lightness) formats. Enter a value in any format to see the equivalents in the other formats and view a live color preview.</p>
+        </section>
+
+        <section className="seo-section">
+          <h2>Formula Used</h2>
+          <div className="seo-formula" style={{ whiteSpace: 'pre-line' }}>
+            {"HEX ↔ RGB ↔ HSL conversion formulas"}
+          </div>
+          <dl className="seo-formula-vars">
+            <dt>HEX</dt>
+            <dd>— a six-digit hexadecimal representation of colors (e.g. #3498db)</dd>
+            <dt>RGB</dt>
+            <dd>— color defined by Red, Green, and Blue intensities from 0 to 255</dd>
+            <dt>HSL</dt>
+            <dd>— color defined by Hue (0-360°), Saturation (0-100%), and Lightness (0-100%)</dd>
+          </dl>
+        </section>
+
+        <section className="seo-section">
+          <h2>Example Calculation</h2>
+          <p>If you enter the HEX value '#3498db', the converter translates it: RGB = (52, 152, 219); HSL = (204°, 70%, 53%). It also displays a blue preview block.</p>
+        </section>
+
+        <section className="seo-section">
+          <h2>Frequently Asked Questions</h2>
+          <FAQAccordion items={colorConverterFAQ} />
+        </section>
+
+      </div>
     </PageTransition>
   );
 }

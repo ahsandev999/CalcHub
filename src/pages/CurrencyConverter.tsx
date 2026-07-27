@@ -1,6 +1,7 @@
 import { useState, useEffect, useMemo, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
+import FAQAccordion, { type FAQItem } from '@/components/ui/FAQAccordion';
 import PageTransition from '@/components/ui/PageTransition';
 import SEO from '@/components/ui/SEO';
 import Card from '@/components/ui/Card';
@@ -48,6 +49,29 @@ const FALLBACK_RATES: Record<string, number> = {
   KRW: 1378.0,
   TRY: 32.5,
 };
+
+const currencyConverterFAQ: FAQItem[] = [
+  {
+    "question": "How are exchange rates determined?",
+    "answer": "Exchange rates are determined by the global foreign exchange market, where currencies are traded 24/7. Rates float constantly based on supply and demand, interest rates, inflation, and economic health."
+  },
+  {
+    "question": "What is a fiat currency?",
+    "answer": "Fiat currency is government-issued money that is not backed by a physical commodity like gold, but by the trust in the issuing government (e.g., USD, EUR, GBP)."
+  },
+  {
+    "question": "Why do currency exchanges charge fees?",
+    "answer": "Banks and exchange kiosks buy and sell currencies at slightly different rates (the spread) or charge transaction commissions to cover operational costs and turn a profit."
+  },
+  {
+    "question": "Does this converter work offline?",
+    "answer": "This tool requires an active internet connection to fetch the latest conversion rates from the API, ensuring you get accurate, up-to-date conversion values."
+  },
+  {
+    "question": "What is the base currency?",
+    "answer": "In exchange rate pairs (e.g. USD/EUR), the first currency (USD) is the base currency, and the second (EUR) is the quote currency. The rate tells you how much quote currency is needed to buy one unit of the base currency."
+  }
+];
 
 export default function CurrencyConverter() {
   useToolTracking('currency-converter', 'Currency Converter');
@@ -135,11 +159,7 @@ export default function CurrencyConverter() {
 
   return (
     <PageTransition className="page-medium">
-      <SEO
-        title="Currency Converter"
-        description="Convert currency values in real-time using live global exchange rates API."
-        path="/currency-converter"
-      />
+      <SEO title="Currency Converter" description="Convert currency values in real-time using live global exchange rates API." path="/currency-converter" faqSchema={currencyConverterFAQ} />
 
       <Link to="/" className="back-link">
         <ArrowLeft size={16} />
@@ -291,6 +311,40 @@ export default function CurrencyConverter() {
           )}
         </AnimatePresence>
       </Card>
+          {/* ── SEO Content Sections ── */}
+      <div className="seo-content">
+
+        <section className="seo-section">
+          <h2>How the Currency Converter Works</h2>
+          <p>This calculator converts currency values between major global currencies using exchange rates. Select the starting currency, the target currency, and enter the amount to see the converted total.</p>
+        </section>
+
+        <section className="seo-section">
+          <h2>Formula Used</h2>
+          <div className="seo-formula" style={{ whiteSpace: 'pre-line' }}>
+            {"Target Amount = Source Amount × Exchange Rate"}
+          </div>
+          <dl className="seo-formula-vars">
+            <dt>Source Amount</dt>
+            <dd>— the amount of money in the original currency</dd>
+            <dt>Exchange Rate</dt>
+            <dd>— the ratio value indicating how much of the target currency is obtained per unit of the source currency</dd>
+            <dt>Target Amount</dt>
+            <dd>— the equivalent value in the target currency, rounded to two decimal places</dd>
+          </dl>
+        </section>
+
+        <section className="seo-section">
+          <h2>Example Calculation</h2>
+          <p>To convert $100 USD to Euros (EUR) with an exchange rate of 0.92: Target Amount = 100 × 0.92 = €92.00. The calculator displays this equivalent value.</p>
+        </section>
+
+        <section className="seo-section">
+          <h2>Frequently Asked Questions</h2>
+          <FAQAccordion items={currencyConverterFAQ} />
+        </section>
+
+      </div>
     </PageTransition>
   );
 }

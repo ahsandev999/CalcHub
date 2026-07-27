@@ -1,6 +1,7 @@
 import { useState, useCallback, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
+import FAQAccordion, { type FAQItem } from '@/components/ui/FAQAccordion';
 import PageTransition from '@/components/ui/PageTransition';
 import SEO from '@/components/ui/SEO';
 import Card from '@/components/ui/Card';
@@ -10,6 +11,29 @@ import { formatDisplay, formatResult, evaluate, pressKey } from '@/lib/calculato
 import { addHistory } from '@/lib/storage';
 import { Copy, Check, History, RotateCcw, Delete, ArrowLeft } from 'lucide-react';
 import '@/styles/components.css';
+
+const scientificCalculatorFAQ: FAQItem[] = [
+  {
+    "question": "What is the difference between DEG and RAD mode?",
+    "answer": "In Degree mode, angles are measured in degrees (a full circle = 360°). In Radian mode, angles are measured in radians (a full circle = 2π ≈ 6.283). Trigonometric functions like sin and cos give different results depending on which mode is active."
+  },
+  {
+    "question": "How do I calculate factorial (n!)?",
+    "answer": "Enter the number first, then press the n! button. For example, to calculate 6!, press 6 then n! to get 720. Results beyond approximately 170! exceed JavaScript's maximum number and will return Infinity."
+  },
+  {
+    "question": "What is the memory function (M+, MR, MC) used for?",
+    "answer": "Memory lets you store an intermediate result and recall it later. M+ adds the current result to memory, MR pastes the stored value into the current expression, and MC clears the memory."
+  },
+  {
+    "question": "How do I enter scientific notation like 2.5 × 10⁶?",
+    "answer": "Use the EXP button (or type 'e' in the expression) to enter the exponent separator. For 2.5 × 10⁶, press 2.5 EXP 6. The calculator interprets this as 2.5 × 10^6 = 2,500,000."
+  },
+  {
+    "question": "Why does my result show 'Error' instead of a number?",
+    "answer": "An Error result usually means the expression is mathematically undefined or malformed. Common causes include dividing by zero (e.g. 1 ÷ 0), taking the square root of a negative number, or unbalanced parentheses."
+  }
+];
 
 export default function ScientificCalculator() {
   useToolTracking('scientific-calculator', 'Scientific Calculator');
@@ -135,11 +159,7 @@ export default function ScientificCalculator() {
 
   return (
     <PageTransition className="page-medium">
-      <SEO
-        title="Scientific Calculator"
-        description="Free online scientific calculator with trigonometry, logarithms, powers, memory, history and scientific notation."
-        path="/scientific-calculator"
-      />
+      <SEO title="Scientific Calculator" description="Free online scientific calculator with trigonometry, logarithms, powers, memory, history and scientific notation." path="/scientific-calculator" faqSchema={scientificCalculatorFAQ} />
 
       <Link to="/" className="back-link">
         <ArrowLeft size={16} />
@@ -294,6 +314,42 @@ export default function ScientificCalculator() {
           <strong>Keyboard Guide:</strong> Number keys, standard operations (+, -, *, /), parentheses, and decimals are mapped. Press <code>Enter</code> to evaluate, <code>Backspace</code> to delete, and <code>Ctrl+C</code> to copy result.
         </p>
       </Card>
+            {/* ── SEO Content Sections ── */}
+      <div className="seo-content">
+
+        <section className="seo-section">
+          <h2>How the Scientific Calculator Works</h2>
+          <p>This calculator evaluates mathematical expressions using standard operator precedence (PEMDAS/BODMAS): exponents are evaluated first, then multiplication and division left to right, then addition and subtraction. Parentheses override this order, allowing complex nested expressions to be entered.</p>
+        </section>
+
+        <section className="seo-section">
+          <h2>Formula Used</h2>
+          <div className="seo-formula" style={{ whiteSpace: 'pre-line' }}>
+            {"Expression → Tokenise → Parse (respecting precedence) → Evaluate → Result"}
+          </div>
+          <dl className="seo-formula-vars">
+            <dt>Tokenise</dt>
+            <dd>— the input string is split into numbers, operators, functions, and parentheses</dd>
+            <dt>Parse</dt>
+            <dd>— a recursive-descent or shunting-yard algorithm arranges tokens by precedence and associativity</dd>
+            <dt>Evaluate</dt>
+            <dd>— the resulting expression tree is evaluated; trig functions use the selected angle unit (deg/rad)</dd>
+            <dt>Precision</dt>
+            <dd>— results are displayed up to 10 significant digits, with trailing zeros trimmed for readability</dd>
+          </dl>
+        </section>
+
+        <section className="seo-section">
+          <h2>Example Calculation</h2>
+          <p>To calculate the hypotenuse of a right triangle with legs of length 3 and 4, you can use the Pythagorean theorem directly: enter √(3² + 4²) as √(3^2 + 4^2). The calculator evaluates 3² = 9, 4² = 16, 9 + 16 = 25, then √25 = 5.</p>
+        </section>
+
+        <section className="seo-section">
+          <h2>Frequently Asked Questions</h2>
+          <FAQAccordion items={scientificCalculatorFAQ} />
+        </section>
+
+      </div>
     </PageTransition>
   );
 }

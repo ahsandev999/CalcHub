@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
+import FAQAccordion, { type FAQItem } from '@/components/ui/FAQAccordion';
 import PageTransition from '@/components/ui/PageTransition';
 import SEO from '@/components/ui/SEO';
 import Card from '@/components/ui/Card';
@@ -23,6 +24,29 @@ const gradeToPoints: Record<string, number> = {
   'D': 1,
   'F': 0,
 };
+
+const gPACalculatorFAQ: FAQItem[] = [
+  {
+    "question": "What is a good GPA in college?",
+    "answer": "A GPA of 3.0 (B average) is generally considered satisfactory and is the minimum required by many graduate programs. A GPA of 3.5 or above is considered strong."
+  },
+  {
+    "question": "How is cumulative GPA different from semester GPA?",
+    "answer": "Semester GPA is calculated using only the courses taken in a single term. Cumulative GPA is the weighted average across all courses taken throughout your entire academic career."
+  },
+  {
+    "question": "Does every school use the same 4.0 GPA scale?",
+    "answer": "No — while the 4.0 scale is by far the most common in the United States, some schools use a 4.3 scale (where A+ = 4.3), and many international universities use entirely different systems."
+  },
+  {
+    "question": "How much will one bad grade hurt my GPA?",
+    "answer": "The impact depends on how many total credits you have already completed and how many credits the new course carries. More credits completed = more GPA stability."
+  },
+  {
+    "question": "Can I raise my GPA after failing a class?",
+    "answer": "Yes — many institutions offer grade forgiveness or course repeat policies where the new grade replaces the original. Earning high grades in subsequent semesters also steadily dilutes the impact."
+  }
+];
 
 export default function GPACalculator() {
   useToolTracking('gpa-calculator', 'GPA Calculator');
@@ -68,7 +92,7 @@ export default function GPACalculator() {
 
   return (
     <PageTransition className="page-medium">
-      <SEO title="GPA Calculator" description="Calculate GPA from a dynamic list of course grades and credit hours." path="/gpa-calculator" />
+      <SEO title="GPA Calculator" description="Calculate GPA from a dynamic list of course grades and credit hours." path="/gpa-calculator" faqSchema={gPACalculatorFAQ} />
       <Link to="/" className="back-link">← Back to tools</Link>
       <div className="tool-header">
         <div className="eyebrow">Education</div>
@@ -101,6 +125,40 @@ export default function GPACalculator() {
           ] : []}
         />
       </Card>
+            {/* ── SEO Content Sections ── */}
+      <div className="seo-content">
+
+        <section className="seo-section">
+          <h2>How the GPA Calculator Works</h2>
+          <p>This calculator computes a weighted Grade Point Average (GPA) on a standard 4.0 scale. You add one row per course, select the letter grade you received, and enter the number of credit hours that course carries. GPA is calculated as a weighted average.</p>
+        </section>
+
+        <section className="seo-section">
+          <h2>Formula Used</h2>
+          <div className="seo-formula" style={{ whiteSpace: 'pre-line' }}>
+            {"GPA = Σ (Grade Points × Credit Hours) ÷ Σ (Credit Hours)"}
+          </div>
+          <dl className="seo-formula-vars">
+            <dt>Grade Points</dt>
+            <dd>— the numeric value assigned to the letter grade for each course (e.g. B+ = 3.3)</dd>
+            <dt>Credit Hours</dt>
+            <dd>— the number of credit hours (units) the course is worth at your institution</dd>
+            <dt>Σ (sum)</dt>
+            <dd>— each course's (Grade Points × Credits) is summed, then divided by the total credit hours across all courses</dd>
+          </dl>
+        </section>
+
+        <section className="seo-section">
+          <h2>Example Calculation</h2>
+          <p>A student takes four courses in a semester: Calculus (4 credits, A), English (3 credits, B+), History (3 credits, B), and Chemistry Lab (2 credits, C+). The weighted sum = (4×4.0) + (3×3.3) + (3×3.0) + (2×2.3) = 16 + 9.9 + 9 + 4.6 = 39.5. Total credits = 12. GPA = 39.5 ÷ 12 = 3.29.</p>
+        </section>
+
+        <section className="seo-section">
+          <h2>Frequently Asked Questions</h2>
+          <FAQAccordion items={gPACalculatorFAQ} />
+        </section>
+
+      </div>
     </PageTransition>
   );
 }

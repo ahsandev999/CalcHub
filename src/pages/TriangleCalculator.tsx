@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
+import FAQAccordion, { type FAQItem } from '@/components/ui/FAQAccordion';
 import PageTransition from '@/components/ui/PageTransition';
 import SEO from '@/components/ui/SEO';
 import Card from '@/components/ui/Card';
@@ -12,6 +13,29 @@ import { addHistory } from '@/lib/storage';
 import '@/styles/components.css';
 
 function toRadians(deg: number) { return (deg * Math.PI) / 180; }
+
+const triangleCalculatorFAQ: FAQItem[] = [
+  {
+    "question": "What is Heron's formula?",
+    "answer": "Heron's formula is a geometric formula that calculates the area of a triangle using only its three side lengths, without needing to know the height."
+  },
+  {
+    "question": "What is the Law of Sines?",
+    "answer": "The Law of Sines states that the ratio of the length of a side to the sine of its opposite angle is constant: a/sin(A) = b/sin(B) = c/sin(C)."
+  },
+  {
+    "question": "Can a triangle have two obtuse angles?",
+    "answer": "No. The sum of all angles in a triangle is exactly 180 degrees. Since an obtuse angle is greater than 90 degrees, two obtuse angles would exceed 180 degrees."
+  },
+  {
+    "question": "What is an equilateral triangle?",
+    "answer": "An equilateral triangle is a triangle where all three sides are equal in length and all three internal angles are exactly 60 degrees."
+  },
+  {
+    "question": "What does it mean if the calculator says 'Invalid Triangle'?",
+    "answer": "A triangle is invalid if the sum of any two side lengths is not greater than the length of the remaining side (known as the Triangle Inequality Theorem)."
+  }
+];
 
 export default function TriangleCalculator() {
   useToolTracking('triangle-calculator', 'Triangle Calculator');
@@ -71,7 +95,7 @@ export default function TriangleCalculator() {
 
   return (
     <PageTransition className="page-medium">
-      <SEO title="Triangle Calculator" description="Solve triangle values using known sides and angles." path="/triangle-calculator" />
+      <SEO title="Triangle Calculator" description="Solve triangle values using known sides and angles." path="/triangle-calculator" faqSchema={triangleCalculatorFAQ} />
       <Link to="/" className="back-link">← Back to tools</Link>
       <div className="tool-header">
         <div className="eyebrow">Math</div>
@@ -100,6 +124,40 @@ export default function TriangleCalculator() {
           ] : []}
         />
       </Card>
+          {/* ── SEO Content Sections ── */}
+      <div className="seo-content">
+
+        <section className="seo-section">
+          <h2>How the Triangle Calculator Works</h2>
+          <p>This triangle calculator solves triangle properties given any three known values (sides or angles). It computes the area, perimeter, and remaining unknown sides and angles using trigonometry and geometry rules.</p>
+        </section>
+
+        <section className="seo-section">
+          <h2>Formula Used</h2>
+          <div className="seo-formula" style={{ whiteSpace: 'pre-line' }}>
+            {"Area = √[s(s − a)(s − b)(s − c)] (Heron's Formula)\nArea = 0.5 × a × b × sin(C)"}
+          </div>
+          <dl className="seo-formula-vars">
+            <dt>a / b / c</dt>
+            <dd>— the lengths of the three sides of the triangle</dd>
+            <dt>s</dt>
+            <dd>— semi-perimeter = (a + b + c) ÷ 2</dd>
+            <dt>C</dt>
+            <dd>— the angle opposite side c, in degrees</dd>
+          </dl>
+        </section>
+
+        <section className="seo-section">
+          <h2>Example Calculation</h2>
+          <p>For a triangle with side lengths a = 3, b = 4, and c = 5: s = (3+4+5)/2 = 6. Area = √[6 × (6-3) × (6-4) × (6-5)] = √[6 × 3 × 2 × 1] = √36 = 6. The perimeter is 3 + 4 + 5 = 12.</p>
+        </section>
+
+        <section className="seo-section">
+          <h2>Frequently Asked Questions</h2>
+          <FAQAccordion items={triangleCalculatorFAQ} />
+        </section>
+
+      </div>
     </PageTransition>
   );
 }

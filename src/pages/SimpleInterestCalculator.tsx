@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
+import FAQAccordion, { type FAQItem } from '@/components/ui/FAQAccordion';
 import PageTransition from '@/components/ui/PageTransition';
 import SEO from '@/components/ui/SEO';
 import Card from '@/components/ui/Card';
@@ -9,6 +10,29 @@ import ResultDisplay from '@/components/ui/ResultDisplay';
 import { useToolTracking } from '@/hooks/useScroll';
 import { addHistory } from '@/lib/storage';
 import '@/styles/components.css';
+
+const simpleInterestCalculatorFAQ: FAQItem[] = [
+  {
+    "question": "What is simple interest?",
+    "answer": "Simple interest is interest calculated strictly on the original principal amount of a loan or investment. Unlike compound interest, you do not earn interest on previously accumulated interest."
+  },
+  {
+    "question": "When is simple interest used?",
+    "answer": "Simple interest is commonly used for short-term loans, auto loans, personal loans, and simple savings certificates where compounding is not specified."
+  },
+  {
+    "question": "How does simple interest differ from compound interest?",
+    "answer": "Simple interest grows linearly (the interest amount stays the same every year), while compound interest grows exponentially because interest is added back to the principal, earning more interest."
+  },
+  {
+    "question": "How do I calculate simple interest if time is in months?",
+    "answer": "Divide the number of months by 12 to convert the term to years. For example, a 6-month term is 0.5 years (6 ÷ 12) in the formula."
+  },
+  {
+    "question": "Is simple interest better for a borrower or a lender?",
+    "answer": "Simple interest is generally better for a borrower because the total interest paid is lower than it would be with compound interest. Lenders typically prefer compound interest to maximise returns."
+  }
+];
 
 export default function SimpleInterestCalculator() {
   useToolTracking('simple-interest-calculator', 'Simple Interest Calculator');
@@ -47,7 +71,7 @@ export default function SimpleInterestCalculator() {
 
   return (
     <PageTransition className="page-medium">
-      <SEO title="Simple Interest Calculator" description="Calculate simple interest and the final account balance." path="/simple-interest-calculator" />
+      <SEO title="Simple Interest Calculator" description="Calculate simple interest and the final account balance." path="/simple-interest-calculator" faqSchema={simpleInterestCalculatorFAQ} />
       <Link to="/" className="back-link">← Back to tools</Link>
       <div className="tool-header">
         <div className="eyebrow">Financial</div>
@@ -70,6 +94,42 @@ export default function SimpleInterestCalculator() {
           ] : []}
         />
       </Card>
+          {/* ── SEO Content Sections ── */}
+      <div className="seo-content">
+
+        <section className="seo-section">
+          <h2>How the Simple Interest Calculator Works</h2>
+          <p>This simple interest calculator computes the interest earned or paid on a loan or deposit where interest is calculated solely on the original principal amount. There is no compounding in this calculation.</p>
+        </section>
+
+        <section className="seo-section">
+          <h2>Formula Used</h2>
+          <div className="seo-formula" style={{ whiteSpace: 'pre-line' }}>
+            {"I = P × r × t"}
+          </div>
+          <dl className="seo-formula-vars">
+            <dt>I</dt>
+            <dd>— Interest amount earned or paid</dd>
+            <dt>P</dt>
+            <dd>— Principal (original amount borrowed or invested)</dd>
+            <dt>r</dt>
+            <dd>— annual interest rate (expressed as a decimal, e.g. 4% = 0.04)</dd>
+            <dt>t</dt>
+            <dd>— time period the money is borrowed or invested, in years</dd>
+          </dl>
+        </section>
+
+        <section className="seo-section">
+          <h2>Example Calculation</h2>
+          <p>If you invest $5,000 at an annual simple interest rate of 4% for 3 years: Interest I = 5,000 × 0.04 × 3 = $600. The total value at the end of 3 years is $5,000 + $600 = $5,600.</p>
+        </section>
+
+        <section className="seo-section">
+          <h2>Frequently Asked Questions</h2>
+          <FAQAccordion items={simpleInterestCalculatorFAQ} />
+        </section>
+
+      </div>
     </PageTransition>
   );
 }

@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
+import FAQAccordion, { type FAQItem } from '@/components/ui/FAQAccordion';
 import PageTransition from '@/components/ui/PageTransition';
 import SEO from '@/components/ui/SEO';
 import Card from '@/components/ui/Card';
@@ -33,6 +34,29 @@ function normalizeFraction({ numerator, denominator }: Fraction): Fraction {
   const divisor = gcd(numerator, denominator);
   return { numerator: numerator / divisor, denominator: denominator / divisor };
 }
+
+const fractionCalculatorFAQ: FAQItem[] = [
+  {
+    "question": "What is a proper fraction?",
+    "answer": "A proper fraction is a fraction where the numerator (top number) is smaller than the denominator (bottom number), representing a value less than 1 (e.g. 3/4)."
+  },
+  {
+    "question": "What is a mixed number?",
+    "answer": "A mixed number is a whole number combined with a proper fraction (e.g. 1 1/2). It represents values greater than 1."
+  },
+  {
+    "question": "How do I divide fractions?",
+    "answer": "To divide two fractions, multiply the first fraction by the reciprocal (the inverted form) of the second fraction. For example, 1/2 ÷ 3/4 = 1/2 × 4/3 = 4/6 = 2/3."
+  },
+  {
+    "question": "What is the lowest common denominator?",
+    "answer": "The LCD is the lowest common multiple of the denominators of a set of fractions. Finding the LCD is required before you can add or subtract fractions."
+  },
+  {
+    "question": "How does the calculator simplify fractions?",
+    "answer": "The calculator finds the Greatest Common Divisor (GCD) of the numerator and denominator and divides both numbers by it to reduce the fraction to its simplest form."
+  }
+];
 
 export default function FractionCalculator() {
   useToolTracking('fraction-calculator', 'Fraction Calculator');
@@ -77,7 +101,7 @@ export default function FractionCalculator() {
 
   return (
     <PageTransition className="page-medium">
-      <SEO title="Fraction Calculator" description="Add, subtract, multiply, or divide two fractions and simplify the result." path="/fraction-calculator" />
+      <SEO title="Fraction Calculator" description="Add, subtract, multiply, or divide two fractions and simplify the result." path="/fraction-calculator" faqSchema={fractionCalculatorFAQ} />
       <Link to="/" className="back-link">← Back to tools</Link>
       <div className="tool-header">
         <div className="eyebrow">Math</div>
@@ -106,6 +130,40 @@ export default function FractionCalculator() {
           ] : []}
         />
       </Card>
+          {/* ── SEO Content Sections ── */}
+      <div className="seo-content">
+
+        <section className="seo-section">
+          <h2>How the Fraction Calculator Works</h2>
+          <p>This fraction calculator performs addition, subtraction, multiplication, and division on common fractions. It supports proper fractions, improper fractions, and mixed numbers, displaying the simplified result as both a fraction and a decimal.</p>
+        </section>
+
+        <section className="seo-section">
+          <h2>Formula Used</h2>
+          <div className="seo-formula" style={{ whiteSpace: 'pre-line' }}>
+            {"a/b ± c/d = (ad ± bc) ÷ bd\na/b × c/d = ac ÷ bd\na/b ÷ c/d = ad ÷ bc"}
+          </div>
+          <dl className="seo-formula-vars">
+            <dt>a / c</dt>
+            <dd>— the numerators of the fractions being operated on</dd>
+            <dt>b / d</dt>
+            <dd>— the denominators of the fractions being operated on (must be non-zero)</dd>
+            <dt>Result</dt>
+            <dd>— reduced to the lowest common denominator (LCD)</dd>
+          </dl>
+        </section>
+
+        <section className="seo-section">
+          <h2>Example Calculation</h2>
+          <p>To add 1/2 and 3/4, find the LCD (4). 1/2 becomes 2/4. Sum = 2/4 + 3/4 = 5/4. The calculator simplifies this to the mixed number 1 1/4 and the decimal 1.25.</p>
+        </section>
+
+        <section className="seo-section">
+          <h2>Frequently Asked Questions</h2>
+          <FAQAccordion items={fractionCalculatorFAQ} />
+        </section>
+
+      </div>
     </PageTransition>
   );
 }

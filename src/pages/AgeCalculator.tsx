@@ -1,6 +1,7 @@
 import { useState, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
+import FAQAccordion, { type FAQItem } from '@/components/ui/FAQAccordion';
 import PageTransition from '@/components/ui/PageTransition';
 import SEO from '@/components/ui/SEO';
 import Card from '@/components/ui/Card';
@@ -16,6 +17,29 @@ import '@/styles/components.css';
 function todayStr() {
   return new Date().toISOString().split('T')[0];
 }
+
+const ageCalculatorFAQ: FAQItem[] = [
+  {
+    "question": "How do I calculate my exact age in days?",
+    "answer": "Enter your date of birth and leave the reference date as today. The calculator displays your total age in days in the result panel alongside years, months, and weeks."
+  },
+  {
+    "question": "Does the calculator handle leap year birthdays (Feb 29)?",
+    "answer": "Yes. If you were born on February 29 and the current year is not a leap year, the calculator treats March 1 as your effective birthday for that year when determining whether your birthday has passed."
+  },
+  {
+    "question": "Can I calculate how old I'll be on a future date?",
+    "answer": "Absolutely — just change the 'As of date' field to any future date. The calculator will show exactly how old you will be on that date."
+  },
+  {
+    "question": "What is the age difference calculator used for?",
+    "answer": "The 'Compare Ages' mode tells you the exact gap in years, months, and days between two people's birth dates. It is commonly used to check age differences for couples, siblings, or sports brackets."
+  },
+  {
+    "question": "Why does my age in months sometimes seem off by one?",
+    "answer": "The month component shows only complete elapsed months after the last birthday. If your birthday is on the 28th and today is the 26th, the current month has not yet completed, so the month count reflects the last fully-elapsed month."
+  }
+];
 
 export default function AgeCalculator() {
   useToolTracking('age-calculator', 'Age Calculator');  const dobRef = useRef<HTMLInputElement>(null);
@@ -115,11 +139,7 @@ export default function AgeCalculator() {
 
   return (
     <PageTransition className="page-medium">
-      <SEO
-        title="Age Calculator"
-        description="Calculate exact age in years, months, days, zodiac signs, birthday countdown and age comparison."
-        path="/age-calculator"
-      />
+      <SEO title="Age Calculator" description="Calculate exact age in years, months, days, zodiac signs, birthday countdown and age comparison." path="/age-calculator" faqSchema={ageCalculatorFAQ} />
       
       <Link to="/" className="back-link">
         <ArrowLeft size={16} />
@@ -275,6 +295,40 @@ export default function AgeCalculator() {
           )}
         </AnimatePresence>
       </Card>
+            {/* ── SEO Content Sections ── */}
+      <div className="seo-content">
+
+        <section className="seo-section">
+          <h2>How the Age Calculator Works</h2>
+          <p>This calculator computes your exact age in years, months, and days by comparing your date of birth to a chosen reference date (defaulting to today). It accounts for the varying number of days in each month and correctly handles leap years, so the result is always precise to the day.</p>
+        </section>
+
+        <section className="seo-section">
+          <h2>Formula Used</h2>
+          <div className="seo-formula" style={{ whiteSpace: 'pre-line' }}>
+            {"Age = (Reference Date) − (Date of Birth)"}
+          </div>
+          <dl className="seo-formula-vars">
+            <dt>Reference Date</dt>
+            <dd>— the date you want to calculate age as of (defaults to today's date)</dd>
+            <dt>Date of Birth</dt>
+            <dd>— your birth date in YYYY-MM-DD format</dd>
+            <dt>Result</dt>
+            <dd>— the difference broken down into complete years, remaining months, and remaining days, with additional conversions to total weeks, hours, and minutes</dd>
+          </dl>
+        </section>
+
+        <section className="seo-section">
+          <h2>Example Calculation</h2>
+          <p>Suppose someone was born on 15 March 1990 and today is 27 July 2025. The calculator first counts complete years: 35 years. Then the remaining months: March to July = 4 complete months. Finally the remaining days: 15 July to 27 July = 12 days. The result is 35 years, 4 months, and 12 days.</p>
+        </section>
+
+        <section className="seo-section">
+          <h2>Frequently Asked Questions</h2>
+          <FAQAccordion items={ageCalculatorFAQ} />
+        </section>
+
+      </div>
     </PageTransition>
   );
 }

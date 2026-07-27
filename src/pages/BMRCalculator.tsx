@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
+import FAQAccordion, { type FAQItem } from '@/components/ui/FAQAccordion';
 import PageTransition from '@/components/ui/PageTransition';
 import SEO from '@/components/ui/SEO';
 import Card from '@/components/ui/Card';
@@ -10,6 +11,29 @@ import ResultDisplay from '@/components/ui/ResultDisplay';
 import { useToolTracking } from '@/hooks/useScroll';
 import { addHistory } from '@/lib/storage';
 import '@/styles/components.css';
+
+const bMRCalculatorFAQ: FAQItem[] = [
+  {
+    "question": "What is Basal Metabolic Rate?",
+    "answer": "BMR is the minimum number of calories your body needs to survive at rest. It does not include the calories burned from moving, digesting food, or daily activities."
+  },
+  {
+    "question": "What formula does this calculator use?",
+    "answer": "This calculator uses the Mifflin-St Jeor equation, which was introduced in 1990 and is currently considered the standard for calculating metabolic rate."
+  },
+  {
+    "question": "How is BMR different from RMR?",
+    "answer": "BMR is measured under strict laboratory conditions after waking up. Resting Metabolic Rate (RMR) is measured under looser conditions and includes slight energy costs, making it about 10% higher than BMR."
+  },
+  {
+    "question": "How can I increase my BMR?",
+    "answer": "The most effective way to increase BMR is to build lean muscle mass. Muscle is more metabolically active than fat, meaning it burns more calories even when you are completely at rest."
+  },
+  {
+    "question": "Does age affect BMR?",
+    "answer": "Yes. BMR naturally decreases as you age. This is due to a natural loss of lean muscle tissue and changes in hormonal activity, which slows down overall metabolic rate."
+  }
+];
 
 export default function BMRCalculator() {
   useToolTracking('bmr-calculator', 'BMR Calculator');
@@ -48,7 +72,7 @@ export default function BMRCalculator() {
 
   return (
     <PageTransition className="page-medium">
-      <SEO title="BMR Calculator" description="Estimate Basal Metabolic Rate using the Mifflin-St Jeor equation." path="/bmr-calculator" />
+      <SEO title="BMR Calculator" description="Estimate Basal Metabolic Rate using the Mifflin-St Jeor equation." path="/bmr-calculator" faqSchema={bMRCalculatorFAQ} />
       <Link to="/" className="back-link">← Back to tools</Link>
       <div className="tool-header">
         <div className="eyebrow">Fitness & Health</div>
@@ -72,6 +96,40 @@ export default function BMRCalculator() {
           slots={result !== null ? [{ label: 'BMR', value: `${result} kcal/day` }] : []}
         />
       </Card>
+          {/* ── SEO Content Sections ── */}
+      <div className="seo-content">
+
+        <section className="seo-section">
+          <h2>How the BMR Calculator Works</h2>
+          <p>This calculator estimates your Basal Metabolic Rate (BMR) — the number of calories your body burns to perform basic life-sustaining functions (like breathing, circulation, and cell production) while at rest.</p>
+        </section>
+
+        <section className="seo-section">
+          <h2>Formula Used</h2>
+          <div className="seo-formula" style={{ whiteSpace: 'pre-line' }}>
+            {"BMR (Male) = 10 × weight (kg) + 6.25 × height (cm) − 5 × age (years) + 5\nBMR (Female) = 10 × weight (kg) + 6.25 × height (cm) − 5 × age (years) − 161"}
+          </div>
+          <dl className="seo-formula-vars">
+            <dt>weight</dt>
+            <dd>— your body weight in kilograms</dd>
+            <dt>height</dt>
+            <dd>— your height in centimetres</dd>
+            <dt>age</dt>
+            <dd>— your current age in years</dd>
+          </dl>
+        </section>
+
+        <section className="seo-section">
+          <h2>Example Calculation</h2>
+          <p>For a 30-year-old female weighing 60 kg and 165 cm tall: BMR = 10 × 60 + 6.25 × 165 − 5 × 30 − 161 = 600 + 1031.25 − 150 − 161 = 1,320 kcal/day. This is her resting energy cost.</p>
+        </section>
+
+        <section className="seo-section">
+          <h2>Frequently Asked Questions</h2>
+          <FAQAccordion items={bMRCalculatorFAQ} />
+        </section>
+
+      </div>
     </PageTransition>
   );
 }

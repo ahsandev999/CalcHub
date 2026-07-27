@@ -1,5 +1,6 @@
 import { useState, useRef, useEffect, useCallback } from 'react';
 import { Link } from 'react-router-dom';
+import FAQAccordion, { type FAQItem } from '@/components/ui/FAQAccordion';
 import PageTransition from '@/components/ui/PageTransition';
 import SEO from '@/components/ui/SEO';
 import Card from '@/components/ui/Card';
@@ -15,6 +16,29 @@ function formatSec(s: number) {
   const sec = s % 60;
   return `${m.toString().padStart(2, '0')}:${sec.toString().padStart(2, '0')}`;
 }
+
+const timerFAQ: FAQItem[] = [
+  {
+    "question": "Does the timer keep running if I switch tabs?",
+    "answer": "Yes. The timer calculates remaining time using the system's absolute clock, ensuring it remains accurate even if the browser tab is minimised or goes to sleep."
+  },
+  {
+    "question": "Can I pause and resume the timer?",
+    "answer": "Yes. Clicking 'Pause' halts the countdown. Clicking 'Resume' recalculates a new target end time based on the remaining seconds, letting the countdown continue."
+  },
+  {
+    "question": "Will the audio alert play if my device is muted?",
+    "answer": "No. The alert relies on the browser's audio API. If your device volume is muted or your browser has blocked autoplay audio, the alarm will not be audible, though the visual alert will still flash."
+  },
+  {
+    "question": "Can I set multiple timers simultaneously?",
+    "answer": "This simple timer tool supports one active countdown at a time. If you need multiple timers, you can open additional tabs of this page in your browser."
+  },
+  {
+    "question": "How do I clear or reset the timer?",
+    "answer": "Click 'Reset' or 'Cancel' to stop the active countdown, reset the progress bar, and return the inputs to their default states."
+  }
+];
 
 export default function Timer() {
   useToolTracking('timer', 'Timer');  const [seconds, setSeconds] = useState(300);
@@ -53,7 +77,7 @@ export default function Timer() {
 
   return (
     <PageTransition className="page-medium">
-      <SEO title="Timer" description="Countdown timer with presets and audio notification." path="/timer" />
+      <SEO title="Timer" description="Countdown timer with presets and audio notification." path="/timer" faqSchema={timerFAQ} />
       <Link to="/" className="back-link">← Back to tools</Link>
       <div className="tool-header">
         <div className="eyebrow">Time</div>
@@ -79,6 +103,40 @@ export default function Timer() {
         </div>
         <Button onClick={applyCustom} variant="secondary" style={{ width: '100%' }}>Set Custom Time</Button>
       </Card>
+          {/* ── SEO Content Sections ── */}
+      <div className="seo-content">
+
+        <section className="seo-section">
+          <h2>How the Timer Works</h2>
+          <p>This countdown timer alerts you when a specified duration has elapsed. Set the hours, minutes, and seconds, then click Start. A progress bar visualises the remaining time, and an audio alert plays when the timer reaches zero.</p>
+        </section>
+
+        <section className="seo-section">
+          <h2>Formula Used</h2>
+          <div className="seo-formula" style={{ whiteSpace: 'pre-line' }}>
+            {"Time Remaining = Target End Time − Current Timestamp"}
+          </div>
+          <dl className="seo-formula-vars">
+            <dt>Target End Time</dt>
+            <dd>— the absolute timestamp when the countdown should end</dd>
+            <dt>Current Timestamp</dt>
+            <dd>— the system clock timestamp at the current frame</dd>
+            <dt>Time Remaining</dt>
+            <dd>— the difference in seconds, formatted as HH:MM:SS</dd>
+          </dl>
+        </section>
+
+        <section className="seo-section">
+          <h2>Example Calculation</h2>
+          <p>If you set a timer for 5 minutes, the target duration is 300 seconds. The countdown progresses, and when remaining time reaches 0, the browser triggers the alarm sound.</p>
+        </section>
+
+        <section className="seo-section">
+          <h2>Frequently Asked Questions</h2>
+          <FAQAccordion items={timerFAQ} />
+        </section>
+
+      </div>
     </PageTransition>
   );
 }

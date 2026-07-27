@@ -1362,3 +1362,186 @@
   line-height: 1;
   margin-bottom: 6px;
 }
+
+/* =============================================
+   SEO CONTENT SECTIONS (calculator pages)
+   ============================================= */
+
+.seo-content {
+  margin-top: 48px;
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+}
+
+.seo-section {
+  border-top: 1px solid var(--border);
+  padding-top: 36px;
+}
+
+.seo-section h2 {
+  font-family: var(--font-display);
+  font-size: 1.375rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: var(--text);
+  margin-bottom: 16px;
+}
+
+.seo-section h3 {
+  font-family: var(--font-display);
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--text);
+  margin-top: 24px;
+  margin-bottom: 8px;
+}
+
+.seo-section p {
+  font-size: 0.9375rem;
+  color: var(--text-secondary);
+  line-height: 1.75;
+  max-width: 72ch;
+}
+
+.seo-section p + p {
+  margin-top: 12px;
+}
+
+.seo-formula {
+  background: var(--bg-subtle);
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--accent);
+  border-radius: var(--radius-md);
+  padding: 20px 24px;
+  margin: 16px 0;
+  font-family: var(--font-mono);
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--text);
+  overflow-x: auto;
+}
+
+.seo-formula-vars {
+  margin-top: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.seo-formula-vars dt {
+  display: inline;
+  font-family: var(--font-mono);
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--accent);
+}
+
+.seo-formula-vars dd {
+  display: inline;
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+  margin-left: 6px;
+}
+
+.seo-formula-vars dd::after {
+  content: '';
+  display: block;
+  margin-bottom: 4px;
+}
+
+.seo-faq {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+/* =============================================
+   FAQ ACCORDION (calculator pages)
+   ============================================= */
+
+.faq-accordion {
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+}
+
+.faq-item {
+  border-bottom: 1px solid var(--border);
+}
+
+.faq-item:last-child {
+  border-bottom: none;
+}
+
+.faq-question {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  padding: 16px 20px;
+  font-family: var(--font-display);
+  font-size: 0.9375rem;
+  font-weight: 600;
+  color: var(--text);
+  text-align: left;
+  cursor: pointer;
+  background: transparent;
+  border: none;
+  outline: none;
+  transition: background var(--transition-fast), color var(--transition-fast);
+}
+
+.faq-question:hover {
+  background: var(--bg-hover);
+  color: var(--accent);
+}
+
+.faq-question:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: -2px;
+}
+
+.faq-chevron {
+  flex-shrink: 0;
+  color: var(--text-muted);
+  transition: transform 0.28s var(--ease-out), color 0.18s var(--ease-out);
+}
+
+.faq-item.is-open .faq-chevron {
+  transform: rotate(180deg);
+  color: var(--accent);
+}
+
+.faq-item.is-open .faq-question {
+  color: var(--accent);
+}
+
+.faq-answer {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 0.28s var(--ease-out);
+  background: var(--bg-subtle);
+}
+
+.faq-item.is-open .faq-answer {
+  grid-template-rows: 1fr;
+}
+
+.faq-answer-inner {
+  overflow: hidden;
+  padding: 0 20px;
+}
+
+.faq-item.is-open .faq-answer-inner {
+  padding: 14px 20px 20px;
+}
+
+.faq-answer-inner p {
+  font-size: 0.9375rem;
+  color: var(--text-secondary);
+  line-height: 1.75;
+  max-width: 72ch;
+  margin: 0;
+}
