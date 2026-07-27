@@ -79,7 +79,7 @@ export default function GradeCalculator() {
 
   return (
     <PageTransition className="page-medium">
-      <SEO title="Grade Calculator" description="Calculate a final weighted grade percentage and letter grade." path="/grade-calculator" faqSchema={gradeCalculatorFAQ} />
+      <SEO title="Free Grade Calculator" description="Calculate your weighted class grade percentage and target final exam score with this free online tool." path="/grade-calculator" faqSchema={gradeCalculatorFAQ} />
       <Link to="/" className="back-link">← Back to tools</Link>
       <div className="tool-header">
         <div className="eyebrow">Education</div>

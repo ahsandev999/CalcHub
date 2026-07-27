@@ -73,7 +73,7 @@ export default function StandardDeviationCalculator() {
 
   return (
     <PageTransition className="page-medium">
-      <SEO title="Standard Deviation Calculator" description="Calculate standard deviation, variance, and mean from a list of numbers." path="/standard-deviation-calculator" faqSchema={standardDeviationCalculatorFAQ} />
+      <SEO title="Free Standard Deviation Calculator" description="Calculate mean, variance, and population/sample standard deviation from a list of numbers online for free." path="/standard-deviation-calculator" faqSchema={standardDeviationCalculatorFAQ} />
       <Link to="/" className="back-link">← Back to tools</Link>
       <div className="tool-header">
         <div className="eyebrow">Math</div>

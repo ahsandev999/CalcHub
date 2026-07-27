@@ -87,7 +87,7 @@ export default function CompoundInterestCalculator() {
 
   return (
     <PageTransition className="page-medium">
-      <SEO title="Compound Interest Calculator" description="Estimate compounding growth with optional monthly contributions." path="/compound-interest-calculator" faqSchema={compoundInterestCalculatorFAQ} />
+      <SEO title="Free Compound Interest Calculator" description="Project investment growth with compound interest and recurring monthly contributions using this free online calculator." path="/compound-interest-calculator" faqSchema={compoundInterestCalculatorFAQ} />
       <Link to="/" className="back-link">← Back to tools</Link>
       <div className="tool-header">
         <div className="eyebrow">Financial</div>

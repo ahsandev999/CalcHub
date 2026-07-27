@@ -80,7 +80,7 @@ export default function LoanCalculator() {
 
   return (
     <PageTransition className="page-medium">
-      <SEO title="Loan Calculator" description="Estimate monthly payments and total cost for a standard loan." path="/loan-calculator" faqSchema={loanCalculatorFAQ} />
+      <SEO title="Free Loan Calculator" description="Calculate monthly payments, interest, and total repayment for any amortized loan with this free online tool." path="/loan-calculator" faqSchema={loanCalculatorFAQ} />
       <Link to="/" className="back-link">← Back to tools</Link>
       <div className="tool-header">
         <div className="eyebrow">Financial</div>

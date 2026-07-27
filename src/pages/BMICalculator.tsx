@@ -59,7 +59,7 @@ export default function BMICalculator() {
 
   return (
     <PageTransition className="page-medium">
-      <SEO title="BMI Calculator" description="Calculate your Body Mass Index with health category and weight recommendations." path="/bmi-calculator" faqSchema={bmiFAQ} />
+      <SEO title="Free BMI Calculator" description="Calculate your Body Mass Index (BMI) online for free. Get height-to-weight category results and healthy range recommendations instantly." path="/bmi-calculator" faqSchema={bmiFAQ} />
       <Link to="/" className="back-link">← Back to tools</Link>
       <div className="tool-header">
         <div className="eyebrow">Health</div>

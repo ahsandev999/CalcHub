@@ -66,7 +66,7 @@ export default function NumberBaseConverter() {
 
   return (
     <PageTransition className="page-medium">
-      <SEO title="Number Base Converter" description="Convert between decimal, binary, octal and hexadecimal." path="/number-base-converter" faqSchema={numberBaseConverterFAQ} />
+      <SEO title="Free Number Base Converter" description="Convert numbers between binary, octal, decimal, and hexadecimal bases online for free." path="/number-base-converter" faqSchema={numberBaseConverterFAQ} />
       <Link to="/" className="back-link">← Back to tools</Link>
       <div className="tool-header">
         <div className="eyebrow">Converter</div>

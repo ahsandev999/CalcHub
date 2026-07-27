@@ -84,7 +84,7 @@ export default function IdealWeightCalculator() {
 
   return (
     <PageTransition className="page-medium">
-      <SEO title="Ideal Weight Calculator" description="Estimate an ideal weight range using common medical formulas." path="/ideal-weight-calculator" faqSchema={idealWeightCalculatorFAQ} />
+      <SEO title="Free Ideal Weight Calculator" description="Calculate your ideal body weight range based on medical formulas online for free." path="/ideal-weight-calculator" faqSchema={idealWeightCalculatorFAQ} />
       <Link to="/" className="back-link">← Back to tools</Link>
       <div className="tool-header">
         <div className="eyebrow">Fitness & Health</div>

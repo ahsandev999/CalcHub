@@ -107,7 +107,7 @@ export default function UnitConverter() {
 
   return (
     <PageTransition className="page-medium">
-      <SEO title="Unit Converter" description="Convert length, weight, and temperature units instantly." path="/unit-converter" faqSchema={unitConverterFAQ} />
+      <SEO title="Free Unit Converter" description="Convert length, weight, temperature, volume, and other measurements online with this free converter." path="/unit-converter" faqSchema={unitConverterFAQ} />
       <Link to="/" className="back-link">← Back to tools</Link>
       <div className="tool-header">
         <div className="eyebrow">Converter</div>

@@ -59,7 +59,7 @@ export default function RandomNumber() {
 
   return (
     <PageTransition className="page-medium">
-      <SEO title="Random Number Generator" description="Generate random numbers within any range." path="/random-number" faqSchema={randomNumberFAQ} />
+      <SEO title="Free Random Number Generator" description="Generate single or multiple random numbers within any custom range online for free." path="/random-number" faqSchema={randomNumberFAQ} />
       <Link to="/" className="back-link">← Back to tools</Link>
       <div className="tool-header">
         <div className="eyebrow">Utility</div>

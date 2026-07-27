@@ -92,7 +92,7 @@ export default function GPACalculator() {
 
   return (
     <PageTransition className="page-medium">
-      <SEO title="GPA Calculator" description="Calculate GPA from a dynamic list of course grades and credit hours." path="/gpa-calculator" faqSchema={gPACalculatorFAQ} />
+      <SEO title="Free GPA Calculator" description="Calculate your weighted GPA on a 4.0 scale from course grades and credit hours online for free." path="/gpa-calculator" faqSchema={gPACalculatorFAQ} />
       <Link to="/" className="back-link">← Back to tools</Link>
       <div className="tool-header">
         <div className="eyebrow">Education</div>

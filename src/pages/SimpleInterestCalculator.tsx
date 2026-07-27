@@ -71,7 +71,7 @@ export default function SimpleInterestCalculator() {
 
   return (
     <PageTransition className="page-medium">
-      <SEO title="Simple Interest Calculator" description="Calculate simple interest and the final account balance." path="/simple-interest-calculator" faqSchema={simpleInterestCalculatorFAQ} />
+      <SEO title="Free Simple Interest Calculator" description="Calculate simple interest earned and final balance over time with this free online financial calculator." path="/simple-interest-calculator" faqSchema={simpleInterestCalculatorFAQ} />
       <Link to="/" className="back-link">← Back to tools</Link>
       <div className="tool-header">
         <div className="eyebrow">Financial</div>

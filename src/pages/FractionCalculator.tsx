@@ -101,7 +101,7 @@ export default function FractionCalculator() {
 
   return (
     <PageTransition className="page-medium">
-      <SEO title="Fraction Calculator" description="Add, subtract, multiply, or divide two fractions and simplify the result." path="/fraction-calculator" faqSchema={fractionCalculatorFAQ} />
+      <SEO title="Free Fraction Calculator" description="Add, subtract, multiply, or divide fractions and simplify results with this free online tool." path="/fraction-calculator" faqSchema={fractionCalculatorFAQ} />
       <Link to="/" className="back-link">← Back to tools</Link>
       <div className="tool-header">
         <div className="eyebrow">Math</div>

@@ -87,7 +87,7 @@ export default function SleepCalculator() {
 
   return (
     <PageTransition className="page-medium">
-      <SEO title="Sleep Calculator" description="Calculate optimal bedtimes, wake times, and nap durations based on 90-minute sleep cycles." path="/sleep-calculator" faqSchema={sleepCalculatorFAQ} />
+      <SEO title="Free Sleep Calculator" description="Calculate optimal sleep cycles, bedtimes, and wake times online for free to improve sleep quality." path="/sleep-calculator" faqSchema={sleepCalculatorFAQ} />
       
       <Link to="/" className="back-link">
         <ArrowLeft size={16} />

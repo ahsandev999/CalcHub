@@ -90,7 +90,7 @@ export default function BodyFatCalculator() {
 
   return (
     <PageTransition className="page-medium">
-      <SEO title="Body Fat Calculator" description="Estimate body fat percentage using the US Navy method." path="/body-fat-calculator" faqSchema={bodyFatCalculatorFAQ} />
+      <SEO title="Free Body Fat Calculator" description="Calculate your estimated body fat percentage using the U.S. Navy circumference method online for free." path="/body-fat-calculator" faqSchema={bodyFatCalculatorFAQ} />
       <Link to="/" className="back-link">← Back to tools</Link>
       <div className="tool-header">
         <div className="eyebrow">Fitness & Health</div>

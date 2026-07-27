@@ -78,7 +78,7 @@ export default function Stopwatch() {
 
   return (
     <PageTransition className="page-medium">
-      <SEO title="Stopwatch" description="Precision stopwatch with lap times and keyboard shortcuts." path="/stopwatch" faqSchema={stopwatchFAQ} />
+      <SEO title="Free Stopwatch" description="A free online precision stopwatch with lap times and high-resolution counter." path="/stopwatch" faqSchema={stopwatchFAQ} />
       <Link to="/" className="back-link">← Back to tools</Link>
       <div className="tool-header">
         <div className="eyebrow">Time</div>

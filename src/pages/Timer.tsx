@@ -77,7 +77,7 @@ export default function Timer() {
 
   return (
     <PageTransition className="page-medium">
-      <SEO title="Timer" description="Countdown timer with presets and audio notification." path="/timer" faqSchema={timerFAQ} />
+      <SEO title="Free Timer" description="A free online countdown timer with presets, visual progress, and audio alerts." path="/timer" faqSchema={timerFAQ} />
       <Link to="/" className="back-link">← Back to tools</Link>
       <div className="tool-header">
         <div className="eyebrow">Time</div>

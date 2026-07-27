@@ -118,7 +118,7 @@ export default function ColorConverter() {
 
   return (
     <PageTransition className="page-medium">
-      <SEO title="Color Converter" description="Convert between HEX, RGB, and HSL color formats." path="/color-converter" faqSchema={colorConverterFAQ} />
+      <SEO title="Free Color Converter" description="Convert color codes between HEX, RGB, and HSL formats online with this free color tool." path="/color-converter" faqSchema={colorConverterFAQ} />
       <Link to="/" className="back-link">← Back to tools</Link>
       <div className="tool-header">
         <div className="eyebrow">Converter</div>

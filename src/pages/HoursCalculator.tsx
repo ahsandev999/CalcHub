@@ -78,7 +78,7 @@ export default function HoursCalculator() {
 
   return (
     <PageTransition className="page-medium">
-      <SEO title="Hours Calculator" description="Calculate total time worked between two times, including optional breaks." path="/hours-calculator" faqSchema={hoursCalculatorFAQ} />
+      <SEO title="Free Hours Calculator" description="Calculate total work hours and decimal time between two times, including break subtraction, online for free." path="/hours-calculator" faqSchema={hoursCalculatorFAQ} />
       <Link to="/" className="back-link">← Back to tools</Link>
       <div className="tool-header">
         <div className="eyebrow">Time</div>

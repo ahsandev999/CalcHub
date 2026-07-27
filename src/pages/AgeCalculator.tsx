@@ -139,7 +139,7 @@ export default function AgeCalculator() {
 
   return (
     <PageTransition className="page-medium">
-      <SEO title="Age Calculator" description="Calculate exact age in years, months, days, zodiac signs, birthday countdown and age comparison." path="/age-calculator" faqSchema={ageCalculatorFAQ} />
+      <SEO title="Free Age Calculator" description="Calculate your exact age online in years, months, and days for free. Check birth details and compare two ages instantly." path="/age-calculator" faqSchema={ageCalculatorFAQ} />
       
       <Link to="/" className="back-link">
         <ArrowLeft size={16} />

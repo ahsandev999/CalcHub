@@ -95,7 +95,7 @@ export default function TriangleCalculator() {
 
   return (
     <PageTransition className="page-medium">
-      <SEO title="Triangle Calculator" description="Solve triangle values using known sides and angles." path="/triangle-calculator" faqSchema={triangleCalculatorFAQ} />
+      <SEO title="Free Triangle Calculator" description="Solve unknown triangle sides, angles, area, and perimeter online with this free geometry tool." path="/triangle-calculator" faqSchema={triangleCalculatorFAQ} />
       <Link to="/" className="back-link">← Back to tools</Link>
       <div className="tool-header">
         <div className="eyebrow">Math</div>

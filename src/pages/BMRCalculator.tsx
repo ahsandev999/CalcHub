@@ -72,7 +72,7 @@ export default function BMRCalculator() {
 
   return (
     <PageTransition className="page-medium">
-      <SEO title="BMR Calculator" description="Estimate Basal Metabolic Rate using the Mifflin-St Jeor equation." path="/bmr-calculator" faqSchema={bMRCalculatorFAQ} />
+      <SEO title="Free BMR Calculator" description="Calculate your basal metabolic rate (BMR) using the Mifflin-St Jeor equation online for free." path="/bmr-calculator" faqSchema={bMRCalculatorFAQ} />
       <Link to="/" className="back-link">← Back to tools</Link>
       <div className="tool-header">
         <div className="eyebrow">Fitness & Health</div>

@@ -169,7 +169,7 @@ export default function Home() {
   return (
     <>
       <SEO
-        title="CalcHub — Premium Calculators & Tools"
+        title="CalcHub — Free Online Calculators & Tools"
         description="Free, beautiful calculators for everyday life. Scientific math, age, sleep, BMI, timers, converters and more — no sign-up required."
         path="/"
       />

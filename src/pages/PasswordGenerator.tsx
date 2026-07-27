@@ -90,7 +90,7 @@ export default function PasswordGenerator() {
 
   return (
     <PageTransition className="page-medium">
-      <SEO title="Password Generator" description="Generate secure, customizable passwords." path="/password-generator" faqSchema={passwordGeneratorFAQ} />
+      <SEO title="Free Password Generator" description="Generate secure, customizable passwords online for free to keep your accounts protected." path="/password-generator" faqSchema={passwordGeneratorFAQ} />
       <Link to="/" className="back-link">← Back to tools</Link>
       <div className="tool-header">
         <div className="eyebrow">Utility</div>

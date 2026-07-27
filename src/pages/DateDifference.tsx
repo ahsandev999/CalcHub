@@ -76,7 +76,7 @@ export default function DateDifference() {
 
   return (
     <PageTransition className="page-medium">
-      <SEO title="Date Difference Calculator" description="Calculate the exact difference between two dates in years, months, days and more." path="/date-difference" faqSchema={dateDifferenceFAQ} />
+      <SEO title="Free Date Difference Calculator" description="Calculate the exact number of days, weeks, or months between two dates online for free." path="/date-difference" faqSchema={dateDifferenceFAQ} />
       <Link to="/" className="back-link">← Back to tools</Link>
       <div className="tool-header">
         <div className="eyebrow">Time</div>

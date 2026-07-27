@@ -159,7 +159,7 @@ export default function ScientificCalculator() {
 
   return (
     <PageTransition className="page-medium">
-      <SEO title="Scientific Calculator" description="Free online scientific calculator with trigonometry, logarithms, powers, memory, history and scientific notation." path="/scientific-calculator" faqSchema={scientificCalculatorFAQ} />
+      <SEO title="Free Scientific Calculator" description="A free online scientific calculator with trigonometric, logarithmic, and exponential functions, formula parsing, and computation history." path="/scientific-calculator" faqSchema={scientificCalculatorFAQ} />
 
       <Link to="/" className="back-link">
         <ArrowLeft size={16} />

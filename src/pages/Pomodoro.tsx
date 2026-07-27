@@ -94,7 +94,7 @@ export default function Pomodoro() {
 
   return (
     <PageTransition className="page-medium">
-      <SEO title="Pomodoro Timer" description="Focus timer with work/break cycles using the Pomodoro Technique." path="/pomodoro" faqSchema={pomodoroFAQ} />
+      <SEO title="Free Pomodoro Timer" description="A free online Pomodoro timer to help structure your focus sessions and break cycles." path="/pomodoro" faqSchema={pomodoroFAQ} />
       <Link to="/" className="back-link">← Back to tools</Link>
       <div className="tool-header">
         <div className="eyebrow">Time</div>

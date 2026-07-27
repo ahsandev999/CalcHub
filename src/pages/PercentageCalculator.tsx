@@ -71,7 +71,7 @@ export default function PercentageCalculator() {
 
   return (
     <PageTransition className="page-medium">
-      <SEO title="Percentage Calculator" description="Calculate percentages, increases, decreases and percentage differences." path="/percentage-calculator" faqSchema={percentageCalculatorFAQ} />
+      <SEO title="Free Percentage Calculator" description="Calculate percentages, percentage changes, increases, or decreases online with this free tool." path="/percentage-calculator" faqSchema={percentageCalculatorFAQ} />
       <Link to="/" className="back-link">← Back to tools</Link>
       <div className="tool-header">
         <div className="eyebrow">Math</div>

@@ -81,7 +81,7 @@ export default function CalorieCalculator() {
 
   return (
     <PageTransition className="page-medium">
-      <SEO title="Calorie Calculator" description="Estimate daily calorie needs with the Mifflin-St Jeor equation." path="/calorie-calculator" faqSchema={calorieCalculatorFAQ} />
+      <SEO title="Free Calorie Calculator" description="Calculate your daily calorie needs for maintenance or weight goals with this free online health tool." path="/calorie-calculator" faqSchema={calorieCalculatorFAQ} />
       <Link to="/" className="back-link">← Back to tools</Link>
       <div className="tool-header">
         <div className="eyebrow">Fitness & Health</div>

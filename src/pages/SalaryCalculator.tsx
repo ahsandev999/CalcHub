@@ -77,7 +77,7 @@ export default function SalaryCalculator() {
 
   return (
     <PageTransition className="page-medium">
-      <SEO title="Salary Calculator" description="Convert hourly wages and annual salary into weekly, monthly, and annual earnings." path="/salary-calculator" faqSchema={salaryCalculatorFAQ} />
+      <SEO title="Free Salary Calculator" description="Convert hourly wages and annual salary into weekly, monthly, and yearly pay rates with this free online tool." path="/salary-calculator" faqSchema={salaryCalculatorFAQ} />
       <Link to="/" className="back-link">← Back to tools</Link>
       <div className="tool-header">
         <div className="eyebrow">Financial</div>

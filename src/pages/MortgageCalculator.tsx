@@ -97,7 +97,7 @@ export default function MortgageCalculator() {
 
   return (
     <PageTransition className="page-medium">
-      <SEO title="Mortgage Calculator" description="Estimate mortgage payments with taxes and insurance." path="/mortgage-calculator" faqSchema={mortgageCalculatorFAQ} />
+      <SEO title="Free Mortgage Calculator" description="Calculate your monthly home mortgage payments including taxes and insurance with this free online estimator." path="/mortgage-calculator" faqSchema={mortgageCalculatorFAQ} />
       <Link to="/" className="back-link">← Back to tools</Link>
       <div className="tool-header">
         <div className="eyebrow">Financial</div>

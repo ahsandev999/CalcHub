@@ -159,7 +159,7 @@ export default function CurrencyConverter() {
 
   return (
     <PageTransition className="page-medium">
-      <SEO title="Currency Converter" description="Convert currency values in real-time using live global exchange rates API." path="/currency-converter" faqSchema={currencyConverterFAQ} />
+      <SEO title="Free Currency Converter" description="Convert currencies online using current live exchange rates with this free tool." path="/currency-converter" faqSchema={currencyConverterFAQ} />
 
       <Link to="/" className="back-link">
         <ArrowLeft size={16} />
