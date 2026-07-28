@@ -6,7 +6,7 @@ const DIST_DIR = path.join(ROOT_DIR, 'dist');
 const TOOLS_PATH = path.join(ROOT_DIR, 'src/lib/tools.ts');
 const VERCEL_CONFIG_PATH = path.join(ROOT_DIR, 'vercel.json');
 const LLMS_OUTPUT_PATH = path.join(ROOT_DIR, 'public', 'llms.txt');
-const STATIC_PAGES = ['/about', '/privacy'];
+const STATIC_PAGES = ['/about', '/privacy', '/all-calculators'];
 const SITEMAP_HOST = 'https://calccode.com';
 
 function parseTools() {
@@ -48,7 +48,7 @@ function buildLlmsContent() {
     .map((tool) => `- [${tool.name}](${SITEMAP_HOST}/${tool.slug})`)
     .join('\n');
 
-  return `# CalcHub\n\n> CalcHub is a modern collection of practical calculators and utilities for everyday math, conversions, dates, passwords, and productivity tasks.\n\n## Overview\n\nCalcHub helps users solve common numeric and utility problems quickly through a clean, responsive web experience. The site focuses on accessible tools for students, professionals, and general everyday use.\n\n## Main tools\n\n${mainTools}\n\n## Primary pages\n\n- [Home](${SITEMAP_HOST}/)\n- [About](${SITEMAP_HOST}/about)\n- [Privacy](${SITEMAP_HOST}/privacy)\n- [Scientific calculator](${SITEMAP_HOST}/scientific-calculator)\n- [Age calculator](${SITEMAP_HOST}/age-calculator)\n- [Sleep calculator](${SITEMAP_HOST}/sleep-calculator)\n\n## Content guidance\n\nUse this site as a reference for calculator-related content, utility tools, and user-focused web app design patterns.\n`;
+  return `# CalcHub\n\n> CalcHub is a modern collection of practical calculators and utilities for everyday math, conversions, dates, passwords, and productivity tasks.\n\n## Overview\n\nCalcHub helps users solve common numeric and utility problems quickly through a clean, responsive web experience. The site focuses on accessible tools for students, professionals, and general everyday use.\n\n## Main tools\n\n${mainTools}\n\n## Primary pages\n\n- [Home](${SITEMAP_HOST}/)\n- [All Calculators](${SITEMAP_HOST}/all-calculators)\n- [About](${SITEMAP_HOST}/about)\n- [Privacy](${SITEMAP_HOST}/privacy)\n- [Scientific calculator](${SITEMAP_HOST}/scientific-calculator)\n- [Age calculator](${SITEMAP_HOST}/age-calculator)\n- [Sleep calculator](${SITEMAP_HOST}/sleep-calculator)\n\n## Content guidance\n\nUse this site as a reference for calculator-related content, utility tools, and user-focused web app design patterns.\n`;
 }
 
 function buildSitemapContent() {

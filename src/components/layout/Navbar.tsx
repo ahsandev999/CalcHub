@@ -31,9 +31,7 @@ export default function Navbar() {
         </Link>
 
         <nav className="navbar-nav" aria-label="Main navigation">
-          {!isCurrentHome && (
-            <Link to="/" className="navbar-link">Tools</Link>
-          )}
+          <Link to="/all-calculators" className="navbar-link">All Calculators</Link>
           <Link to="/about" className="navbar-link">About</Link>
           <Link to="/privacy" className="navbar-link">Privacy</Link>
         </nav>

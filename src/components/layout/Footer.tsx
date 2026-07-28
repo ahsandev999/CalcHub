@@ -40,7 +40,7 @@ export default function Footer() {
                   <li key={t.slug}><Link to={`/${t.slug}`}>{t.name}</Link></li>
                 ))}
                 {group.extra > 0 && (
-                  <li className="footer-more"><Link to="/">+{group.extra} more</Link></li>
+                  <li className="footer-more"><Link to="/all-calculators">+{group.extra} more</Link></li>
                 )}
               </ul>
             </div>

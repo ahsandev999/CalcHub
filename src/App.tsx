@@ -42,6 +42,8 @@ const GradeCalculator = lazy(() => import('./pages/GradeCalculator'));
 const HoursCalculator = lazy(() => import('./pages/HoursCalculator'));
 const About = lazy(() => import('./pages/About'));
 const Privacy = lazy(() => import('./pages/Privacy'));
+const AllCalculators = lazy(() => import('./pages/AllCalculators'));
+
 
 export default function App() {
   const location = useLocation();
@@ -228,6 +230,7 @@ export default function App() {
             <Route path="/hours-calculator" element={<HoursCalculator />} />
             <Route path="/about" element={<About />} />
             <Route path="/privacy" element={<Privacy />} />
+            <Route path="/all-calculators" element={<AllCalculators />} />
           </Routes>
         </Suspense>
       </Layout>

@@ -9,7 +9,7 @@ const ROUTES = getAllRoutes();
 
 const DIST_DIR = path.join(process.cwd(), 'dist');
 const VERCEL_CONFIG_PATH = path.join(process.cwd(), 'vercel.json');
-const PORT = process.env.PRERENDER_PORT || 5173;
+const PORT = process.env.PRERENDER_PORT || 5178;
 const HOST = `http://localhost:${PORT}`;
 const IS_LINUX = process.platform === 'linux';
 const DEBUG_PRERENDER_LOCAL = process.env.DEBUG_PRERENDER_LOCAL === '1';
@@ -122,23 +122,47 @@ async function prerender() {
     serverProcess = await startStaticServer();
 
     console.log('Launching headless browser...');
-  const executablePath = await chromium.executablePath();
-  console.log('Chromium executable path:', executablePath);
-  const browser = await puppeteer.launch({
-    executablePath,
-    headless: 'new',
-    args: [
-      ...chromium.args,
-      '--no-sandbox',
-      '--disable-setuid-sandbox',
-      '--disable-dev-shm-usage',
-      '--disable-accelerated-2d-canvas',
-      '--disable-gpu',
-    ],
-    ignoreHTTPSErrors: true,
-    defaultViewport: { width: 1280, height: 800 },
-  });
+    let executablePath;
+    if (!IS_LINUX) {
+      const winPaths = [
+        'C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe',
+        'C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe',
+        path.join(process.env.LOCALAPPDATA || '', 'Google\\Chrome\\Application\\chrome.exe'),
+      ];
+      for (const p of winPaths) {
+        if (fs.existsSync(p)) {
+          executablePath = p;
+          break;
+        }
+      }
+    }
+    if (!executablePath) {
+      executablePath = await chromium.executablePath();
+    }
+    console.log('Using browser executable path:', executablePath);
+
+    const browser = await puppeteer.launch({
+      executablePath,
+      headless: 'new',
+      args: IS_LINUX ? [
+        ...chromium.args,
+        '--no-sandbox',
+        '--disable-setuid-sandbox',
+        '--disable-dev-shm-usage',
+        '--disable-accelerated-2d-canvas',
+        '--disable-gpu',
+      ] : [
+        '--no-sandbox',
+        '--disable-dev-shm-usage',
+        '--disable-accelerated-2d-canvas',
+        '--disable-gpu',
+      ],
+      ignoreHTTPSErrors: true,
+      defaultViewport: { width: 1280, height: 800 },
+    });
   const page = await browser.newPage();
+  page.on('console', msg => console.log('BROWSER LOG:', msg.text()));
+  page.on('pageerror', err => console.error('BROWSER ERROR:', err.toString()));
 
   for (const route of ROUTES) {
     const routeStart = Date.now();
@@ -153,7 +177,7 @@ async function prerender() {
       const response = await page.goto(url, waitOptions);
       console.log(`  response status=${response ? response.status() : 'no response'}`);
 
-      const selector = 'h1.page-title';
+      const selector = 'h1.page-title, h1.hero-title';
       console.log(`  waiting for selector ${selector}`);
       await page.waitForSelector(selector, { timeout: 120000 });
 
@@ -173,8 +197,9 @@ async function prerender() {
 
       // Determine output path
       if (route === '/') {
-        // leave root index.html as-is
-        console.log('Skipping root replacement (keep dist/index.html)');
+        const outPath = path.join(DIST_DIR, 'index.html.temp');
+        fs.writeFileSync(outPath, html, 'utf8');
+        console.log('Wrote prerendered homepage to index.html.temp');
       } else {
         const outDir = path.join(DIST_DIR, route.replace(/(^\/|\/$)/g, ''));
         ensureDir(outDir);
@@ -187,6 +212,14 @@ async function prerender() {
       console.error(e.stack || e);
       console.error(`Route ${route} failed after ${Date.now() - routeStart}ms`);
     }
+  }
+
+  // Copy index.html.temp to index.html at the very end to finalize homepage
+  const tempPath = path.join(DIST_DIR, 'index.html.temp');
+  if (fs.existsSync(tempPath)) {
+    fs.copyFileSync(tempPath, path.join(DIST_DIR, 'index.html'));
+    fs.unlinkSync(tempPath);
+    console.log('Finalized dist/index.html with pre-rendered homepage');
   }
 
   // Generate sitemap.xml using calccode.com as requested

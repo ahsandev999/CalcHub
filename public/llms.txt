@@ -42,6 +42,7 @@ CalcHub helps users solve common numeric and utility problems quickly through a 
 ## Primary pages
 
 - [Home](https://calccode.com/)
+- [All Calculators](https://calccode.com/all-calculators)
 - [About](https://calccode.com/about)
 - [Privacy](https://calccode.com/privacy)
 - [Scientific calculator](https://calccode.com/scientific-calculator)
