@@ -42,8 +42,8 @@ export default function IdealWeightCalculator() {
   const [result, setResult] = useState<{ range: string; average: string } | null>(null);
   const [validationError, setValidationError] = useState<string | null>(null);
 
-  const calculate = () => {
-    const heightIn = Number(height);
+  const calculate = (overrideHeight?: string) => {
+    const heightIn = Number(overrideHeight !== undefined ? overrideHeight : height);
     if (!heightIn || heightIn <= 0) {
       setValidationError('Enter a valid height.');
       return;
@@ -79,7 +79,13 @@ export default function IdealWeightCalculator() {
       expression: `${gender}, ${heightCm} cm`,
       result: nextResult.average,
     });
-    
+  };
+
+  const fillExample = () => {
+    const exH = '175';
+    setHeight(exH);
+    setValidationError(null);
+    calculate(exH);
   };
 
   return (
@@ -93,12 +99,13 @@ export default function IdealWeightCalculator() {
       </div>
       <Card padding="lg">
         <div className="tabs">
-          <button className={`tab ${gender === 'male' ? 'active' : ''}`} onClick={() => setGender('male')}>Male</button>
-          <button className={`tab ${gender === 'female' ? 'active' : ''}`} onClick={() => setGender('female')}>Female</button>
+          <button className={`tab ${gender === 'male' ? 'active' : ''}`} onClick={() => { setGender('male'); setResult(null); }}>Male</button>
+          <button className={`tab ${gender === 'female' ? 'active' : ''}`} onClick={() => { setGender('female'); setResult(null); }}>Female</button>
         </div>
-        <Input label="Height (cm)" type="number" value={height} onChange={(e) => { setHeight(e.target.value); setValidationError(null); }} min="1" error={validationError ? 'Enter a valid height.' : undefined} />
+        <Input label="Height (cm)" type="number" value={height} onChange={(e) => { setHeight(e.target.value); setValidationError(null); }} min="1" placeholder="e.g. 175" error={validationError ? 'Enter a valid height.' : undefined} />
         {validationError && <p className="input-message input-message-error" role="alert">{validationError}</p>}
-        <Button onClick={calculate} magnetic style={{ width: '100%' }}>Calculate Ideal Weight</Button>
+        <Button onClick={() => calculate()} magnetic style={{ width: '100%' }}>Calculate Ideal Weight</Button>
+        <button className="btn-demo-fill" onClick={fillExample}>Try Example</button>
         <ResultDisplay
           visible={!!result}
           highlight={result ? result.average : undefined}

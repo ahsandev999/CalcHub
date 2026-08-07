@@ -50,12 +50,16 @@ const gPACalculatorFAQ: FAQItem[] = [
 
 export default function GPACalculator() {
   useToolTracking('gpa-calculator', 'GPA Calculator');
-  const [validationError, setValidationError] = useState<string | null>(null);
-  const [courses, setCourses] = useState([{ grade: 'A', credits: '3' }]);
+  const [courses, setCourses] = useState([{ grade: 'A', credits: '' }]);
   const [result, setResult] = useState<{ gpa: number; totalCredits: number } | null>(null);
+  const [validationError, setValidationError] = useState<string | null>(null);
 
-  const addCourse = () => setCourses([...courses, { grade: 'A', credits: '1' }]);
-  const removeCourse = (index: number) => setCourses(courses.filter((_, i) => i !== index));
+  const addCourse = () => setCourses([...courses, { grade: 'A', credits: '' }]);
+  const removeCourse = (index: number) => {
+    const next = courses.filter((_, i) => i !== index);
+    setCourses(next);
+    setResult(null);
+  };
   const updateCourse = (index: number, field: 'grade' | 'credits', value: string) => {
     const next = [...courses];
     next[index][field] = value;
@@ -63,8 +67,9 @@ export default function GPACalculator() {
     setValidationError(null);
   };
 
-  const calculate = () => {
-    const valid = courses.map((course) => ({
+  const calculate = (overrideCourses?: typeof courses) => {
+    const list = overrideCourses !== undefined ? overrideCourses : courses;
+    const valid = list.map((course) => ({
       grade: gradeToPoints[course.grade] ?? 0,
       credits: Number(course.credits),
     }));
@@ -85,9 +90,20 @@ export default function GPACalculator() {
     addHistory({
       tool: 'GPA Calculator',
       toolSlug: 'gpa-calculator',
-      expression: `${courses.length} courses`,
+      expression: `${list.length} courses`,
       result: `${nextResult.gpa.toFixed(2)} GPA`,
     });
+  };
+
+  const fillExample = () => {
+    const exCourses = [
+      { grade: 'A', credits: '3' },
+      { grade: 'B+', credits: '4' },
+      { grade: 'A-', credits: '3' },
+    ];
+    setCourses(exCourses);
+    setValidationError(null);
+    calculate(exCourses);
   };
 
   return (
@@ -108,13 +124,14 @@ export default function GPACalculator() {
                 {Object.keys(gradeToPoints).map((grade) => <option key={grade}>{grade}</option>)}
               </select>
             </div>
-            <Input label="Credit Hours" type="number" value={course.credits} onChange={(e) => updateCourse(index, 'credits', e.target.value)} min="1" />
+            <Input label="Credit Hours" type="number" value={course.credits} onChange={(e) => updateCourse(index, 'credits', e.target.value)} min="1" placeholder="e.g. 3" />
             <Button variant="ghost" onClick={() => removeCourse(index)} style={{ marginTop: 8 }}>Remove</Button>
           </div>
         ))}
         <Button variant="secondary" onClick={addCourse} style={{ width: '100%', marginBottom: 12 }}>Add Course</Button>
         {validationError && <p className="input-message input-message-error" role="alert">{validationError}</p>}
-        <Button onClick={calculate} magnetic style={{ width: '100%' }}>Calculate GPA</Button>
+        <Button onClick={() => calculate()} magnetic style={{ width: '100%' }}>Calculate GPA</Button>
+        <button className="btn-demo-fill" onClick={fillExample}>Try Example</button>
         <ResultDisplay
           visible={!!result}
           highlight={result ? `${result.gpa.toFixed(2)} / 4.0` : undefined}

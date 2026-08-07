@@ -307,6 +307,33 @@ export default function ScientificCalculator() {
             </motion.div>
           )}
         </AnimatePresence>
+        
+        <button
+          className="btn-demo-fill"
+          onClick={() => {
+            const sample = '(5+3)*12/sin(30)';
+            setExpr(sample);
+            setJustEvaluated(false);
+            try {
+              const result = evaluate(sample, isDeg);
+              const formatted = formatResult(result);
+              const displayExpr = formatDisplay(sample);
+              setActiveExpr(displayExpr);
+              setHistory((h) => [{ expr: displayExpr, result: formatted }, ...h].slice(0, 20));
+              addHistory({
+                tool: 'Scientific Calculator',
+                toolSlug: 'scientific-calculator',
+                expression: displayExpr,
+                result: formatted,
+              });
+              setExpr(formatted);
+              setJustEvaluated(true);
+            } catch {}
+          }}
+          style={{ marginTop: 16 }}
+        >
+          Try Example
+        </button>
       </Card>
 
       <Card padding="md" style={{ marginTop: 24, maxWidth: 460, margin: '24px auto 0' }}>

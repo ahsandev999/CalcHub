@@ -48,13 +48,20 @@ export default function TriangleCalculator() {
   const [result, setResult] = useState<{ area: string; perimeter: string; remaining: string } | null>(null);
   const [validationError, setValidationError] = useState<string | null>(null);
 
-  const calculate = () => {
-    const sideA = Number(a);
-    const sideB = Number(b);
-    const sideC = Number(c);
-    const angA = Number(angleA);
-    const angB = Number(angleB);
-    const angC = Number(angleC);
+  const calculate = (
+    overrideA?: string,
+    overrideB?: string,
+    overrideC?: string,
+    overrideAngleA?: string,
+    overrideAngleB?: string,
+    overrideAngleC?: string
+  ) => {
+    const sideA = Number(overrideA !== undefined ? overrideA : a);
+    const sideB = Number(overrideB !== undefined ? overrideB : b);
+    const sideC = Number(overrideC !== undefined ? overrideC : c);
+    const angA = Number(overrideAngleA !== undefined ? overrideAngleA : angleA);
+    const angB = Number(overrideAngleB !== undefined ? overrideAngleB : angleB);
+    const angC = Number(overrideAngleC !== undefined ? overrideAngleC : angleC);
 
     if ([sideA, sideB, sideC, angA, angB, angC].every((v) => !v)) {
       setValidationError('Enter at least three triangle values.');
@@ -70,27 +77,50 @@ export default function TriangleCalculator() {
       return;
     }
 
+    let areaVal = '0.00';
+    let perimeterVal = '0.00';
+    let remainingVal = '';
+
     if (knownSides === 3) {
       const s = (sideA + sideB + sideC) / 2;
       const area = Math.sqrt(s * (s - sideA) * (s - sideB) * (s - sideC));
       const perimeter = sideA + sideB + sideC;
-      setResult({ area: area.toFixed(2), perimeter: perimeter.toFixed(2), remaining: 'Solved from side lengths' });
+      areaVal = area.toFixed(2);
+      perimeterVal = perimeter.toFixed(2);
+      remainingVal = 'Solved from side lengths';
     } else {
       const side1 = sideA || sideB || sideC;
       const side2 = sideB || sideA || sideC;
       const angle = angA || angB || angC;
       const area = 0.5 * side1 * side2 * Math.sin(toRadians(angle));
       const perimeter = Number((side1 + side2 + (side1 ? side2 : side1)).toFixed(2));
-      setResult({ area: area.toFixed(2), perimeter: perimeter.toFixed(2), remaining: 'Approximate solve using Law of Sines/Cosines' });
+      areaVal = area.toFixed(2);
+      perimeterVal = perimeter.toFixed(2);
+      remainingVal = 'Approximate solve using Law of Sines/Cosines';
     }
+
+    setResult({ area: areaVal, perimeter: perimeterVal, remaining: remainingVal });
 
     addHistory({
       tool: 'Triangle Calculator',
       toolSlug: 'triangle-calculator',
       expression: 'triangle values',
-      result: `${result?.area || 'calc'} area`,
+      result: `${areaVal} area`,
     });
-    
+  };
+
+  const fillExample = () => {
+    const exA = '3';
+    const exB = '4';
+    const exC = '5';
+    setA(exA);
+    setB(exB);
+    setC(exC);
+    setAngleA('');
+    setAngleB('');
+    setAngleC('');
+    setValidationError(null);
+    calculate(exA, exB, exC, '', '', '');
   };
 
   return (
@@ -104,15 +134,16 @@ export default function TriangleCalculator() {
       </div>
       <Card padding="lg">
         <div className="grid-2">
-          <Input label="Side a" type="number" value={a} onChange={(e) => { setA(e.target.value); setValidationError(null); }} min="0" error={validationError ? 'Enter a valid side or angle.' : undefined} />
-          <Input label="Side b" type="number" value={b} onChange={(e) => { setB(e.target.value); setValidationError(null); }} min="0" error={validationError ? 'Enter a valid side or angle.' : undefined} />
-          <Input label="Side c" type="number" value={c} onChange={(e) => { setC(e.target.value); setValidationError(null); }} min="0" error={validationError ? 'Enter a valid side or angle.' : undefined} />
-          <Input label="Angle A (°)" type="number" value={angleA} onChange={(e) => { setAngleA(e.target.value); setValidationError(null); }} min="0" max="180" error={validationError ? 'Enter a valid side or angle.' : undefined} />
-          <Input label="Angle B (°)" type="number" value={angleB} onChange={(e) => { setAngleB(e.target.value); setValidationError(null); }} min="0" max="180" error={validationError ? 'Enter a valid side or angle.' : undefined} />
-          <Input label="Angle C (°)" type="number" value={angleC} onChange={(e) => { setAngleC(e.target.value); setValidationError(null); }} min="0" max="180" error={validationError ? 'Enter a valid side or angle.' : undefined} />
+          <Input label="Side a" type="number" value={a} onChange={(e) => { setA(e.target.value); setValidationError(null); }} min="0" placeholder="e.g. 3" error={validationError ? 'Enter a valid side or angle.' : undefined} />
+          <Input label="Side b" type="number" value={b} onChange={(e) => { setB(e.target.value); setValidationError(null); }} min="0" placeholder="e.g. 4" error={validationError ? 'Enter a valid side or angle.' : undefined} />
+          <Input label="Side c" type="number" value={c} onChange={(e) => { setC(e.target.value); setValidationError(null); }} min="0" placeholder="e.g. 5" error={validationError ? 'Enter a valid side or angle.' : undefined} />
+          <Input label="Angle A (°)" type="number" value={angleA} onChange={(e) => { setAngleA(e.target.value); setValidationError(null); }} min="0" max="180" placeholder="e.g. 36.87" error={validationError ? 'Enter a valid side or angle.' : undefined} />
+          <Input label="Angle B (°)" type="number" value={angleB} onChange={(e) => { setAngleB(e.target.value); setValidationError(null); }} min="0" max="180" placeholder="e.g. 53.13" error={validationError ? 'Enter a valid side or angle.' : undefined} />
+          <Input label="Angle C (°)" type="number" value={angleC} onChange={(e) => { setAngleC(e.target.value); setValidationError(null); }} min="0" max="180" placeholder="e.g. 90.00" error={validationError ? 'Enter a valid side or angle.' : undefined} />
         </div>
         {validationError && <p className="input-message input-message-error" role="alert">{validationError}</p>}
-        <Button onClick={calculate} magnetic style={{ width: '100%' }}>Solve Triangle</Button>
+        <Button onClick={() => calculate()} magnetic style={{ width: '100%' }}>Solve Triangle</Button>
+        <button className="btn-demo-fill" onClick={fillExample}>Try Example</button>
         <ResultDisplay
           visible={!!result}
           highlight={result ? `${result.area} sq units` : undefined}

@@ -53,11 +53,16 @@ export default function BodyFatCalculator() {
   const [hip, setHip] = useState('');
   const [result, setResult] = useState<{ percent: number; category: string } | null>(null);
 
-  const calculate = () => {
-    const waistNum = Number(waist);
-    const neckNum = Number(neck);
-    const heightNum = Number(height);
-    const hipNum = Number(hip || 0);
+  const calculate = (
+    overrideWaist?: string,
+    overrideNeck?: string,
+    overrideHeight?: string,
+    overrideHip?: string
+  ) => {
+    const waistNum = Number(overrideWaist !== undefined ? overrideWaist : waist);
+    const neckNum = Number(overrideNeck !== undefined ? overrideNeck : neck);
+    const heightNum = Number(overrideHeight !== undefined ? overrideHeight : height);
+    const hipNum = Number(overrideHip !== undefined ? overrideHip : (hip || 0));
 
     if (!waistNum || !neckNum || !heightNum || waistNum <= 0 || neckNum <= 0 || heightNum <= 0) {
       setValidationError('Enter valid waist, neck, and height values.');
@@ -88,6 +93,19 @@ export default function BodyFatCalculator() {
     });
   };
 
+  const fillExample = () => {
+    const exWaist = gender === 'male' ? '88' : '72';
+    const exNeck = gender === 'male' ? '38' : '34';
+    const exHeight = gender === 'male' ? '180' : '165';
+    const exHip = gender === 'male' ? '' : '94';
+    setWaist(exWaist);
+    setNeck(exNeck);
+    setHeight(exHeight);
+    if (gender === 'female') setHip(exHip);
+    setValidationError(null);
+    calculate(exWaist, exNeck, exHeight, exHip);
+  };
+
   return (
     <PageTransition className="page-medium">
       <SEO title="Free Body Fat Calculator" description="Calculate your estimated body fat percentage using the U.S. Navy circumference method online for free." path="/body-fat-calculator" faqSchema={bodyFatCalculatorFAQ} />
@@ -99,17 +117,18 @@ export default function BodyFatCalculator() {
       </div>
       <Card padding="lg">
         <div className="tabs">
-          <button className={`tab ${gender === 'male' ? 'active' : ''}`} onClick={() => setGender('male')}>Male</button>
-          <button className={`tab ${gender === 'female' ? 'active' : ''}`} onClick={() => setGender('female')}>Female</button>
+          <button className={`tab ${gender === 'male' ? 'active' : ''}`} onClick={() => { setGender('male'); setResult(null); }}>Male</button>
+          <button className={`tab ${gender === 'female' ? 'active' : ''}`} onClick={() => { setGender('female'); setResult(null); }}>Female</button>
         </div>
-        <Input label="Waist (cm)" type="number" value={waist} onChange={(e) => { setWaist(e.target.value); setValidationError(null); }} min="0" />
-        <Input label="Neck (cm)" type="number" value={neck} onChange={(e) => { setNeck(e.target.value); setValidationError(null); }} min="0" />
-        <Input label="Height (cm)" type="number" value={height} onChange={(e) => { setHeight(e.target.value); setValidationError(null); }} min="0" />
+        <Input label="Waist (cm)" type="number" value={waist} onChange={(e) => { setWaist(e.target.value); setValidationError(null); }} min="0" placeholder={gender === 'male' ? 'e.g. 88' : 'e.g. 72'} />
+        <Input label="Neck (cm)" type="number" value={neck} onChange={(e) => { setNeck(e.target.value); setValidationError(null); }} min="0" placeholder={gender === 'male' ? 'e.g. 38' : 'e.g. 34'} />
+        <Input label="Height (cm)" type="number" value={height} onChange={(e) => { setHeight(e.target.value); setValidationError(null); }} min="0" placeholder={gender === 'male' ? 'e.g. 180' : 'e.g. 165'} />
         {gender === 'female' && (
-          <Input label="Hip (cm)" type="number" value={hip} onChange={(e) => { setHip(e.target.value); setValidationError(null); }} min="0" />
+          <Input label="Hip (cm)" type="number" value={hip} onChange={(e) => { setHip(e.target.value); setValidationError(null); }} min="0" placeholder="e.g. 94" />
         )}
         {validationError && <p className="input-message input-message-error" role="alert">{validationError}</p>}
-        <Button onClick={calculate} magnetic style={{ width: '100%' }}>Calculate Body Fat</Button>
+        <Button onClick={() => calculate()} magnetic style={{ width: '100%' }}>Calculate Body Fat</Button>
+        <button className="btn-demo-fill" onClick={fillExample}>Try Example</button>
         <ResultDisplay
           visible={!!result}
           highlight={result ? `${result.percent}%` : undefined}

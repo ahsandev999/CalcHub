@@ -36,9 +36,9 @@ const hoursCalculatorFAQ: FAQItem[] = [
 
 export default function HoursCalculator() {
   useToolTracking('hours-calculator', 'Hours Calculator');
-  const [start, setStart] = useState('09:00');
-  const [end, setEnd] = useState('17:00');
-  const [breakMinutes, setBreakMinutes] = useState('0');
+  const [start, setStart] = useState('');
+  const [end, setEnd] = useState('');
+  const [breakMinutes, setBreakMinutes] = useState('');
   const [result, setResult] = useState<{ decimal: string; hhmm: string } | null>(null);
   const [validationError, setValidationError] = useState<string | null>(null);
 
@@ -47,10 +47,19 @@ export default function HoursCalculator() {
     return hours * 60 + minutes;
   };
 
-  const calculate = () => {
-    const startMinutes = timeToMinutes(start);
-    const endMinutes = timeToMinutes(end);
-    const breakTotal = Number(breakMinutes || 0);
+  const calculate = (overrideStart?: string, overrideEnd?: string, overrideBreak?: string) => {
+    const s = overrideStart !== undefined ? overrideStart : start;
+    const e = overrideEnd !== undefined ? overrideEnd : end;
+    const b = overrideBreak !== undefined ? overrideBreak : breakMinutes;
+
+    if (!s || !e) {
+      setValidationError('Enter both start and end times.');
+      return;
+    }
+
+    const startMinutes = timeToMinutes(s);
+    const endMinutes = timeToMinutes(e);
+    const breakTotal = Number(b || 0);
 
     if (Number.isNaN(startMinutes) || Number.isNaN(endMinutes) || breakTotal < 0) {
       setValidationError('Enter valid times.');
@@ -71,9 +80,20 @@ export default function HoursCalculator() {
     addHistory({
       tool: 'Hours Calculator',
       toolSlug: 'hours-calculator',
-      expression: `${start} → ${end}`,
+      expression: `${s} → ${e}`,
       result: nextResult.hhmm,
     });
+  };
+
+  const fillExample = () => {
+    const exStart = '09:00';
+    const exEnd = '17:00';
+    const exBreak = '30';
+    setStart(exStart);
+    setEnd(exEnd);
+    setBreakMinutes(exBreak);
+    setValidationError(null);
+    calculate(exStart, exEnd, exBreak);
   };
 
   return (
@@ -86,11 +106,12 @@ export default function HoursCalculator() {
         <p className="page-lede">Calculate total hours worked, including break time, in decimal and hh:mm formats.</p>
       </div>
       <Card padding="lg">
-        <Input label="Start Time" type="time" value={start} onChange={(e) => { setStart(e.target.value); setValidationError(null); }} />
-        <Input label="End Time" type="time" value={end} onChange={(e) => { setEnd(e.target.value); setValidationError(null); }} />
-        <Input label="Break Duration (minutes)" type="number" value={breakMinutes} onChange={(e) => { setBreakMinutes(e.target.value); setValidationError(null); }} min="0" />
+        <Input label="Start Time" type="time" value={start} onChange={(e) => { setStart(e.target.value); setValidationError(null); }} placeholder="e.g. 09:00" />
+        <Input label="End Time" type="time" value={end} onChange={(e) => { setEnd(e.target.value); setValidationError(null); }} placeholder="e.g. 17:00" />
+        <Input label="Break Duration (minutes)" type="number" value={breakMinutes} onChange={(e) => { setBreakMinutes(e.target.value); setValidationError(null); }} min="0" placeholder="e.g. 30" />
         {validationError && <p className="input-message input-message-error" role="alert">{validationError}</p>}
-        <Button onClick={calculate} magnetic style={{ width: '100%' }}>Calculate Hours</Button>
+        <Button onClick={() => calculate()} magnetic style={{ width: '100%' }}>Calculate Hours</Button>
+        <button className="btn-demo-fill" onClick={fillExample}>Try Example</button>
         <ResultDisplay
           visible={!!result}
           highlight={result ? `${result.decimal} hrs` : undefined}

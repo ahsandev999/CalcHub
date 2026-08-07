@@ -45,23 +45,36 @@ const numberBaseConverterFAQ: FAQItem[] = [
 export default function NumberBaseConverter() {
   useToolTracking('number-base-converter', 'Base Converter');
   const [fromBase, setFromBase] = useState<Base>(10);
-  const [input, setInput] = useState('255');
+  const [input, setInput] = useState('');
   const [results, setResults] = useState<Record<Base, string> | null>(null);
   const [convertError, setConvertError] = useState<string | null>(null);
 
-  const convert = () => {
+  const convert = (overrideInput?: string) => {
+    const valInput = overrideInput !== undefined ? overrideInput : input;
+    if (!valInput) {
+      setConvertError('Enter a number to convert.');
+      return;
+    }
     try {
       setConvertError(null);
       const r: Record<Base, string> = { 2: '', 8: '', 10: '', 16: '' };
       const bases: Base[] = [2, 8, 10, 16];
       for (const b of bases) {
-        r[b] = b === fromBase ? input.toUpperCase() : convertBase(input, fromBase, b);
+        r[b] = b === fromBase ? valInput.toUpperCase() : convertBase(valInput, fromBase, b);
       }
       setResults(r);
     } catch (e) {
       setConvertError((e as Error).message);
       setResults(null);
     }
+  };
+
+  const fillExample = () => {
+    const exInput = '255';
+    setInput(exInput);
+    setFromBase(10);
+    setConvertError(null);
+    convert(exInput);
   };
 
   return (
@@ -77,11 +90,12 @@ export default function NumberBaseConverter() {
         <label className="field-label">Input Base</label>
         <div className="tabs" style={{ marginBottom: 16 }}>
           {([2, 8, 10, 16] as Base[]).map((b) => (
-            <button key={b} className={`tab ${fromBase === b ? 'active' : ''}`} onClick={() => { setFromBase(b); setConvertError(null); }}>{BASE_LABELS[b]}</button>
+            <button key={b} className={`tab ${fromBase === b ? 'active' : ''}`} onClick={() => { setFromBase(b); setConvertError(null); setResults(null); }}>{BASE_LABELS[b]}</button>
           ))}
         </div>
-        <Input label="Number" value={input} onChange={(e) => { setInput(e.target.value); setConvertError(null); }} error={convertError || undefined} />
-        <button className="btn btn-primary btn-md" style={{ width: '100%', marginTop: 8 }} onClick={convert}>Convert</button>
+        <Input label="Number" value={input} onChange={(e) => { setInput(e.target.value); setConvertError(null); }} placeholder="e.g. 255" error={convertError || undefined} />
+        <button className="btn btn-primary btn-md" style={{ width: '100%', marginTop: 8 }} onClick={() => convert()}>Convert</button>
+        <button className="btn-demo-fill" onClick={fillExample} style={{ marginTop: 8 }}>Try Example</button>
         {results && (
           <div className="result-grid" style={{ marginTop: 24 }}>
             {([2, 8, 10, 16] as Base[]).map((b) => (

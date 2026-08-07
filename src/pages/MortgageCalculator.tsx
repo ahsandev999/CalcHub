@@ -46,13 +46,20 @@ export default function MortgageCalculator() {
   const [result, setResult] = useState<{ mortgage: number; monthlyTax: number; monthlyInsurance: number; totalInterest: number; totalCost: number } | null>(null);
   const [validationError, setValidationError] = useState<string | null>(null);
 
-  const calculate = () => {
-    const homePrice = Number(price);
-    const dp = Number(downPayment);
-    const annualRate = Number(rate);
-    const termYears = Number(years);
-    const annualTax = Number(tax || 0);
-    const annualInsurance = Number(insurance || 0);
+  const calculate = (
+    overridePrice?: string,
+    overrideDp?: string,
+    overrideRate?: string,
+    overrideYrs?: string,
+    overrideTax?: string,
+    overrideIns?: string
+  ) => {
+    const homePrice = Number(overridePrice !== undefined ? overridePrice : price);
+    const dp = Number(overrideDp !== undefined ? overrideDp : downPayment);
+    const annualRate = Number(overrideRate !== undefined ? overrideRate : rate);
+    const termYears = Number(overrideYrs !== undefined ? overrideYrs : years);
+    const annualTax = Number(overrideTax !== undefined ? overrideTax : (tax || 0));
+    const annualInsurance = Number(overrideIns !== undefined ? overrideIns : (insurance || 0));
 
     if (!homePrice || !annualRate || !termYears || homePrice <= 0 || annualRate <= 0 || termYears <= 0) {
       setValidationError('Enter valid home price, interest rate, and term.');
@@ -71,8 +78,8 @@ export default function MortgageCalculator() {
     const monthlyMortgage = monthlyRate === 0
       ? principal / totalMonths
       : (principal * monthlyRate) / (1 - Math.pow(1 + monthlyRate, -totalMonths));
-	const monthlyTax = annualTax / 12;
-	const monthlyInsurance = annualInsurance / 12;
+    const monthlyTax = annualTax / 12;
+    const monthlyInsurance = annualInsurance / 12;
     const monthlyPayment = monthlyMortgage + monthlyTax + monthlyInsurance;
     const totalPaid = monthlyPayment * totalMonths;
     const totalInterest = totalPaid - principal;
@@ -90,9 +97,25 @@ export default function MortgageCalculator() {
       tool: 'Mortgage Calculator',
       toolSlug: 'mortgage-calculator',
       expression: `${homePrice}, ${annualRate}%, ${termYears}y`,
-      result: `$${nextResult.monthlyInsurance.toFixed(2)} / month`,
+      result: `$${(nextResult.mortgage + nextResult.monthlyTax + nextResult.monthlyInsurance).toFixed(2)} / month`,
     });
-    
+  };
+
+  const fillExample = () => {
+    const exPrice = '400000';
+    const exDp = '80000';
+    const exRate = '6.5';
+    const exYrs = '30';
+    const exTax = '4800';
+    const exIns = '1200';
+    setPrice(exPrice);
+    setDownPayment(exDp);
+    setRate(exRate);
+    setYears(exYrs);
+    setTax(exTax);
+    setInsurance(exIns);
+    setValidationError(null);
+    calculate(exPrice, exDp, exRate, exYrs, exTax, exIns);
   };
 
   return (
@@ -105,14 +128,15 @@ export default function MortgageCalculator() {
         <p className="page-lede">Estimate your monthly payment, loan interest, and the effect of taxes and insurance.</p>
       </div>
       <Card padding="lg">
-        <Input label="Home Price" type="number" value={price} onChange={(e) => { setPrice(e.target.value); setValidationError(null); }} min="0" error={validationError ? 'Enter a valid home price.' : undefined} />
-        <Input label="Down Payment" type="number" value={downPayment} onChange={(e) => { setDownPayment(e.target.value); setValidationError(null); }} min="0" />
-        <Input label="Annual Interest Rate (%)" type="number" value={rate} onChange={(e) => { setRate(e.target.value); setValidationError(null); }} min="0" step="0.01" error={validationError ? 'Enter a valid rate.' : undefined} />
-        <Input label="Loan Term (Years)" type="number" value={years} onChange={(e) => { setYears(e.target.value); setValidationError(null); }} min="1" step="1" error={validationError ? 'Enter a valid term.' : undefined} />
-        <Input label="Annual Property Tax ($)" type="number" value={tax} onChange={(e) => setTax(e.target.value)} min="0" />
-        <Input label="Annual Insurance ($)" type="number" value={insurance} onChange={(e) => setInsurance(e.target.value)} min="0" />
+        <Input label="Home Price" type="number" value={price} onChange={(e) => { setPrice(e.target.value); setValidationError(null); }} min="0" placeholder="e.g. 400000" error={validationError ? 'Enter a valid home price.' : undefined} />
+        <Input label="Down Payment" type="number" value={downPayment} onChange={(e) => { setDownPayment(e.target.value); setValidationError(null); }} min="0" placeholder="e.g. 80000" />
+        <Input label="Annual Interest Rate (%)" type="number" value={rate} onChange={(e) => { setRate(e.target.value); setValidationError(null); }} min="0" step="0.01" placeholder="e.g. 6.5" error={validationError ? 'Enter a valid rate.' : undefined} />
+        <Input label="Loan Term (Years)" type="number" value={years} onChange={(e) => { setYears(e.target.value); setValidationError(null); }} min="1" step="1" placeholder="e.g. 30" error={validationError ? 'Enter a valid term.' : undefined} />
+        <Input label="Annual Property Tax ($)" type="number" value={tax} onChange={(e) => setTax(e.target.value)} min="0" placeholder="e.g. 4800" />
+        <Input label="Annual Insurance ($)" type="number" value={insurance} onChange={(e) => setInsurance(e.target.value)} min="0" placeholder="e.g. 1200" />
         {validationError && <p className="input-message input-message-error" role="alert">{validationError}</p>}
-        <Button onClick={calculate} magnetic style={{ width: '100%' }}>Calculate Mortgage</Button>
+        <Button onClick={() => calculate()} magnetic style={{ width: '100%' }}>Calculate Mortgage</Button>
+        <button className="btn-demo-fill" onClick={fillExample}>Try Example</button>
         <ResultDisplay
           visible={!!result}
           highlight={result ? `$${(result.mortgage + result.monthlyTax + result.monthlyInsurance).toLocaleString()}` : undefined}

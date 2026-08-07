@@ -44,8 +44,8 @@ export default function Timer() {
   useToolTracking('timer', 'Timer');  const [seconds, setSeconds] = useState(300);
   const [remaining, setRemaining] = useState(300);
   const [running, setRunning] = useState(false);
-  const [inputMin, setInputMin] = useState('5');
-  const [inputSec, setInputSec] = useState('0');
+  const [inputMin, setInputMin] = useState('');
+  const [inputSec, setInputSec] = useState('');
   const intervalRef = useRef<ReturnType<typeof setInterval>>();
 
   const tick = useCallback(() => {
@@ -70,9 +70,19 @@ export default function Timer() {
   const pause = () => setRunning(false);
   const reset = () => { setRunning(false); setRemaining(seconds); };
 
-  const applyCustom = () => {
-    const s = (parseInt(inputMin) || 0) * 60 + (parseInt(inputSec) || 0);
+  const applyCustom = (overrideMin?: string, overrideSec?: string) => {
+    const minVal = overrideMin !== undefined ? overrideMin : inputMin;
+    const secVal = overrideSec !== undefined ? overrideSec : inputSec;
+    const s = (parseInt(minVal) || 0) * 60 + (parseInt(secVal) || 0);
     if (s > 0) setTime(s);
+  };
+
+  const fillExample = () => {
+    const exMin = '5';
+    const exSec = '0';
+    setInputMin(exMin);
+    setInputSec(exSec);
+    applyCustom(exMin, exSec);
   };
 
   return (
@@ -98,10 +108,11 @@ export default function Timer() {
           ))}
         </div>
         <div className="grid-2">
-          <Input label="Minutes" type="number" value={inputMin} onChange={(e) => setInputMin(e.target.value)} min="0" />
-          <Input label="Seconds" type="number" value={inputSec} onChange={(e) => setInputSec(e.target.value)} min="0" max="59" />
+          <Input label="Minutes" type="number" value={inputMin} onChange={(e) => setInputMin(e.target.value)} min="0" placeholder="e.g. 5" />
+          <Input label="Seconds" type="number" value={inputSec} onChange={(e) => setInputSec(e.target.value)} min="0" max="59" placeholder="e.g. 0" />
         </div>
-        <Button onClick={applyCustom} variant="secondary" style={{ width: '100%' }}>Set Custom Time</Button>
+        <Button onClick={() => applyCustom()} variant="secondary" style={{ width: '100%' }}>Set Custom Time</Button>
+        <button className="btn-demo-fill" onClick={fillExample}>Try Example</button>
       </Card>
           {/* ── SEO Content Sections ── */}
       <div className="seo-content">

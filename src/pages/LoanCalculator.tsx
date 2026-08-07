@@ -43,10 +43,10 @@ export default function LoanCalculator() {
   const [result, setResult] = useState<{ monthly: number; totalInterest: number; totalPaid: number } | null>(null);
   const [validationError, setValidationError] = useState<string | null>(null);
 
-  const calculate = () => {
-    const principal = Number(amount);
-    const annualRate = Number(rate);
-    const termYears = Number(years);
+  const calculate = (overrideAmt?: string, overrideRate?: string, overrideYrs?: string) => {
+    const principal = Number(overrideAmt !== undefined ? overrideAmt : amount);
+    const annualRate = Number(overrideRate !== undefined ? overrideRate : rate);
+    const termYears = Number(overrideYrs !== undefined ? overrideYrs : years);
 
     if (!principal || !annualRate || !termYears || principal <= 0 || annualRate <= 0 || termYears <= 0) {
       setValidationError('Enter valid loan amount, rate, and term.');
@@ -75,7 +75,17 @@ export default function LoanCalculator() {
       expression: `${principal}, ${annualRate}%, ${termYears}y`,
       result: `${nextResult.monthly.toFixed(2)} / month`,
     });
-    
+  };
+
+  const fillExample = () => {
+    const exAmt = '25000';
+    const exRate = '6.5';
+    const exYrs = '5';
+    setAmount(exAmt);
+    setRate(exRate);
+    setYears(exYrs);
+    setValidationError(null);
+    calculate(exAmt, exRate, exYrs);
   };
 
   return (
@@ -88,11 +98,12 @@ export default function LoanCalculator() {
         <p className="page-lede">Calculate monthly payments, total interest, and total amount paid on a standard amortized loan.</p>
       </div>
       <Card padding="lg">
-        <Input label="Loan Amount" type="number" value={amount} onChange={(e) => { setAmount(e.target.value); setValidationError(null); }} min="0" error={validationError ? 'Enter a valid loan amount.' : undefined} />
-        <Input label="Annual Interest Rate (%)" type="number" value={rate} onChange={(e) => { setRate(e.target.value); setValidationError(null); }} min="0" step="0.01" error={validationError ? 'Enter a valid rate.' : undefined} />
-        <Input label="Loan Term (Years)" type="number" value={years} onChange={(e) => { setYears(e.target.value); setValidationError(null); }} min="1" step="1" error={validationError ? 'Enter a valid term.' : undefined} />
+        <Input label="Loan Amount" type="number" value={amount} onChange={(e) => { setAmount(e.target.value); setValidationError(null); }} min="0" placeholder="e.g. 25000" error={validationError ? 'Enter a valid loan amount.' : undefined} />
+        <Input label="Annual Interest Rate (%)" type="number" value={rate} onChange={(e) => { setRate(e.target.value); setValidationError(null); }} min="0" step="0.01" placeholder="e.g. 6.5" error={validationError ? 'Enter a valid rate.' : undefined} />
+        <Input label="Loan Term (Years)" type="number" value={years} onChange={(e) => { setYears(e.target.value); setValidationError(null); }} min="1" step="1" placeholder="e.g. 5" error={validationError ? 'Enter a valid term.' : undefined} />
         {validationError && <p className="input-message input-message-error" role="alert">{validationError}</p>}
-        <Button onClick={calculate} magnetic style={{ width: '100%' }}>Calculate Loan</Button>
+        <Button onClick={() => calculate()} magnetic style={{ width: '100%' }}>Calculate Loan</Button>
+        <button className="btn-demo-fill" onClick={fillExample}>Try Example</button>
         <ResultDisplay
           visible={!!result}
           highlight={result ? `$${result.monthly.toLocaleString()}` : undefined}

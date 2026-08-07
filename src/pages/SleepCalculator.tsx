@@ -39,29 +39,50 @@ const sleepCalculatorFAQ: FAQItem[] = [
 export default function SleepCalculator() {
   useToolTracking('sleep-calculator', 'Sleep Calculator');
   const [mode, setMode] = useState<SleepMode>('wake');
-  const [wakeTime, setWakeTime] = useState('07:00');
-  const [fallAsleep, setFallAsleep] = useState('15');
-  const [napDuration, setNapDuration] = useState('20');
+  const [wakeTime, setWakeTime] = useState('');
+  const [fallAsleep, setFallAsleep] = useState('');
+  const [napDuration, setNapDuration] = useState('');
   const [result, setResult] = useState<ReturnType<typeof calculateSleep> | null>(null);
   const [copied, setCopied] = useState(false);
+  const [validationError, setValidationError] = useState<string | null>(null);
 
-  const calculate = () => {
+  const calculate = (overrideWakeTime?: string, overrideFallAsleep?: string, overrideNap?: string) => {
+    const wt = overrideWakeTime !== undefined ? overrideWakeTime : wakeTime;
+    const fa = overrideFallAsleep !== undefined ? overrideFallAsleep : fallAsleep;
+    const nd = overrideNap !== undefined ? overrideNap : napDuration;
+
+    if ((mode === 'wake' || mode === 'bedtime') && !wt) {
+      setValidationError('Please select a time.');
+      return;
+    }
+
+    setValidationError(null);
+
     const r = calculateSleep(
       mode,
-      mode !== 'sleep' ? wakeTime : undefined,
-      parseInt(fallAsleep) || 15,
-      parseInt(napDuration) || 20
+      wt || undefined,
+      parseInt(fa) || 15,
+      parseInt(nd) || 20
     );
     setResult(r);
-    
+
     addHistory({
       tool: 'Sleep Calculator',
       toolSlug: 'sleep-calculator',
       expression: `${mode === 'wake' ? 'Wake at' : mode === 'sleep' ? 'Sleep now' : mode === 'bedtime' ? 'Bedtime' : 'Nap'} mode`,
       result: r.options[0] ? formatTime(r.options[0].time) : '',
     });
-    
-    
+  };
+
+  const fillExample = () => {
+    const exWT = '07:00';
+    const exFA = '15';
+    const exND = '20';
+    setWakeTime(exWT);
+    setFallAsleep(exFA);
+    setNapDuration(exND);
+    setValidationError(null);
+    calculate(exWT, exFA, exND);
   };
 
   const copyResultText = async () => {
@@ -110,7 +131,7 @@ export default function SleepCalculator() {
                 role="tab" 
                 aria-selected={mode === m.id} 
                 className={`tab ${mode === m.id ? 'active' : ''}`} 
-                onClick={() => { setMode(m.id); setResult(null); }}
+                onClick={() => { setMode(m.id); setResult(null); setValidationError(null); }}
                 style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6 }}
               >
                 <Icon size={14} />
@@ -126,7 +147,9 @@ export default function SleepCalculator() {
               label={mode === 'wake' ? 'Target Wake Up Time' : 'Bedtime'} 
               type="time" 
               value={wakeTime} 
-              onChange={(e) => setWakeTime(e.target.value)} 
+              onChange={(e) => { setWakeTime(e.target.value); setValidationError(null); }} 
+              placeholder="e.g. 07:00"
+              error={validationError ? 'Please select a time.' : undefined}
             />
           )}
           {mode === 'nap' && (
@@ -134,25 +157,28 @@ export default function SleepCalculator() {
               label="Nap Duration (minutes)" 
               type="number" 
               value={napDuration} 
-              onChange={(e) => setNapDuration(e.target.value)} 
+              onChange={(e) => { setNapDuration(e.target.value); setValidationError(null); }} 
               min="5" 
               max="120" 
+              placeholder="e.g. 20"
             />
           )}
           <Input 
             label="Time to Fall Asleep (minutes)" 
             type="number" 
             value={fallAsleep} 
-            onChange={(e) => setFallAsleep(e.target.value)} 
+            onChange={(e) => { setFallAsleep(e.target.value); setValidationError(null); }} 
             min="0" 
             max="60" 
+            placeholder="e.g. 15"
             hint="Typically takes about 10-20 minutes" 
           />
         </div>
-
-        <Button onClick={calculate} magnetic style={{ width: '100%' }}>
+        {validationError && <p className="input-message input-message-error" role="alert">{validationError}</p>}
+        <Button onClick={() => calculate()} magnetic style={{ width: '100%' }}>
           {mode === 'wake' ? 'Calculate Bedtime' : mode === 'sleep' ? 'Calculate Wake Time' : mode === 'nap' ? 'Calculate Nap Alarm' : 'Calculate Wake Time'}
         </Button>
+        <button className="btn-demo-fill" onClick={fillExample} style={{ marginTop: 12 }}>Try Example</button>
 
         <AnimatePresence>
           {result && (

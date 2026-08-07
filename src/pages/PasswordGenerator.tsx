@@ -122,6 +122,19 @@ export default function PasswordGenerator() {
           <Button onClick={generate} magnetic >Generate</Button>
           <Button onClick={copy} variant="secondary" disabled={!password}>Copy</Button>
         </div>
+        <button
+          className="btn-demo-fill"
+          onClick={() => {
+            setLength(16);
+            setOpts({ lowercase: true, uppercase: true, numbers: true, symbols: true });
+            setValidationError(null);
+            const pw = generatePassword(16, { lowercase: true, uppercase: true, numbers: true, symbols: true });
+            setPassword(pw);
+          }}
+          style={{ marginTop: 16 }}
+        >
+          Try Example
+        </button>
       </Card>
           {/* ── SEO Content Sections ── */}
       <div className="seo-content">

@@ -34,16 +34,20 @@ const randomNumberFAQ: FAQItem[] = [
 ];
 
 export default function RandomNumber() {
-  useToolTracking('random-number', 'Random Number');  const [min, setMin] = useState('1');
-  const [max, setMax] = useState('100');
-  const [count, setCount] = useState('1');
+  useToolTracking('random-number', 'Random Number');  const [min, setMin] = useState('');
+  const [max, setMax] = useState('');
+  const [count, setCount] = useState('');
   const [results, setResults] = useState<number[]>([]);
   const [validationError, setValidationError] = useState<string | null>(null);
 
-  const generate = () => {
-    const lo = parseInt(min);
-    const hi = parseInt(max);
-    const n = parseInt(count) || 1;
+  const generate = (overrideMin?: string, overrideMax?: string, overrideCount?: string) => {
+    const minVal = overrideMin !== undefined ? overrideMin : min;
+    const maxVal = overrideMax !== undefined ? overrideMax : max;
+    const countVal = overrideCount !== undefined ? overrideCount : count;
+
+    const lo = parseInt(minVal);
+    const hi = parseInt(maxVal);
+    const n = parseInt(countVal) || 1;
     if (isNaN(lo) || isNaN(hi) || lo > hi) { setValidationError('Enter a valid range.'); return; }
 
     setValidationError(null);
@@ -54,7 +58,17 @@ export default function RandomNumber() {
     }
     setResults(nums);
     addHistory({ tool: 'Random Number', toolSlug: 'random-number', expression: `${lo}–${hi}`, result: nums.join(', ') });
-    
+  };
+
+  const fillExample = () => {
+    const exMin = '1';
+    const exMax = '100';
+    const exCount = '1';
+    setMin(exMin);
+    setMax(exMax);
+    setCount(exCount);
+    setValidationError(null);
+    generate(exMin, exMax, exCount);
   };
 
   return (
@@ -68,12 +82,13 @@ export default function RandomNumber() {
       </div>
       <Card padding="lg">
         <div className="grid-2">
-          <Input label="Minimum" type="number" value={min} onChange={(e) => { setMin(e.target.value); setValidationError(null); }} error={validationError ? 'Enter a valid minimum.' : undefined} />
-          <Input label="Maximum" type="number" value={max} onChange={(e) => { setMax(e.target.value); setValidationError(null); }} error={validationError ? 'Enter a valid maximum.' : undefined} />
+          <Input label="Minimum" type="number" value={min} onChange={(e) => { setMin(e.target.value); setValidationError(null); }} placeholder="e.g. 1" error={validationError ? 'Enter a valid minimum.' : undefined} />
+          <Input label="Maximum" type="number" value={max} onChange={(e) => { setMax(e.target.value); setValidationError(null); }} placeholder="e.g. 100" error={validationError ? 'Enter a valid maximum.' : undefined} />
         </div>
-        <Input label="How many numbers" type="number" value={count} onChange={(e) => setCount(e.target.value)} min="1" max="100" />
+        <Input label="How many numbers" type="number" value={count} onChange={(e) => setCount(e.target.value)} min="1" max="100" placeholder="e.g. 1" />
         {validationError && <p className="input-message input-message-error" role="alert">{validationError}</p>}
-        <Button onClick={generate} magnetic style={{ width: '100%' }}>Generate</Button>
+        <Button onClick={() => generate()} magnetic style={{ width: '100%' }}>Generate</Button>
+        <button className="btn-demo-fill" onClick={fillExample}>Try Example</button>
         {results.length > 0 && (
           <div className="result-display">
             <div className="result-highlight">{results.join(', ')}</div>

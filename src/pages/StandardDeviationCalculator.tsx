@@ -40,11 +40,12 @@ export default function StandardDeviationCalculator() {
   const [result, setResult] = useState<{ mean: number; population: number; sample: number; variance: number } | null>(null);
   const [validationError, setValidationError] = useState<string | null>(null);
 
-  const calculate = () => {
-    const values = numbers
+  const calculate = (overrideNumbers?: string) => {
+    const valNumbers = overrideNumbers !== undefined ? overrideNumbers : numbers;
+    const values = valNumbers
       .split(/[,\n]+/)
       .map((v) => Number(v.trim()))
-      .filter((v) => !Number.isNaN(v));
+      .filter((v) => !Number.isNaN(v) && v !== 0); // Exclude empty parses
 
     if (values.length < 2) {
       setValidationError('Enter at least two valid numbers.');
@@ -66,9 +67,16 @@ export default function StandardDeviationCalculator() {
     addHistory({
       tool: 'Standard Deviation Calculator',
       toolSlug: 'standard-deviation-calculator',
-      expression: numbers,
+      expression: valNumbers,
       result: `${nextResult.population}`,
     });
+  };
+
+  const fillExample = () => {
+    const exNumbers = '10, 15, 23, 12, 18, 20';
+    setNumbers(exNumbers);
+    setValidationError(null);
+    calculate(exNumbers);
   };
 
   return (
@@ -81,9 +89,10 @@ export default function StandardDeviationCalculator() {
         <p className="page-lede">Compute the mean, variance, and both population and sample standard deviations from a list of numeric values.</p>
       </div>
       <Card padding="lg">
-        <Input label="Numbers (comma or line separated)" type="text" value={numbers} onChange={(e) => { setNumbers(e.target.value); setValidationError(null); }} />
+        <Input label="Numbers (comma or line separated)" type="text" value={numbers} onChange={(e) => { setNumbers(e.target.value); setValidationError(null); }} placeholder="e.g. 10, 15, 23, 12, 18, 20" />
         {validationError && <p className="input-message input-message-error" role="alert">{validationError}</p>}
-        <Button onClick={calculate} magnetic style={{ width: '100%' }}>Calculate</Button>
+        <Button onClick={() => calculate()} magnetic style={{ width: '100%' }}>Calculate</Button>
+        <button className="btn-demo-fill" onClick={fillExample}>Try Example</button>
         <ResultDisplay
           visible={!!result}
           highlight={result ? `Mean: ${result.mean}` : undefined}

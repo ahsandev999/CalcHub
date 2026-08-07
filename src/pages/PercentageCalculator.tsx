@@ -43,9 +43,11 @@ export default function PercentageCalculator() {
   const [result, setResult] = useState<string | null>(null);
   const [validationError, setValidationError] = useState<string | null>(null);
 
-  const calculate = () => {
-    const na = parseFloat(a);
-    const nb = parseFloat(b);
+  const calculate = (overrideA?: string, overrideB?: string) => {
+    const valA = overrideA !== undefined ? overrideA : a;
+    const valB = overrideB !== undefined ? overrideB : b;
+    const na = parseFloat(valA);
+    const nb = parseFloat(valB);
     if (isNaN(na) || isNaN(nb)) { setValidationError('Enter valid numbers.'); return; }
 
     setValidationError(null);
@@ -58,8 +60,7 @@ export default function PercentageCalculator() {
       case 'increase': r = `${nb} + ${na}% = ${(nb * (1 + na / 100)).toFixed(2)}`; break;
     }
     setResult(r);
-    addHistory({ tool: 'Percentage Calculator', toolSlug: 'percentage-calculator', expression: `${a}, ${b}`, result: r });
-    
+    addHistory({ tool: 'Percentage Calculator', toolSlug: 'percentage-calculator', expression: `${valA}, ${valB}`, result: r });
   };
 
   const labels: Record<Mode, [string, string]> = {
@@ -67,6 +68,27 @@ export default function PercentageCalculator() {
     'what-percent': ['Number', 'Of total'],
     'change': ['New value', 'Original value'],
     'increase': ['Increase (%)', 'Original number'],
+  };
+
+  const placeholders: Record<Mode, [string, string]> = {
+    'percent-of': ['e.g. 20', 'e.g. 150'],
+    'what-percent': ['e.g. 45', 'e.g. 60'],
+    'change': ['e.g. 120', 'e.g. 100'],
+    'increase': ['e.g. 15', 'e.g. 200'],
+  };
+
+  const fillExample = () => {
+    const examples: Record<Mode, [string, string]> = {
+      'percent-of': ['20', '150'],
+      'what-percent': ['45', '60'],
+      'change': ['120', '100'],
+      'increase': ['15', '200'],
+    };
+    const [exa, exb] = examples[mode];
+    setA(exa);
+    setB(exb);
+    setValidationError(null);
+    calculate(exa, exb);
   };
 
   return (
@@ -84,10 +106,11 @@ export default function PercentageCalculator() {
             <button key={id} className={`tab ${mode === id ? 'active' : ''}`} onClick={() => setMode(id)}>{label}</button>
           ))}
         </div>
-        <Input label={labels[mode][0]} type="number" value={a} onChange={(e) => { setA(e.target.value); setValidationError(null); }} error={validationError ? 'Enter a valid number.' : undefined} />
-        <Input label={labels[mode][1]} type="number" value={b} onChange={(e) => { setB(e.target.value); setValidationError(null); }} error={validationError ? 'Enter a valid number.' : undefined} />
+        <Input label={labels[mode][0]} type="number" value={a} onChange={(e) => { setA(e.target.value); setValidationError(null); }} placeholder={placeholders[mode][0]} error={validationError ? 'Enter a valid number.' : undefined} />
+        <Input label={labels[mode][1]} type="number" value={b} onChange={(e) => { setB(e.target.value); setValidationError(null); }} placeholder={placeholders[mode][1]} error={validationError ? 'Enter a valid number.' : undefined} />
         {validationError && <p className="input-message input-message-error" role="alert">{validationError}</p>}
-        <Button onClick={calculate} magnetic style={{ width: '100%' }}>Calculate</Button>
+        <Button onClick={() => calculate()} magnetic style={{ width: '100%' }}>Calculate</Button>
+        <button className="btn-demo-fill" onClick={fillExample}>Try Example</button>
         <ResultDisplay visible={!!result} highlight={result || undefined} slots={[]} />
       </Card>
             {/* ── SEO Content Sections ── */}

@@ -75,7 +75,7 @@ const currencyConverterFAQ: FAQItem[] = [
 
 export default function CurrencyConverter() {
   useToolTracking('currency-converter', 'Currency Converter');
-  const [amount, setAmount] = useState('100');
+  const [amount, setAmount] = useState('');
   const [fromCurrency, setFromCurrency] = useState('USD');
   const [toCurrency, setToCurrency] = useState('EUR');
   const [rates, setRates] = useState<Record<string, number>>(FALLBACK_RATES);
@@ -126,22 +126,39 @@ export default function CurrencyConverter() {
     setToCurrency(fromCurrency);
   };
 
-  const handleCalculate = () => {
-    const amt = parseFloat(amount);
+  const handleCalculate = (overrideAmount?: string, overrideFrom?: string, overrideTo?: string) => {
+    const amtStr = overrideAmount !== undefined ? overrideAmount : amount;
+    const fromC = overrideFrom !== undefined ? overrideFrom : fromCurrency;
+    const toC = overrideTo !== undefined ? overrideTo : toCurrency;
+
+    const amt = parseFloat(amtStr);
     if (isNaN(amt) || amt <= 0) {
       setAmountError('Please enter a valid amount.');
       return;
     }
     setAmountError(null);
 
+    const fromRate = rates[fromC] || FALLBACK_RATES[fromC];
+    const toRate = rates[toC] || FALLBACK_RATES[toC];
+    if (!fromRate || !toRate) return;
+    const amountInUSD = amt / fromRate;
+    const converted = Math.round((amountInUSD * toRate) * 100) / 100;
+
     addHistory({
       tool: 'Currency Converter',
       toolSlug: 'currency-converter',
-      expression: `${amount} ${fromCurrency} to ${toCurrency}`,
-      result: `${POPULAR_CURRENCIES[toCurrency].symbol}${convertedAmount.toLocaleString()}`,
+      expression: `${amtStr} ${fromC} to ${toC}`,
+      result: `${POPULAR_CURRENCIES[toC]?.symbol || ''}${converted.toLocaleString()}`,
     });
-    
-    
+  };
+
+  const fillExample = () => {
+    const exAmt = '100';
+    setAmount(exAmt);
+    setFromCurrency('USD');
+    setToCurrency('EUR');
+    setAmountError(null);
+    handleCalculate(exAmt, 'USD', 'EUR');
   };
 
   const copyResultText = async () => {
@@ -193,6 +210,7 @@ export default function CurrencyConverter() {
             value={amount}
             onChange={(e) => { setAmount(e.target.value); setAmountError(null); }}
             min="0"
+            placeholder="e.g. 100"
             style={{ marginBottom: 0 }}
             error={amountError || undefined}
           />
@@ -255,9 +273,10 @@ export default function CurrencyConverter() {
           </div>
         </div>
 
-        <Button onClick={handleCalculate} magnetic style={{ width: '100%' }}>
+        <Button onClick={() => handleCalculate()} magnetic style={{ width: '100%' }}>
           Convert Currency
         </Button>
+        <button className="btn-demo-fill" onClick={fillExample} style={{ marginTop: 12 }}>Try Example</button>
 
         <AnimatePresence>
           {convertedAmount > 0 && (

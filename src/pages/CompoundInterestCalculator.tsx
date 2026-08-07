@@ -51,12 +51,17 @@ export default function CompoundInterestCalculator() {
   const [result, setResult] = useState<{ finalAmount: number; interestEarned: number } | null>(null);
   const [validationError, setValidationError] = useState<string | null>(null);
 
-  const calculate = () => {
-    const p = Number(principal);
-    const annualRate = Number(rate) / 100;
+  const calculate = (
+    overrideP?: string,
+    overrideRate?: string,
+    overrideYrs?: string,
+    overrideCont?: string
+  ) => {
+    const p = Number(overrideP !== undefined ? overrideP : principal);
+    const annualRate = Number(overrideRate !== undefined ? overrideRate : rate) / 100;
     const periodsPerYear = frequencyMap[frequency];
-    const totalYears = Number(years);
-    const monthlyContribution = Number(contribution || 0);
+    const totalYears = Number(overrideYrs !== undefined ? overrideYrs : years);
+    const monthlyContribution = Number(overrideCont !== undefined ? overrideCont : (contribution || 0));
 
     if (!p || !annualRate || !totalYears || p <= 0 || annualRate <= 0 || totalYears <= 0) {
       setValidationError('Enter valid principal, rate, and time period.');
@@ -79,10 +84,22 @@ export default function CompoundInterestCalculator() {
     addHistory({
       tool: 'Compound Interest Calculator',
       toolSlug: 'compound-interest-calculator',
-      expression: `${p}, ${Number(rate).toFixed(2)}%, ${years}y`,
+      expression: `${p}, ${Number(overrideRate !== undefined ? overrideRate : rate).toFixed(2)}%, ${totalYears}y`,
       result: `$${nextResult.finalAmount.toLocaleString()}`,
     });
-    
+  };
+
+  const fillExample = () => {
+    const exP = '10000';
+    const exRate = '8';
+    const exYrs = '10';
+    const exCont = '200';
+    setPrincipal(exP);
+    setRate(exRate);
+    setYears(exYrs);
+    setContribution(exCont);
+    setValidationError(null);
+    calculate(exP, exRate, exYrs, exCont);
   };
 
   return (
@@ -100,12 +117,13 @@ export default function CompoundInterestCalculator() {
             <button key={item} className={`tab ${frequency === item ? 'active' : ''}`} onClick={() => setFrequency(item)}>{item}</button>
           ))}
         </div>
-        <Input label="Principal" type="number" value={principal} onChange={(e) => { setPrincipal(e.target.value); setValidationError(null); }} min="0" error={validationError ? 'Enter a valid principal.' : undefined} />
-        <Input label="Annual Interest Rate (%)" type="number" value={rate} onChange={(e) => { setRate(e.target.value); setValidationError(null); }} min="0" step="0.01" error={validationError ? 'Enter a valid rate.' : undefined} />
-        <Input label="Time (Years)" type="number" value={years} onChange={(e) => { setYears(e.target.value); setValidationError(null); }} min="1" step="1" error={validationError ? 'Enter a valid time period.' : undefined} />
-        <Input label="Monthly Contribution (optional)" type="number" value={contribution} onChange={(e) => setContribution(e.target.value)} min="0" />
+        <Input label="Principal" type="number" value={principal} onChange={(e) => { setPrincipal(e.target.value); setValidationError(null); }} min="0" placeholder="e.g. 10000" error={validationError ? 'Enter a valid principal.' : undefined} />
+        <Input label="Annual Interest Rate (%)" type="number" value={rate} onChange={(e) => { setRate(e.target.value); setValidationError(null); }} min="0" step="0.01" placeholder="e.g. 8" error={validationError ? 'Enter a valid rate.' : undefined} />
+        <Input label="Time (Years)" type="number" value={years} onChange={(e) => { setYears(e.target.value); setValidationError(null); }} min="1" step="1" placeholder="e.g. 10" error={validationError ? 'Enter a valid time period.' : undefined} />
+        <Input label="Monthly Contribution (optional)" type="number" value={contribution} onChange={(e) => setContribution(e.target.value)} min="0" placeholder="e.g. 200" />
         {validationError && <p className="input-message input-message-error" role="alert">{validationError}</p>}
-        <Button onClick={calculate} magnetic style={{ width: '100%' }}>Calculate Growth</Button>
+        <Button onClick={() => calculate()} magnetic style={{ width: '100%' }}>Calculate Growth</Button>
+        <button className="btn-demo-fill" onClick={fillExample}>Try Example</button>
         <ResultDisplay
           visible={!!result}
           highlight={result ? `$${result.finalAmount.toLocaleString()}` : undefined}

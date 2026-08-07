@@ -45,11 +45,15 @@ const gradeCalculatorFAQ: FAQItem[] = [
 export default function GradeCalculator() {
   useToolTracking('grade-calculator', 'Grade Calculator');
   const [validationError, setValidationError] = useState<string | null>(null);
-  const [assignments, setAssignments] = useState([{ score: '90', weight: '20' }]);
+  const [assignments, setAssignments] = useState([{ score: '', weight: '' }]);
   const [result, setResult] = useState<{ percentage: number; letter: string } | null>(null);
 
-  const addAssignment = () => setAssignments([...assignments, { score: '100', weight: '10' }]);
-  const removeAssignment = (index: number) => setAssignments(assignments.filter((_, i) => i !== index));
+  const addAssignment = () => setAssignments([...assignments, { score: '', weight: '' }]);
+  const removeAssignment = (index: number) => {
+    const next = assignments.filter((_, i) => i !== index);
+    setAssignments(next);
+    setResult(null);
+  };
   const updateAssignment = (index: number, field: 'score' | 'weight', value: string) => {
     const next = [...assignments];
     next[index][field] = value;
@@ -57,24 +61,36 @@ export default function GradeCalculator() {
     setValidationError(null);
   };
 
-  const calculate = () => {
-    const totalWeight = assignments.reduce((sum, item) => sum + Number(item.weight || 0), 0);
-    if (!assignments.length || totalWeight <= 0) {
+  const calculate = (overrideAssignments?: typeof assignments) => {
+    const list = overrideAssignments !== undefined ? overrideAssignments : assignments;
+    const totalWeight = list.reduce((sum, item) => sum + Number(item.weight || 0), 0);
+    if (!list.length || totalWeight <= 0) {
       setValidationError('Enter valid weights for the assignments.');
       return;
     }
 
     setValidationError(null);
-    const weighted = assignments.reduce((sum, item) => sum + Number(item.score || 0) * Number(item.weight || 0), 0);
+    const weighted = list.reduce((sum, item) => sum + Number(item.score || 0) * Number(item.weight || 0), 0);
     const finalPercent = weighted / totalWeight;
     const nextResult = { percentage: Number(finalPercent.toFixed(2)), letter: letterGrade(finalPercent) };
     setResult(nextResult);
     addHistory({
       tool: 'Grade Calculator',
       toolSlug: 'grade-calculator',
-      expression: `${assignments.length} assignments`,
+      expression: `${list.length} assignments`,
       result: `${nextResult.percentage}%`,
     });
+  };
+
+  const fillExample = () => {
+    const exAssignments = [
+      { score: '90', weight: '20' },
+      { score: '85', weight: '30' },
+      { score: '95', weight: '50' },
+    ];
+    setAssignments(exAssignments);
+    setValidationError(null);
+    calculate(exAssignments);
   };
 
   return (
@@ -89,14 +105,15 @@ export default function GradeCalculator() {
       <Card padding="lg">
         {assignments.map((item, index) => (
           <div key={index} className="grid-2" style={{ marginBottom: 12 }}>
-            <Input label="Score (%)" type="number" value={item.score} onChange={(e) => updateAssignment(index, 'score', e.target.value)} min="0" max="100" />
-            <Input label="Weight (%)" type="number" value={item.weight} onChange={(e) => updateAssignment(index, 'weight', e.target.value)} min="0" />
+            <Input label="Score (%)" type="number" value={item.score} onChange={(e) => updateAssignment(index, 'score', e.target.value)} min="0" max="100" placeholder="e.g. 90" />
+            <Input label="Weight (%)" type="number" value={item.weight} onChange={(e) => updateAssignment(index, 'weight', e.target.value)} min="0" placeholder="e.g. 20" />
             <Button variant="ghost" onClick={() => removeAssignment(index)} style={{ marginTop: 8 }}>Remove</Button>
           </div>
         ))}
         <Button variant="secondary" onClick={addAssignment} style={{ width: '100%', marginBottom: 12 }}>Add Assignment</Button>
         {validationError && <p className="input-message input-message-error" role="alert">{validationError}</p>}
-        <Button onClick={calculate} magnetic style={{ width: '100%' }}>Calculate Grade</Button>
+        <Button onClick={() => calculate()} magnetic style={{ width: '100%' }}>Calculate Grade</Button>
+        <button className="btn-demo-fill" onClick={fillExample}>Try Example</button>
         <ResultDisplay
           visible={!!result}
           highlight={result ? `${result.percentage}%` : undefined}

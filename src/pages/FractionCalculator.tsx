@@ -68,11 +68,16 @@ export default function FractionCalculator() {
   const [result, setResult] = useState<{ fraction: string; decimal: string } | null>(null);
   const [validationError, setValidationError] = useState<string | null>(null);
 
-  const calculate = () => {
-    const n1 = Number(aNum);
-    const d1 = Number(aDen);
-    const n2 = Number(bNum);
-    const d2 = Number(bDen);
+  const calculate = (
+    overrideANum?: string,
+    overrideADen?: string,
+    overrideBNum?: string,
+    overrideBDen?: string
+  ) => {
+    const n1 = Number(overrideANum !== undefined ? overrideANum : aNum);
+    const d1 = Number(overrideADen !== undefined ? overrideADen : aDen);
+    const n2 = Number(overrideBNum !== undefined ? overrideBNum : bNum);
+    const d2 = Number(overrideBDen !== undefined ? overrideBDen : bDen);
 
     if (!n1 || !d1 || !n2 || !d2 || d1 === 0 || d2 === 0) {
       setValidationError('Enter valid fractions with non-zero denominators.');
@@ -93,10 +98,22 @@ export default function FractionCalculator() {
     addHistory({
       tool: 'Fraction Calculator',
       toolSlug: 'fraction-calculator',
-      expression: `${aNum}/${aDen} ${operation} ${bNum}/${bDen}`,
+      expression: `${overrideANum !== undefined ? overrideANum : aNum}/${overrideADen !== undefined ? overrideADen : aDen} ${operation} ${overrideBNum !== undefined ? overrideBNum : bNum}/${overrideBDen !== undefined ? overrideBDen : bDen}`,
       result: fraction,
     });
-    
+  };
+
+  const fillExample = () => {
+    const exANum = '1';
+    const exADen = '2';
+    const exBNum = '3';
+    const exBDen = '4';
+    setANum(exANum);
+    setADen(exADen);
+    setBNum(exBNum);
+    setBDen(exBDen);
+    setValidationError(null);
+    calculate(exANum, exADen, exBNum, exBDen);
   };
 
   return (
@@ -114,12 +131,13 @@ export default function FractionCalculator() {
             <button key={item} className={`tab ${operation === item ? 'active' : ''}`} onClick={() => setOperation(item)}>{item}</button>
           ))}
         </div>
-        <Input label="Fraction 1 Numerator" type="number" value={aNum} onChange={(e) => { setANum(e.target.value); setValidationError(null); }} error={validationError ? 'Enter a valid numerator.' : undefined} />
-        <Input label="Fraction 1 Denominator" type="number" value={aDen} onChange={(e) => { setADen(e.target.value); setValidationError(null); }} error={validationError ? 'Enter a valid denominator.' : undefined} />
-        <Input label="Fraction 2 Numerator" type="number" value={bNum} onChange={(e) => { setBNum(e.target.value); setValidationError(null); }} error={validationError ? 'Enter a valid numerator.' : undefined} />
-        <Input label="Fraction 2 Denominator" type="number" value={bDen} onChange={(e) => { setBDen(e.target.value); setValidationError(null); }} error={validationError ? 'Enter a valid denominator.' : undefined} />
+        <Input label="Fraction 1 Numerator" type="number" value={aNum} onChange={(e) => { setANum(e.target.value); setValidationError(null); }} placeholder="e.g. 1" error={validationError ? 'Enter a valid numerator.' : undefined} />
+        <Input label="Fraction 1 Denominator" type="number" value={aDen} onChange={(e) => { setADen(e.target.value); setValidationError(null); }} placeholder="e.g. 2" error={validationError ? 'Enter a valid denominator.' : undefined} />
+        <Input label="Fraction 2 Numerator" type="number" value={bNum} onChange={(e) => { setBNum(e.target.value); setValidationError(null); }} placeholder="e.g. 3" error={validationError ? 'Enter a valid numerator.' : undefined} />
+        <Input label="Fraction 2 Denominator" type="number" value={bDen} onChange={(e) => { setBDen(e.target.value); setValidationError(null); }} placeholder="e.g. 4" error={validationError ? 'Enter a valid denominator.' : undefined} />
         {validationError && <p className="input-message input-message-error" role="alert">{validationError}</p>}
-        <Button onClick={calculate} magnetic style={{ width: '100%' }}>Calculate Fraction</Button>
+        <Button onClick={() => calculate()} magnetic style={{ width: '100%' }}>Calculate Fraction</Button>
+        <button className="btn-demo-fill" onClick={fillExample}>Try Example</button>
         <ResultDisplay
           visible={!!result}
           highlight={result ? result.fraction : undefined}

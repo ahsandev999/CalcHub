@@ -1545,3 +1545,29 @@
   max-width: 72ch;
   margin: 0;
 }
+
+/* Demo fill secondary button */
+.btn-demo-fill {
+  display: block;
+  width: max-content;
+  margin: 12px auto 0;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: var(--accent);
+  background: var(--accent-soft);
+  border: 1px solid var(--border);
+  padding: 6px 16px;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition: background var(--transition-fast), transform var(--transition-fast);
+}
+
+.btn-demo-fill:hover {
+  background: var(--accent-glow);
+  transform: translateY(-1px);
+}
+
+.btn-demo-fill:active {
+  transform: translateY(0);
+}
+

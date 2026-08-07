@@ -42,10 +42,10 @@ export default function SimpleInterestCalculator() {
   const [result, setResult] = useState<{ interest: number; totalAmount: number } | null>(null);
   const [validationError, setValidationError] = useState<string | null>(null);
 
-  const calculate = () => {
-    const p = Number(principal);
-    const r = Number(rate);
-    const t = Number(time);
+  const calculate = (overrideP?: string, overrideRate?: string, overrideTime?: string) => {
+    const p = Number(overrideP !== undefined ? overrideP : principal);
+    const r = Number(overrideRate !== undefined ? overrideRate : rate);
+    const t = Number(overrideTime !== undefined ? overrideTime : time);
 
     if (!p || !r || !t || p <= 0 || r < 0 || t <= 0) {
       setValidationError('Enter valid principal, rate, and time.');
@@ -69,6 +69,17 @@ export default function SimpleInterestCalculator() {
     });
   };
 
+  const fillExample = () => {
+    const exP = '5000';
+    const exRate = '5';
+    const exTime = '3';
+    setPrincipal(exP);
+    setRate(exRate);
+    setTime(exTime);
+    setValidationError(null);
+    calculate(exP, exRate, exTime);
+  };
+
   return (
     <PageTransition className="page-medium">
       <SEO title="Free Simple Interest Calculator" description="Calculate simple interest earned and final balance over time with this free online financial calculator." path="/simple-interest-calculator" faqSchema={simpleInterestCalculatorFAQ} />
@@ -79,11 +90,12 @@ export default function SimpleInterestCalculator() {
         <p className="page-lede">Compute interest earned and total repayment or balance using the simple interest formula.</p>
       </div>
       <Card padding="lg">
-        <Input label="Principal" type="number" value={principal} onChange={(e) => { setPrincipal(e.target.value); setValidationError(null); }} min="0" />
-        <Input label="Rate (%)" type="number" value={rate} onChange={(e) => { setRate(e.target.value); setValidationError(null); }} min="0" step="0.01" />
-        <Input label="Time (Years)" type="number" value={time} onChange={(e) => { setTime(e.target.value); setValidationError(null); }} min="0" step="0.1" />
+        <Input label="Principal" type="number" value={principal} onChange={(e) => { setPrincipal(e.target.value); setValidationError(null); }} min="0" placeholder="e.g. 5000" />
+        <Input label="Rate (%)" type="number" value={rate} onChange={(e) => { setRate(e.target.value); setValidationError(null); }} min="0" step="0.01" placeholder="e.g. 5" />
+        <Input label="Time (Years)" type="number" value={time} onChange={(e) => { setTime(e.target.value); setValidationError(null); }} min="0" step="0.1" placeholder="e.g. 3" />
         {validationError && <p className="input-message input-message-error" role="alert">{validationError}</p>}
-        <Button onClick={calculate} magnetic style={{ width: '100%' }}>Calculate</Button>
+        <Button onClick={() => calculate()} magnetic style={{ width: '100%' }}>Calculate</Button>
+        <button className="btn-demo-fill" onClick={fillExample}>Try Example</button>
         <ResultDisplay
           visible={!!result}
           highlight={result ? `$${result.totalAmount.toLocaleString()}` : undefined}

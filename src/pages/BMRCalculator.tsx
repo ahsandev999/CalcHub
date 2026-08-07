@@ -44,10 +44,10 @@ export default function BMRCalculator() {
   const [result, setResult] = useState<number | null>(null);
   const [validationError, setValidationError] = useState<string | null>(null);
 
-  const calculate = () => {
-    const ageNum = Number(age);
-    const weightNum = Number(weight);
-    const heightNum = Number(height);
+  const calculate = (overrideAge?: string, overrideW?: string, overrideH?: string) => {
+    const ageNum = Number(overrideAge !== undefined ? overrideAge : age);
+    const weightNum = Number(overrideW !== undefined ? overrideW : weight);
+    const heightNum = Number(overrideH !== undefined ? overrideH : height);
 
     if (!ageNum || !weightNum || !heightNum || ageNum <= 0 || weightNum <= 0 || heightNum <= 0) {
       setValidationError('Enter valid age, weight, and height.');
@@ -67,7 +67,17 @@ export default function BMRCalculator() {
       expression: `${gender}, ${weightNum}kg, ${heightNum}cm, ${ageNum}y`,
       result: `${rounded} kcal/day`,
     });
-    
+  };
+
+  const fillExample = () => {
+    const exAge = '30';
+    const exW = '70';
+    const exH = '175';
+    setAge(exAge);
+    setWeight(exW);
+    setHeight(exH);
+    setValidationError(null);
+    calculate(exAge, exW, exH);
   };
 
   return (
@@ -84,11 +94,12 @@ export default function BMRCalculator() {
           <button className={`tab ${gender === 'male' ? 'active' : ''}`} onClick={() => setGender('male')}>Male</button>
           <button className={`tab ${gender === 'female' ? 'active' : ''}`} onClick={() => setGender('female')}>Female</button>
         </div>
-        <Input label="Age" type="number" value={age} onChange={(e) => { setAge(e.target.value); setValidationError(null); }} min="1" error={validationError ? 'Enter a valid age.' : undefined} />
-        <Input label="Weight (kg)" type="number" value={weight} onChange={(e) => { setWeight(e.target.value); setValidationError(null); }} min="1" error={validationError ? 'Enter a valid weight.' : undefined} />
-        <Input label="Height (cm)" type="number" value={height} onChange={(e) => { setHeight(e.target.value); setValidationError(null); }} min="1" error={validationError ? 'Enter a valid height.' : undefined} />
+        <Input label="Age" type="number" value={age} onChange={(e) => { setAge(e.target.value); setValidationError(null); }} min="1" placeholder="e.g. 30" error={validationError ? 'Enter a valid age.' : undefined} />
+        <Input label="Weight (kg)" type="number" value={weight} onChange={(e) => { setWeight(e.target.value); setValidationError(null); }} min="1" placeholder="e.g. 70" error={validationError ? 'Enter a valid weight.' : undefined} />
+        <Input label="Height (cm)" type="number" value={height} onChange={(e) => { setHeight(e.target.value); setValidationError(null); }} min="1" placeholder="e.g. 175" error={validationError ? 'Enter a valid height.' : undefined} />
         {validationError && <p className="input-message input-message-error" role="alert">{validationError}</p>}
-        <Button onClick={calculate} magnetic style={{ width: '100%' }}>Calculate BMR</Button>
+        <Button onClick={() => calculate()} magnetic style={{ width: '100%' }}>Calculate BMR</Button>
+        <button className="btn-demo-fill" onClick={fillExample}>Try Example</button>
         <ResultDisplay
           visible={result !== null}
           highlight={result ? `${result} kcal/day` : undefined}

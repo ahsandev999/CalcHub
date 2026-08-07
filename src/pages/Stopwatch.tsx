@@ -92,6 +92,18 @@ export default function Stopwatch() {
           <Button onClick={lap} variant="secondary" disabled={!running}>Lap</Button>
           <Button onClick={reset} variant="ghost">Reset</Button>
         </div>
+        <button
+          className="btn-demo-fill"
+          onClick={() => {
+            setElapsed(131000);
+            offsetRef.current = 131000;
+            setLaps([131000, 87000, 45000]);
+            setRunning(false);
+          }}
+          style={{ marginTop: 16 }}
+        >
+          Try Example
+        </button>
         {laps.length > 0 && (
           <div className="lap-list">
             {laps.map((l, i) => (

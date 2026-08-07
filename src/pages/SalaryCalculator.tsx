@@ -39,13 +39,13 @@ export default function SalaryCalculator() {
   useToolTracking('salary-calculator', 'Salary Calculator');
   const [mode, setMode] = useState<'hourly' | 'annual'>('hourly');
   const [amount, setAmount] = useState('');
-  const [hours, setHours] = useState('40');
+  const [hours, setHours] = useState('');
   const [result, setResult] = useState<{ hourly: number; weekly: number; monthly: number; annual: number } | null>(null);
   const [validationError, setValidationError] = useState<string | null>(null);
 
-  const calculate = () => {
-    const value = Number(amount);
-    const weeklyHours = Number(hours);
+  const calculate = (overrideAmt?: string, overrideHours?: string) => {
+    const value = Number(overrideAmt !== undefined ? overrideAmt : amount);
+    const weeklyHours = Number(overrideHours !== undefined ? overrideHours : hours);
 
     if (!value || !weeklyHours || value <= 0 || weeklyHours <= 0) {
       setValidationError('Enter valid wage and hours worked.');
@@ -72,7 +72,15 @@ export default function SalaryCalculator() {
       expression: `${mode}: ${value}`,
       result: `$${nextResult.annual.toLocaleString()}`,
     });
-    
+  };
+
+  const fillExample = () => {
+    const exAmt = mode === 'hourly' ? '25' : '50000';
+    const exHours = '40';
+    setAmount(exAmt);
+    setHours(exHours);
+    setValidationError(null);
+    calculate(exAmt, exHours);
   };
 
   return (
@@ -89,10 +97,11 @@ export default function SalaryCalculator() {
           <button className={`tab ${mode === 'hourly' ? 'active' : ''}`} onClick={() => setMode('hourly')}>Hourly Wage</button>
           <button className={`tab ${mode === 'annual' ? 'active' : ''}`} onClick={() => setMode('annual')}>Annual Salary</button>
         </div>
-        <Input label={mode === 'hourly' ? 'Hourly Wage ($)' : 'Annual Salary ($)'} type="number" value={amount} onChange={(e) => { setAmount(e.target.value); setValidationError(null); }} min="0" error={validationError ? 'Enter a valid amount.' : undefined} />
-        <Input label="Hours per Week" type="number" value={hours} onChange={(e) => { setHours(e.target.value); setValidationError(null); }} min="1" step="1" error={validationError ? 'Enter a valid weekly hour count.' : undefined} />
+        <Input label={mode === 'hourly' ? 'Hourly Wage ($)' : 'Annual Salary ($)'} type="number" value={amount} onChange={(e) => { setAmount(e.target.value); setValidationError(null); }} min="0" placeholder={mode === 'hourly' ? 'e.g. 25' : 'e.g. 50000'} error={validationError ? 'Enter a valid amount.' : undefined} />
+        <Input label="Hours per Week" type="number" value={hours} onChange={(e) => { setHours(e.target.value); setValidationError(null); }} min="1" step="1" placeholder="e.g. 40" error={validationError ? 'Enter a valid weekly hour count.' : undefined} />
         {validationError && <p className="input-message input-message-error" role="alert">{validationError}</p>}
-        <Button onClick={calculate} magnetic style={{ width: '100%' }}>Convert Salary</Button>
+        <Button onClick={() => calculate()} magnetic style={{ width: '100%' }}>Convert Salary</Button>
+        <button className="btn-demo-fill" onClick={fillExample}>Try Example</button>
         <ResultDisplay
           visible={!!result}
           highlight={result ? `$${result.annual.toLocaleString()}` : undefined}

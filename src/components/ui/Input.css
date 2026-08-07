@@ -85,3 +85,9 @@ select.input-select:focus { border-color: var(--accent); box-shadow: 0 0 0 3px v
   color: var(--text-muted);
   margin-bottom: 8px;
 }
+
+.input-field::placeholder {
+  color: var(--text-muted);
+  opacity: 0.65;
+}
+

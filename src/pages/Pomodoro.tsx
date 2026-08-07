@@ -127,6 +127,18 @@ export default function Pomodoro() {
             </button>
           ))}
         </div>
+        <button
+          className="btn-demo-fill"
+          onClick={() => {
+            setSessions(3);
+            setPhase('short');
+            setRemaining(SHORT - 10);
+            setRunning(false);
+          }}
+          style={{ marginTop: 16 }}
+        >
+          Try Example
+        </button>
       </Card>
           {/* ── SEO Content Sections ── */}
       <div className="seo-content">

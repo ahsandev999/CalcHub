@@ -53,9 +53,13 @@ export default function AgeCalculator() {
   const [error, setError] = useState('');
   const [copied, setCopied] = useState(false);
 
-  const calculate = () => {
+  const calculate = (overrideDob?: string, overrideAsOf?: string, overrideDob2?: string) => {
     setError('');
-    if (!dob) {
+    const d = overrideDob !== undefined ? overrideDob : dob;
+    const a = overrideAsOf !== undefined ? overrideAsOf : asOf;
+    const d2 = overrideDob2 !== undefined ? overrideDob2 : dob2;
+
+    if (!d) {
       setError('Please enter a date of birth');
       dobRef.current?.focus();
       return;
@@ -63,14 +67,14 @@ export default function AgeCalculator() {
 
     try {
       if (mode === 'single') {
-        const r = calculateAge(dob, asOf);
+        const r = calculateAge(d, a);
         setResult(r);
         setDiffResult(null);
         
         addHistory({
           tool: 'Age Calculator',
           toolSlug: 'age-calculator',
-          expression: `Born ${dob}`,
+          expression: `Born ${d}`,
           result: `${r.years}y ${r.months}m ${r.days}d`,
         });
 
@@ -81,23 +85,30 @@ export default function AgeCalculator() {
             spread: 80,
             origin: { y: 0.6 }
           });
-          
-        } else {
-          
         }
       } else {
-        if (!dob2) {
+        if (!d2) {
           setError('Please enter second date of birth');
           return;
         }
-        const r = calculateAgeDifference(dob, dob2);
+        const r = calculateAgeDifference(d, d2);
         setDiffResult(r);
         setResult(null);
-        
       }
     } catch (e) {
       setError((e as Error).message);
     }
+  };
+
+  const fillExample = () => {
+    const exDob = '1995-04-12';
+    const exAsOf = todayStr();
+    const exDob2 = '1997-08-25';
+    setDob(exDob);
+    setAsOf(exAsOf);
+    setDob2(exDob2);
+    setError('');
+    calculate(exDob, exAsOf, exDob2);
   };
 
   const copyResultText = async () => {
@@ -182,6 +193,7 @@ export default function AgeCalculator() {
             value={dob}
             onChange={(e) => setDob(e.target.value)}
             max={todayStr()}
+            placeholder="e.g. 1995-04-12"
             error={error && !dob ? error : undefined}
           />
           {mode === 'single' && (
@@ -190,6 +202,7 @@ export default function AgeCalculator() {
               type="date"
               value={asOf}
               onChange={(e) => setAsOf(e.target.value)}
+              placeholder="e.g. 2026-08-07"
             />
           )}
           {mode === 'compare' && (
@@ -199,14 +212,16 @@ export default function AgeCalculator() {
               value={dob2}
               onChange={(e) => setDob2(e.target.value)}
               max={todayStr()}
+              placeholder="e.g. 1997-08-25"
               error={error && !dob2 ? error : undefined}
             />
           )}
         </div>
 
-        <Button onClick={calculate} magnetic style={{ width: '100%', marginBottom: 16 }}>
+        <Button onClick={() => calculate()} magnetic style={{ width: '100%', marginBottom: 16 }}>
           Calculate Age
         </Button>
+        <button className="btn-demo-fill" onClick={fillExample} style={{ marginTop: 0, marginBottom: 16 }}>Try Example</button>
 
         <AnimatePresence>
           {result && (

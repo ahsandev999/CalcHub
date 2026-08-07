@@ -70,7 +70,7 @@ export default function UnitConverter() {
   const [category, setCategory] = useState<Cat>('length');
   const [fromUnit, setFromUnit] = useState('m');
   const [toUnit, setToUnit] = useState('km');
-  const [value, setValue] = useState('1');
+  const [value, setValue] = useState('');
 
   const units = CATEGORIES[category];
   const unitKeys = Object.keys(units);
@@ -92,17 +92,35 @@ export default function UnitConverter() {
     setToUnit(keys[1] || keys[0]);
   };
 
-  const handleConvert = () => {
-    if (result !== '—') {
-      const fromLabel = units[fromUnit as keyof typeof units]?.label || fromUnit;
-      const toLabel = units[toUnit as keyof typeof units]?.label || toUnit;
-      addHistory({
-        tool: 'Unit Converter',
-        toolSlug: 'unit-converter',
-        expression: `${value} ${fromLabel}`,
-        result: `${result} ${toLabel}`,
-      });
-    }
+  const handleConvert = (overrideVal?: string, overrideFrom?: string, overrideTo?: string) => {
+    const val = overrideVal !== undefined ? overrideVal : value;
+    const fromU = overrideFrom !== undefined ? overrideFrom : fromUnit;
+    const toU = overrideTo !== undefined ? overrideTo : toUnit;
+
+    const v = parseFloat(val);
+    if (isNaN(v)) return;
+    const u = units as Record<string, { toBase: (v: number) => number; fromBase: (v: number) => number }>;
+    if (!u[fromU] || !u[toU]) return;
+    const base = u[fromU].toBase(v);
+    const converted = u[toU].fromBase(base);
+    const res = converted.toLocaleString(undefined, { maximumFractionDigits: 6 });
+
+    const fromLabel = units[fromU as keyof typeof units]?.label || fromU;
+    const toLabel = units[toU as keyof typeof units]?.label || toU;
+    addHistory({
+      tool: 'Unit Converter',
+      toolSlug: 'unit-converter',
+      expression: `${val} ${fromLabel}`,
+      result: `${res} ${toLabel}`,
+    });
+  };
+
+  const fillExample = () => {
+    setCategory('length');
+    setFromUnit('m');
+    setToUnit('km');
+    setValue('1000');
+    handleConvert('1000', 'm', 'km');
   };
 
   return (
@@ -120,7 +138,7 @@ export default function UnitConverter() {
             <button key={c} className={`tab ${category === c ? 'active' : ''}`} onClick={() => switchCategory(c)}>{c}</button>
           ))}
         </div>
-        <Input label="Value" type="number" value={value} onChange={(e) => setValue(e.target.value)} />
+        <Input label="Value" type="number" value={value} onChange={(e) => setValue(e.target.value)} placeholder="e.g. 1000" />
         <div className="grid-2">
           <div>
             <label className="field-label">From</label>
@@ -135,7 +153,8 @@ export default function UnitConverter() {
             </select>
           </div>
         </div>
-        <Button onClick={handleConvert} magnetic style={{ width: '100%', marginTop: 16 }}>Convert Units</Button>
+        <Button onClick={() => handleConvert()} magnetic style={{ width: '100%', marginTop: 16 }}>Convert Units</Button>
+        <button className="btn-demo-fill" onClick={fillExample}>Try Example</button>
         <div className="result-display">
           <div className="result-highlight">{result}</div>
           <p className="result-subtitle">{value} {units[fromUnit as keyof typeof units].label} = {result} {units[toUnit as keyof typeof units].label}</p>
