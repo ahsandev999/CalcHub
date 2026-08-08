@@ -26,7 +26,7 @@ export default function SEO({ title, description, path = '', type = 'website', f
     '@type': 'WebApplication',
     name: SITE_NAME,
     description,
-    url: SITE_URL,
+    url: url,
     applicationCategory: 'UtilitiesApplication',
     operatingSystem: 'Any',
     offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },

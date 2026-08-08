@@ -4,6 +4,7 @@ import Layout from './components/layout/Layout';
 import PageLoader from './components/ui/PageLoader';
 import CustomCursor from './components/ui/CustomCursor';
 import Background from './components/ui/Background';
+import PWAInstallPrompt from './components/ui/PWAInstallPrompt';
 import { TOOLS } from './lib/tools';
 
 const getScrollKey = (path: string) => `calchub:scroll:${path || '/'}`;
@@ -233,6 +234,7 @@ export default function App() {
             <Route path="/all-calculators" element={<AllCalculators />} />
           </Routes>
         </Suspense>
+        <PWAInstallPrompt />
       </Layout>
     </>
   );
