@@ -1,5 +1,7 @@
+import Breadcrumbs from '@/components/ui/Breadcrumbs';
+import { getBreadcrumbsForTool } from '@/lib/tools';
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
+
 import FAQAccordion, { type FAQItem } from '@/components/ui/FAQAccordion';
 import PageTransition from '@/components/ui/PageTransition';
 import SEO from '@/components/ui/SEO';
@@ -43,6 +45,7 @@ const gradeCalculatorFAQ: FAQItem[] = [
 ];
 
 export default function GradeCalculator() {
+  const breadcrumbs = getBreadcrumbsForTool('grade-calculator');
   useToolTracking('grade-calculator', 'Grade Calculator');
   const [validationError, setValidationError] = useState<string | null>(null);
   const [assignments, setAssignments] = useState([{ score: '', weight: '' }]);
@@ -95,8 +98,11 @@ export default function GradeCalculator() {
 
   return (
     <PageTransition className="page-medium">
-      <SEO title="Free Grade Calculator" description="Calculate your weighted class grade percentage and target final exam score with this free online tool." path="/grade-calculator" faqSchema={gradeCalculatorFAQ} />
-      <Link to="/" className="back-link">← Back to tools</Link>
+      <SEO
+        title="Free Grade Calculator" description="Calculate your weighted class grade percentage and target final exam score with this free online tool." path="/grade-calculator" faqSchema={gradeCalculatorFAQ} 
+        breadcrumbSchema={breadcrumbs?.schema}
+      />
+      <Breadcrumbs items={breadcrumbs?.visual || []} />
       <div className="tool-header">
         <div className="eyebrow">Education</div>
         <h1 className="page-title">Grade Calculator</h1>

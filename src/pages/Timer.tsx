@@ -1,5 +1,7 @@
+import Breadcrumbs from '@/components/ui/Breadcrumbs';
+import { getBreadcrumbsForTool } from '@/lib/tools';
 import { useState, useRef, useEffect, useCallback } from 'react';
-import { Link } from 'react-router-dom';
+
 import FAQAccordion, { type FAQItem } from '@/components/ui/FAQAccordion';
 import PageTransition from '@/components/ui/PageTransition';
 import SEO from '@/components/ui/SEO';
@@ -41,6 +43,7 @@ const timerFAQ: FAQItem[] = [
 ];
 
 export default function Timer() {
+  const breadcrumbs = getBreadcrumbsForTool('timer');
   useToolTracking('timer', 'Timer');  const [seconds, setSeconds] = useState(300);
   const [remaining, setRemaining] = useState(300);
   const [running, setRunning] = useState(false);
@@ -87,8 +90,11 @@ export default function Timer() {
 
   return (
     <PageTransition className="page-medium">
-      <SEO title="Free Timer" description="A free online countdown timer with presets, visual progress, and audio alerts." path="/timer" faqSchema={timerFAQ} />
-      <Link to="/" className="back-link">← Back to tools</Link>
+      <SEO
+        title="Free Timer" description="A free online countdown timer with presets, visual progress, and audio alerts." path="/timer" faqSchema={timerFAQ} 
+        breadcrumbSchema={breadcrumbs?.schema}
+      />
+      <Breadcrumbs items={breadcrumbs?.visual || []} />
       <div className="tool-header">
         <div className="eyebrow">Time</div>
         <h1 className="page-title">Timer</h1>

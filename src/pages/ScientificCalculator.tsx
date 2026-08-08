@@ -1,5 +1,7 @@
+import Breadcrumbs from '@/components/ui/Breadcrumbs';
+import { getBreadcrumbsForTool } from '@/lib/tools';
 import { useState, useCallback, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+
 import { motion, AnimatePresence } from 'framer-motion';
 import FAQAccordion, { type FAQItem } from '@/components/ui/FAQAccordion';
 import PageTransition from '@/components/ui/PageTransition';
@@ -9,7 +11,7 @@ import Button from '@/components/ui/Button';
 import { useToolTracking } from '@/hooks/useScroll';
 import { formatDisplay, formatResult, evaluate, pressKey } from '@/lib/calculators/scientific';
 import { addHistory } from '@/lib/storage';
-import { Copy, Check, History, RotateCcw, Delete, ArrowLeft } from 'lucide-react';
+import { Copy, Check, History, RotateCcw, Delete } from 'lucide-react';
 import '@/styles/components.css';
 
 const scientificCalculatorFAQ: FAQItem[] = [
@@ -36,6 +38,7 @@ const scientificCalculatorFAQ: FAQItem[] = [
 ];
 
 export default function ScientificCalculator() {
+  const breadcrumbs = getBreadcrumbsForTool('scientific-calculator');
   useToolTracking('scientific-calculator', 'Scientific Calculator');
   const [expr, setExpr] = useState('');
   const [justEvaluated, setJustEvaluated] = useState(false);
@@ -159,12 +162,12 @@ export default function ScientificCalculator() {
 
   return (
     <PageTransition className="page-medium">
-      <SEO title="Free Scientific Calculator" description="A free online scientific calculator with trigonometric, logarithmic, and exponential functions, formula parsing, and computation history." path="/scientific-calculator" faqSchema={scientificCalculatorFAQ} />
+      <SEO
+        title="Free Scientific Calculator" description="A free online scientific calculator with trigonometric, logarithmic, and exponential functions, formula parsing, and computation history." path="/scientific-calculator" faqSchema={scientificCalculatorFAQ} 
+        breadcrumbSchema={breadcrumbs?.schema}
+      />
 
-      <Link to="/" className="back-link">
-        <ArrowLeft size={16} />
-        Back to tools
-      </Link>
+      <Breadcrumbs items={breadcrumbs?.visual || []} />
 
       <div className="tool-header">
         <div className="eyebrow">Math</div>

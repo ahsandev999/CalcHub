@@ -1,5 +1,7 @@
+import Breadcrumbs from '@/components/ui/Breadcrumbs';
+import { getBreadcrumbsForTool } from '@/lib/tools';
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
+
 import FAQAccordion, { type FAQItem } from '@/components/ui/FAQAccordion';
 import PageTransition from '@/components/ui/PageTransition';
 import SEO from '@/components/ui/SEO';
@@ -36,6 +38,7 @@ const idealWeightCalculatorFAQ: FAQItem[] = [
 ];
 
 export default function IdealWeightCalculator() {
+  const breadcrumbs = getBreadcrumbsForTool('ideal-weight-calculator');
   useToolTracking('ideal-weight-calculator', 'Ideal Weight Calculator');
   const [gender, setGender] = useState<'male' | 'female'>('male');
   const [height, setHeight] = useState('');
@@ -90,8 +93,11 @@ export default function IdealWeightCalculator() {
 
   return (
     <PageTransition className="page-medium">
-      <SEO title="Free Ideal Weight Calculator" description="Calculate your ideal body weight range based on medical formulas online for free." path="/ideal-weight-calculator" faqSchema={idealWeightCalculatorFAQ} />
-      <Link to="/" className="back-link">← Back to tools</Link>
+      <SEO
+        title="Free Ideal Weight Calculator" description="Calculate your ideal body weight range based on medical formulas online for free." path="/ideal-weight-calculator" faqSchema={idealWeightCalculatorFAQ} 
+        breadcrumbSchema={breadcrumbs?.schema}
+      />
+      <Breadcrumbs items={breadcrumbs?.visual || []} />
       <div className="tool-header">
         <div className="eyebrow">Fitness & Health</div>
         <h1 className="page-title">Ideal Weight Calculator</h1>

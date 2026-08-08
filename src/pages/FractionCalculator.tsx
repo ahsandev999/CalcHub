@@ -1,5 +1,7 @@
+import Breadcrumbs from '@/components/ui/Breadcrumbs';
+import { getBreadcrumbsForTool } from '@/lib/tools';
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
+
 import FAQAccordion, { type FAQItem } from '@/components/ui/FAQAccordion';
 import PageTransition from '@/components/ui/PageTransition';
 import SEO from '@/components/ui/SEO';
@@ -59,6 +61,7 @@ const fractionCalculatorFAQ: FAQItem[] = [
 ];
 
 export default function FractionCalculator() {
+  const breadcrumbs = getBreadcrumbsForTool('fraction-calculator');
   useToolTracking('fraction-calculator', 'Fraction Calculator');
   const [aNum, setANum] = useState('');
   const [aDen, setADen] = useState('');
@@ -118,8 +121,11 @@ export default function FractionCalculator() {
 
   return (
     <PageTransition className="page-medium">
-      <SEO title="Free Fraction Calculator" description="Add, subtract, multiply, or divide fractions and simplify results with this free online tool." path="/fraction-calculator" faqSchema={fractionCalculatorFAQ} />
-      <Link to="/" className="back-link">← Back to tools</Link>
+      <SEO
+        title="Free Fraction Calculator" description="Add, subtract, multiply, or divide fractions and simplify results with this free online tool." path="/fraction-calculator" faqSchema={fractionCalculatorFAQ} 
+        breadcrumbSchema={breadcrumbs?.schema}
+      />
+      <Breadcrumbs items={breadcrumbs?.visual || []} />
       <div className="tool-header">
         <div className="eyebrow">Math</div>
         <h1 className="page-title">Fraction Calculator</h1>

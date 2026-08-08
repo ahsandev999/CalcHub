@@ -1,5 +1,7 @@
+import Breadcrumbs from '@/components/ui/Breadcrumbs';
+import { getBreadcrumbsForTool } from '@/lib/tools';
 import { useState, useCallback } from 'react';
-import { Link } from 'react-router-dom';
+
 import FAQAccordion, { type FAQItem } from '@/components/ui/FAQAccordion';
 import PageTransition from '@/components/ui/PageTransition';
 import SEO from '@/components/ui/SEO';
@@ -64,6 +66,7 @@ const passwordGeneratorFAQ: FAQItem[] = [
 ];
 
 export default function PasswordGenerator() {
+  const breadcrumbs = getBreadcrumbsForTool('password-generator');
   useToolTracking('password-generator', 'Password Generator');  const [length, setLength] = useState(16);
   const [opts, setOpts] = useState({ lowercase: true, uppercase: true, numbers: true, symbols: true });
   const [password, setPassword] = useState('');
@@ -90,8 +93,11 @@ export default function PasswordGenerator() {
 
   return (
     <PageTransition className="page-medium">
-      <SEO title="Free Password Generator" description="Generate secure, customizable passwords online for free to keep your accounts protected." path="/password-generator" faqSchema={passwordGeneratorFAQ} />
-      <Link to="/" className="back-link">← Back to tools</Link>
+      <SEO
+        title="Free Password Generator" description="Generate secure, customizable passwords online for free to keep your accounts protected." path="/password-generator" faqSchema={passwordGeneratorFAQ} 
+        breadcrumbSchema={breadcrumbs?.schema}
+      />
+      <Breadcrumbs items={breadcrumbs?.visual || []} />
       <div className="tool-header">
         <div className="eyebrow">Utility</div>
         <h1 className="page-title">Password Generator</h1>

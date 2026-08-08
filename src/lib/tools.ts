@@ -53,3 +53,24 @@ export const CATEGORIES = [
   { id: 'converter', label: 'Converters' },
   { id: 'education', label: 'Education' },
 ] as const;
+
+export function getBreadcrumbsForTool(slug: string) {
+  const tool = getToolBySlug(slug);
+  if (!tool) return null;
+  const categoryObj = CATEGORIES.find((c) => c.id === tool.category);
+  const categoryName = categoryObj ? categoryObj.label : 'Tools';
+
+  return {
+    categoryName,
+    visual: [
+      { name: 'Home', url: '/' },
+      { name: categoryName, url: '/all-calculators' },
+      { name: tool.name },
+    ],
+    schema: [
+      { name: 'Home', path: '/' },
+      { name: categoryName, path: '/all-calculators' },
+      { name: tool.name, path: `/${tool.slug}` },
+    ],
+  };
+}

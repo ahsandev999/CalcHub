@@ -1,5 +1,7 @@
+import Breadcrumbs from '@/components/ui/Breadcrumbs';
+import { getBreadcrumbsForTool } from '@/lib/tools';
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
+
 import FAQAccordion, { type FAQItem } from '@/components/ui/FAQAccordion';
 import PageTransition from '@/components/ui/PageTransition';
 import SEO from '@/components/ui/SEO';
@@ -56,6 +58,7 @@ const dateDifferenceFAQ: FAQItem[] = [
 ];
 
 export default function DateDifference() {
+  const breadcrumbs = getBreadcrumbsForTool('date-difference');
   useToolTracking('date-difference', 'Date Difference');
 
   const [start, setStart] = useState('');
@@ -88,8 +91,11 @@ export default function DateDifference() {
 
   return (
     <PageTransition className="page-medium">
-      <SEO title="Free Date Difference Calculator" description="Calculate the exact number of days, weeks, or months between two dates online for free." path="/date-difference" faqSchema={dateDifferenceFAQ} />
-      <Link to="/" className="back-link">← Back to tools</Link>
+      <SEO
+        title="Free Date Difference Calculator" description="Calculate the exact number of days, weeks, or months between two dates online for free." path="/date-difference" faqSchema={dateDifferenceFAQ} 
+        breadcrumbSchema={breadcrumbs?.schema}
+      />
+      <Breadcrumbs items={breadcrumbs?.visual || []} />
       <div className="tool-header">
         <div className="eyebrow">Time</div>
         <h1 className="page-title">Date Difference</h1>

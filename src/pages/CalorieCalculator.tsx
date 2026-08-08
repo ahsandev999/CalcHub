@@ -1,5 +1,7 @@
+import Breadcrumbs from '@/components/ui/Breadcrumbs';
+import { getBreadcrumbsForTool } from '@/lib/tools';
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
+
 import FAQAccordion, { type FAQItem } from '@/components/ui/FAQAccordion';
 import PageTransition from '@/components/ui/PageTransition';
 import SEO from '@/components/ui/SEO';
@@ -44,6 +46,7 @@ const calorieCalculatorFAQ: FAQItem[] = [
 ];
 
 export default function CalorieCalculator() {
+  const breadcrumbs = getBreadcrumbsForTool('calorie-calculator');
   useToolTracking('calorie-calculator', 'Calorie Calculator');
   const [age, setAge] = useState('');
   const [gender, setGender] = useState<'male' | 'female'>('male');
@@ -91,8 +94,11 @@ export default function CalorieCalculator() {
 
   return (
     <PageTransition className="page-medium">
-      <SEO title="Free Calorie Calculator" description="Calculate your daily calorie needs for maintenance or weight goals with this free online health tool." path="/calorie-calculator" faqSchema={calorieCalculatorFAQ} />
-      <Link to="/" className="back-link">← Back to tools</Link>
+      <SEO
+        title="Free Calorie Calculator" description="Calculate your daily calorie needs for maintenance or weight goals with this free online health tool." path="/calorie-calculator" faqSchema={calorieCalculatorFAQ} 
+        breadcrumbSchema={breadcrumbs?.schema}
+      />
+      <Breadcrumbs items={breadcrumbs?.visual || []} />
       <div className="tool-header">
         <div className="eyebrow">Fitness & Health</div>
         <h1 className="page-title">Calorie Calculator</h1>

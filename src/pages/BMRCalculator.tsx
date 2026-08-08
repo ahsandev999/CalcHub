@@ -1,5 +1,7 @@
+import Breadcrumbs from '@/components/ui/Breadcrumbs';
+import { getBreadcrumbsForTool } from '@/lib/tools';
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
+
 import FAQAccordion, { type FAQItem } from '@/components/ui/FAQAccordion';
 import PageTransition from '@/components/ui/PageTransition';
 import SEO from '@/components/ui/SEO';
@@ -36,6 +38,7 @@ const bMRCalculatorFAQ: FAQItem[] = [
 ];
 
 export default function BMRCalculator() {
+  const breadcrumbs = getBreadcrumbsForTool('bmr-calculator');
   useToolTracking('bmr-calculator', 'BMR Calculator');
   const [age, setAge] = useState('');
   const [gender, setGender] = useState<'male' | 'female'>('male');
@@ -82,8 +85,11 @@ export default function BMRCalculator() {
 
   return (
     <PageTransition className="page-medium">
-      <SEO title="Free BMR Calculator" description="Calculate your basal metabolic rate (BMR) using the Mifflin-St Jeor equation online for free." path="/bmr-calculator" faqSchema={bMRCalculatorFAQ} />
-      <Link to="/" className="back-link">← Back to tools</Link>
+      <SEO
+        title="Free BMR Calculator" description="Calculate your basal metabolic rate (BMR) using the Mifflin-St Jeor equation online for free." path="/bmr-calculator" faqSchema={bMRCalculatorFAQ} 
+        breadcrumbSchema={breadcrumbs?.schema}
+      />
+      <Breadcrumbs items={breadcrumbs?.visual || []} />
       <div className="tool-header">
         <div className="eyebrow">Fitness & Health</div>
         <h1 className="page-title">BMR Calculator</h1>

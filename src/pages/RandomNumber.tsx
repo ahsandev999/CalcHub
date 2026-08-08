@@ -1,5 +1,7 @@
+import Breadcrumbs from '@/components/ui/Breadcrumbs';
+import { getBreadcrumbsForTool } from '@/lib/tools';
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
+
 import FAQAccordion, { type FAQItem } from '@/components/ui/FAQAccordion';
 import PageTransition from '@/components/ui/PageTransition';
 import SEO from '@/components/ui/SEO';
@@ -34,6 +36,7 @@ const randomNumberFAQ: FAQItem[] = [
 ];
 
 export default function RandomNumber() {
+  const breadcrumbs = getBreadcrumbsForTool('random-number');
   useToolTracking('random-number', 'Random Number');  const [min, setMin] = useState('');
   const [max, setMax] = useState('');
   const [count, setCount] = useState('');
@@ -73,8 +76,11 @@ export default function RandomNumber() {
 
   return (
     <PageTransition className="page-medium">
-      <SEO title="Free Random Number Generator" description="Generate single or multiple random numbers within any custom range online for free." path="/random-number" faqSchema={randomNumberFAQ} />
-      <Link to="/" className="back-link">← Back to tools</Link>
+      <SEO
+        title="Free Random Number Generator" description="Generate single or multiple random numbers within any custom range online for free." path="/random-number" faqSchema={randomNumberFAQ} 
+        breadcrumbSchema={breadcrumbs?.schema}
+      />
+      <Breadcrumbs items={breadcrumbs?.visual || []} />
       <div className="tool-header">
         <div className="eyebrow">Utility</div>
         <h1 className="page-title">Random Number</h1>

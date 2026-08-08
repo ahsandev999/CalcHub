@@ -20,9 +20,9 @@ export default function Navbar() {
     setIsMegaOpen(false);
   }, [location.pathname]);
 
-  // Prevent background scroll when mobile menu is open
+  // Prevent background scroll when mobile menu or mega menu is open
   useEffect(() => {
-    if (isOpen) {
+    if (isOpen || isMegaOpen) {
       document.body.style.overflow = 'hidden';
     } else {
       document.body.style.overflow = '';
@@ -30,7 +30,7 @@ export default function Navbar() {
     return () => {
       document.body.style.overflow = '';
     };
-  }, [isOpen]);
+  }, [isOpen, isMegaOpen]);
 
   const navClass = [
     'navbar',

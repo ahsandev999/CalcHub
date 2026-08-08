@@ -1,5 +1,7 @@
+import Breadcrumbs from '@/components/ui/Breadcrumbs';
+import { getBreadcrumbsForTool } from '@/lib/tools';
 import { useState, useEffect, useMemo, useCallback } from 'react';
-import { Link } from 'react-router-dom';
+
 import { motion, AnimatePresence } from 'framer-motion';
 import FAQAccordion, { type FAQItem } from '@/components/ui/FAQAccordion';
 import PageTransition from '@/components/ui/PageTransition';
@@ -9,7 +11,7 @@ import Button from '@/components/ui/Button';
 import Input from '@/components/ui/Input';
 import { useToolTracking } from '@/hooks/useScroll';
 import { addHistory } from '@/lib/storage';
-import { ArrowLeftRight, ArrowLeft, RefreshCw, Copy, Check, Globe } from 'lucide-react';
+import { ArrowLeftRight, RefreshCw, Copy, Check, Globe } from 'lucide-react';
 import '@/styles/components.css';
 
 const POPULAR_CURRENCIES: Record<string, { code: string; name: string; symbol: string }> = {
@@ -74,6 +76,7 @@ const currencyConverterFAQ: FAQItem[] = [
 ];
 
 export default function CurrencyConverter() {
+  const breadcrumbs = getBreadcrumbsForTool('currency-converter');
   useToolTracking('currency-converter', 'Currency Converter');
   const [amount, setAmount] = useState('');
   const [fromCurrency, setFromCurrency] = useState('USD');
@@ -176,12 +179,12 @@ export default function CurrencyConverter() {
 
   return (
     <PageTransition className="page-medium">
-      <SEO title="Free Currency Converter" description="Convert currencies online using current live exchange rates with this free tool." path="/currency-converter" faqSchema={currencyConverterFAQ} />
+      <SEO
+        title="Free Currency Converter" description="Convert currencies online using current live exchange rates with this free tool." path="/currency-converter" faqSchema={currencyConverterFAQ} 
+        breadcrumbSchema={breadcrumbs?.schema}
+      />
 
-      <Link to="/" className="back-link">
-        <ArrowLeft size={16} />
-        Back to tools
-      </Link>
+      <Breadcrumbs items={breadcrumbs?.visual || []} />
 
       <div className="tool-header">
         <div className="eyebrow">Converter</div>

@@ -1,5 +1,7 @@
+import Breadcrumbs from '@/components/ui/Breadcrumbs';
+import { getBreadcrumbsForTool } from '@/lib/tools';
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
+
 import FAQAccordion, { type FAQItem } from '@/components/ui/FAQAccordion';
 import PageTransition from '@/components/ui/PageTransition';
 import SEO from '@/components/ui/SEO';
@@ -36,6 +38,7 @@ const salaryCalculatorFAQ: FAQItem[] = [
 ];
 
 export default function SalaryCalculator() {
+  const breadcrumbs = getBreadcrumbsForTool('salary-calculator');
   useToolTracking('salary-calculator', 'Salary Calculator');
   const [mode, setMode] = useState<'hourly' | 'annual'>('hourly');
   const [amount, setAmount] = useState('');
@@ -85,8 +88,11 @@ export default function SalaryCalculator() {
 
   return (
     <PageTransition className="page-medium">
-      <SEO title="Free Salary Calculator" description="Convert hourly wages and annual salary into weekly, monthly, and yearly pay rates with this free online tool." path="/salary-calculator" faqSchema={salaryCalculatorFAQ} />
-      <Link to="/" className="back-link">← Back to tools</Link>
+      <SEO
+        title="Free Salary Calculator" description="Convert hourly wages and annual salary into weekly, monthly, and yearly pay rates with this free online tool." path="/salary-calculator" faqSchema={salaryCalculatorFAQ} 
+        breadcrumbSchema={breadcrumbs?.schema}
+      />
+      <Breadcrumbs items={breadcrumbs?.visual || []} />
       <div className="tool-header">
         <div className="eyebrow">Financial</div>
         <h1 className="page-title">Salary Calculator</h1>

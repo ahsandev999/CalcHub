@@ -1,5 +1,7 @@
+import Breadcrumbs from '@/components/ui/Breadcrumbs';
+import { getBreadcrumbsForTool } from '@/lib/tools';
 import { useState, useRef } from 'react';
-import { Link } from 'react-router-dom';
+
 import { motion, AnimatePresence } from 'framer-motion';
 import FAQAccordion, { type FAQItem } from '@/components/ui/FAQAccordion';
 import PageTransition from '@/components/ui/PageTransition';
@@ -10,7 +12,7 @@ import Input from '@/components/ui/Input';
 import { useToolTracking } from '@/hooks/useScroll';
 import { calculateAge, calculateAgeDifference } from '@/lib/calculators/age';
 import { addHistory } from '@/lib/storage';
-import { Calendar, Users, Award, Star, Compass, Clock, ArrowLeft, Copy, Check } from 'lucide-react';
+import { Calendar, Users, Award, Star, Compass, Clock, Copy, Check } from 'lucide-react';
 import confetti from 'canvas-confetti';
 import '@/styles/components.css';
 
@@ -42,6 +44,7 @@ const ageCalculatorFAQ: FAQItem[] = [
 ];
 
 export default function AgeCalculator() {
+  const breadcrumbs = getBreadcrumbsForTool('age-calculator');
   useToolTracking('age-calculator', 'Age Calculator');  const dobRef = useRef<HTMLInputElement>(null);
 
   const [mode, setMode] = useState<'single' | 'compare'>('single');
@@ -150,12 +153,12 @@ export default function AgeCalculator() {
 
   return (
     <PageTransition className="page-medium">
-      <SEO title="Free Age Calculator" description="Calculate your exact age online in years, months, and days for free. Check birth details and compare two ages instantly." path="/age-calculator" faqSchema={ageCalculatorFAQ} />
+      <SEO
+        title="Free Age Calculator" description="Calculate your exact age online in years, months, and days for free. Check birth details and compare two ages instantly." path="/age-calculator" faqSchema={ageCalculatorFAQ} 
+        breadcrumbSchema={breadcrumbs?.schema}
+      />
       
-      <Link to="/" className="back-link">
-        <ArrowLeft size={16} />
-        Back to tools
-      </Link>
+      <Breadcrumbs items={breadcrumbs?.visual || []} />
 
       <div className="tool-header">
         <div className="eyebrow">Time</div>

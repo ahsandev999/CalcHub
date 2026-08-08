@@ -1,5 +1,7 @@
+import Breadcrumbs from '@/components/ui/Breadcrumbs';
+import { getBreadcrumbsForTool } from '@/lib/tools';
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
+
 import FAQAccordion, { type FAQItem } from '@/components/ui/FAQAccordion';
 import PageTransition from '@/components/ui/PageTransition';
 import SEO from '@/components/ui/SEO';
@@ -44,6 +46,7 @@ const bodyFatCalculatorFAQ: FAQItem[] = [
 ];
 
 export default function BodyFatCalculator() {
+  const breadcrumbs = getBreadcrumbsForTool('body-fat-calculator');
   useToolTracking('body-fat-calculator', 'Body Fat Calculator');
   const [validationError, setValidationError] = useState<string | null>(null);
   const [gender, setGender] = useState<'male' | 'female'>('male');
@@ -108,8 +111,11 @@ export default function BodyFatCalculator() {
 
   return (
     <PageTransition className="page-medium">
-      <SEO title="Free Body Fat Calculator" description="Calculate your estimated body fat percentage using the U.S. Navy circumference method online for free." path="/body-fat-calculator" faqSchema={bodyFatCalculatorFAQ} />
-      <Link to="/" className="back-link">← Back to tools</Link>
+      <SEO
+        title="Free Body Fat Calculator" description="Calculate your estimated body fat percentage using the U.S. Navy circumference method online for free." path="/body-fat-calculator" faqSchema={bodyFatCalculatorFAQ} 
+        breadcrumbSchema={breadcrumbs?.schema}
+      />
+      <Breadcrumbs items={breadcrumbs?.visual || []} />
       <div className="tool-header">
         <div className="eyebrow">Fitness & Health</div>
         <h1 className="page-title">Body Fat Calculator</h1>

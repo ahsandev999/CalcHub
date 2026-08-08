@@ -1,5 +1,7 @@
+import Breadcrumbs from '@/components/ui/Breadcrumbs';
+import { getBreadcrumbsForTool } from '@/lib/tools';
 import { useState, useRef, useEffect, useCallback } from 'react';
-import { Link } from 'react-router-dom';
+
 import FAQAccordion, { type FAQItem } from '@/components/ui/FAQAccordion';
 import PageTransition from '@/components/ui/PageTransition';
 import SEO from '@/components/ui/SEO';
@@ -40,6 +42,7 @@ const stopwatchFAQ: FAQItem[] = [
 ];
 
 export default function Stopwatch() {
+  const breadcrumbs = getBreadcrumbsForTool('stopwatch');
   useToolTracking('stopwatch', 'Stopwatch');
   const [elapsed, setElapsed] = useState(0);
   const [running, setRunning] = useState(false);
@@ -78,8 +81,11 @@ export default function Stopwatch() {
 
   return (
     <PageTransition className="page-medium">
-      <SEO title="Free Stopwatch" description="A free online precision stopwatch with lap times and high-resolution counter." path="/stopwatch" faqSchema={stopwatchFAQ} />
-      <Link to="/" className="back-link">← Back to tools</Link>
+      <SEO
+        title="Free Stopwatch" description="A free online precision stopwatch with lap times and high-resolution counter." path="/stopwatch" faqSchema={stopwatchFAQ} 
+        breadcrumbSchema={breadcrumbs?.schema}
+      />
+      <Breadcrumbs items={breadcrumbs?.visual || []} />
       <div className="tool-header">
         <div className="eyebrow">Time</div>
         <h1 className="page-title">Stopwatch</h1>

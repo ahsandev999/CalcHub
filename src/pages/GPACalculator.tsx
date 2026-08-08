@@ -1,5 +1,7 @@
+import Breadcrumbs from '@/components/ui/Breadcrumbs';
+import { getBreadcrumbsForTool } from '@/lib/tools';
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
+
 import FAQAccordion, { type FAQItem } from '@/components/ui/FAQAccordion';
 import PageTransition from '@/components/ui/PageTransition';
 import SEO from '@/components/ui/SEO';
@@ -49,6 +51,7 @@ const gPACalculatorFAQ: FAQItem[] = [
 ];
 
 export default function GPACalculator() {
+  const breadcrumbs = getBreadcrumbsForTool('gpa-calculator');
   useToolTracking('gpa-calculator', 'GPA Calculator');
   const [courses, setCourses] = useState([{ grade: 'A', credits: '' }]);
   const [result, setResult] = useState<{ gpa: number; totalCredits: number } | null>(null);
@@ -108,8 +111,11 @@ export default function GPACalculator() {
 
   return (
     <PageTransition className="page-medium">
-      <SEO title="Free GPA Calculator" description="Calculate your weighted GPA on a 4.0 scale from course grades and credit hours online for free." path="/gpa-calculator" faqSchema={gPACalculatorFAQ} />
-      <Link to="/" className="back-link">← Back to tools</Link>
+      <SEO
+        title="Free GPA Calculator" description="Calculate your weighted GPA on a 4.0 scale from course grades and credit hours online for free." path="/gpa-calculator" faqSchema={gPACalculatorFAQ} 
+        breadcrumbSchema={breadcrumbs?.schema}
+      />
+      <Breadcrumbs items={breadcrumbs?.visual || []} />
       <div className="tool-header">
         <div className="eyebrow">Education</div>
         <h1 className="page-title">GPA Calculator</h1>

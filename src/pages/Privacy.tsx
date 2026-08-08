@@ -1,13 +1,20 @@
 import PageTransition, { FadeIn } from '@/components/ui/PageTransition';
 import SEO from '@/components/ui/SEO';
 import Card from '@/components/ui/Card';
+import Breadcrumbs from '@/components/ui/Breadcrumbs';
+
+const privacyBreadcrumbs = {
+  visual: [{ name: 'Home', url: '/' }, { name: 'Privacy Policy' }],
+  schema: [{ name: 'Home', path: '/' }, { name: 'Privacy Policy', path: '/privacy' }],
+};
 
 export default function Privacy() {
   const today = new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
 
   return (
     <PageTransition className="page-medium">
-      <SEO title="Privacy Policy" description="CalcHub privacy policy — your data stays on your device." path="/privacy" />
+      <SEO title="Privacy Policy" description="CalcHub privacy policy — your data stays on your device." path="/privacy" breadcrumbSchema={privacyBreadcrumbs.schema} />
+      <Breadcrumbs items={privacyBreadcrumbs.visual} />
       <div className="tool-header">
         <div className="eyebrow">Privacy</div>
         <h1 className="page-title">Privacy Policy</h1>

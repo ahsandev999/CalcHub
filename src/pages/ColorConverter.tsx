@@ -1,5 +1,7 @@
+import Breadcrumbs from '@/components/ui/Breadcrumbs';
+import { getBreadcrumbsForTool } from '@/lib/tools';
 import { useState, useMemo } from 'react';
-import { Link } from 'react-router-dom';
+
 import FAQAccordion, { type FAQItem } from '@/components/ui/FAQAccordion';
 import PageTransition from '@/components/ui/PageTransition';
 import SEO from '@/components/ui/SEO';
@@ -76,6 +78,7 @@ const colorConverterFAQ: FAQItem[] = [
 ];
 
 export default function ColorConverter() {
+  const breadcrumbs = getBreadcrumbsForTool('color-converter');
   useToolTracking('color-converter', 'Color Converter');
   const [hex, setHex] = useState('');
   const [rgb, setRgb] = useState({ r: '', g: '', b: '' });
@@ -144,8 +147,11 @@ export default function ColorConverter() {
 
   return (
     <PageTransition className="page-medium">
-      <SEO title="Free Color Converter" description="Convert color codes between HEX, RGB, and HSL formats online with this free color tool." path="/color-converter" faqSchema={colorConverterFAQ} />
-      <Link to="/" className="back-link">← Back to tools</Link>
+      <SEO
+        title="Free Color Converter" description="Convert color codes between HEX, RGB, and HSL formats online with this free color tool." path="/color-converter" faqSchema={colorConverterFAQ} 
+        breadcrumbSchema={breadcrumbs?.schema}
+      />
+      <Breadcrumbs items={breadcrumbs?.visual || []} />
       <div className="tool-header">
         <div className="eyebrow">Converter</div>
         <h1 className="page-title">Color Converter</h1>

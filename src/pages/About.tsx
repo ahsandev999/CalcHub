@@ -2,11 +2,18 @@ import { Link } from 'react-router-dom';
 import PageTransition, { FadeIn } from '@/components/ui/PageTransition';
 import SEO from '@/components/ui/SEO';
 import Card from '@/components/ui/Card';
+import Breadcrumbs from '@/components/ui/Breadcrumbs';
+
+const aboutBreadcrumbs = {
+  visual: [{ name: 'Home', url: '/' }, { name: 'About' }],
+  schema: [{ name: 'Home', path: '/' }, { name: 'About', path: '/about' }],
+};
 
 export default function About() {
   return (
     <PageTransition className="page-medium">
-      <SEO title="About CalcHub" description="Learn about CalcHub — premium free calculators and tools." path="/about" />
+      <SEO title="About CalcHub" description="Learn about CalcHub — premium free calculators and tools." path="/about" breadcrumbSchema={aboutBreadcrumbs.schema} />
+      <Breadcrumbs items={aboutBreadcrumbs.visual} />
       <div className="tool-header">
         <div className="eyebrow">About</div>
         <h1 className="page-title">Built for precision.</h1>

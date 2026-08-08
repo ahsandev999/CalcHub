@@ -1,5 +1,7 @@
+import Breadcrumbs from '@/components/ui/Breadcrumbs';
+import { getBreadcrumbsForTool } from '@/lib/tools';
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
+
 import { motion, AnimatePresence } from 'framer-motion';
 import FAQAccordion, { type FAQItem } from '@/components/ui/FAQAccordion';
 import PageTransition from '@/components/ui/PageTransition';
@@ -10,7 +12,7 @@ import Input from '@/components/ui/Input';
 import { useToolTracking } from '@/hooks/useScroll';
 import { calculateSleep, formatTime, type SleepMode } from '@/lib/calculators/sleep';
 import { addHistory } from '@/lib/storage';
-import { Moon, Sun, Clock, Coffee, Sparkles, Check, Copy, ArrowLeft } from 'lucide-react';
+import { Moon, Sun, Clock, Coffee, Sparkles, Check, Copy } from 'lucide-react';
 import '@/styles/components.css';
 
 const sleepCalculatorFAQ: FAQItem[] = [
@@ -37,6 +39,7 @@ const sleepCalculatorFAQ: FAQItem[] = [
 ];
 
 export default function SleepCalculator() {
+  const breadcrumbs = getBreadcrumbsForTool('sleep-calculator');
   useToolTracking('sleep-calculator', 'Sleep Calculator');
   const [mode, setMode] = useState<SleepMode>('wake');
   const [wakeTime, setWakeTime] = useState('');
@@ -108,12 +111,12 @@ export default function SleepCalculator() {
 
   return (
     <PageTransition className="page-medium">
-      <SEO title="Free Sleep Calculator" description="Calculate optimal sleep cycles, bedtimes, and wake times online for free to improve sleep quality." path="/sleep-calculator" faqSchema={sleepCalculatorFAQ} />
+      <SEO
+        title="Free Sleep Calculator" description="Calculate optimal sleep cycles, bedtimes, and wake times online for free to improve sleep quality." path="/sleep-calculator" faqSchema={sleepCalculatorFAQ} 
+        breadcrumbSchema={breadcrumbs?.schema}
+      />
       
-      <Link to="/" className="back-link">
-        <ArrowLeft size={16} />
-        Back to tools
-      </Link>
+      <Breadcrumbs items={breadcrumbs?.visual || []} />
 
       <div className="tool-header">
         <div className="eyebrow">Health</div>

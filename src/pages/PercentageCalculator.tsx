@@ -1,5 +1,7 @@
+import Breadcrumbs from '@/components/ui/Breadcrumbs';
+import { getBreadcrumbsForTool } from '@/lib/tools';
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
+
 import FAQAccordion, { type FAQItem } from '@/components/ui/FAQAccordion';
 import PageTransition from '@/components/ui/PageTransition';
 import SEO from '@/components/ui/SEO';
@@ -37,6 +39,7 @@ const percentageCalculatorFAQ: FAQItem[] = [
 ];
 
 export default function PercentageCalculator() {
+  const breadcrumbs = getBreadcrumbsForTool('percentage-calculator');
   useToolTracking('percentage-calculator', 'Percentage Calculator');  const [mode, setMode] = useState<Mode>('percent-of');
   const [a, setA] = useState('');
   const [b, setB] = useState('');
@@ -93,8 +96,11 @@ export default function PercentageCalculator() {
 
   return (
     <PageTransition className="page-medium">
-      <SEO title="Free Percentage Calculator" description="Calculate percentages, percentage changes, increases, or decreases online with this free tool." path="/percentage-calculator" faqSchema={percentageCalculatorFAQ} />
-      <Link to="/" className="back-link">← Back to tools</Link>
+      <SEO
+        title="Free Percentage Calculator" description="Calculate percentages, percentage changes, increases, or decreases online with this free tool." path="/percentage-calculator" faqSchema={percentageCalculatorFAQ} 
+        breadcrumbSchema={breadcrumbs?.schema}
+      />
+      <Breadcrumbs items={breadcrumbs?.visual || []} />
       <div className="tool-header">
         <div className="eyebrow">Math</div>
         <h1 className="page-title">Percentage Calculator</h1>

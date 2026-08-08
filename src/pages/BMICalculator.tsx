@@ -1,5 +1,7 @@
+import Breadcrumbs from '@/components/ui/Breadcrumbs';
+import { getBreadcrumbsForTool } from '@/lib/tools';
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
+
 import PageTransition from '@/components/ui/PageTransition';
 import SEO from '@/components/ui/SEO';
 import Card from '@/components/ui/Card';
@@ -27,6 +29,7 @@ function getBMICategory(bmi: number): { label: string; color: string } {
 }
 
 export default function BMICalculator() {
+  const breadcrumbs = getBreadcrumbsForTool('bmi-calculator');
   useToolTracking('bmi-calculator', 'BMI Calculator');  const [weight, setWeight] = useState('');
   const [height, setHeight] = useState('');
   const [unit, setUnit] = useState<'metric' | 'imperial'>('metric');
@@ -67,8 +70,11 @@ export default function BMICalculator() {
 
   return (
     <PageTransition className="page-medium">
-      <SEO title="Free BMI Calculator" description="Calculate your Body Mass Index (BMI) online for free. Get height-to-weight category results and healthy range recommendations instantly." path="/bmi-calculator" faqSchema={bmiFAQ} />
-      <Link to="/" className="back-link">← Back to tools</Link>
+      <SEO
+        title="Free BMI Calculator" description="Calculate your Body Mass Index (BMI) online for free. Get height-to-weight category results and healthy range recommendations instantly." path="/bmi-calculator" faqSchema={bmiFAQ} 
+        breadcrumbSchema={breadcrumbs?.schema}
+      />
+      <Breadcrumbs items={breadcrumbs?.visual || []} />
       <div className="tool-header">
         <div className="eyebrow">Health</div>
         <h1 className="page-title">BMI Calculator</h1>

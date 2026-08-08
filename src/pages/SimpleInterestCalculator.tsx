@@ -1,5 +1,7 @@
+import Breadcrumbs from '@/components/ui/Breadcrumbs';
+import { getBreadcrumbsForTool } from '@/lib/tools';
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
+
 import FAQAccordion, { type FAQItem } from '@/components/ui/FAQAccordion';
 import PageTransition from '@/components/ui/PageTransition';
 import SEO from '@/components/ui/SEO';
@@ -35,6 +37,7 @@ const simpleInterestCalculatorFAQ: FAQItem[] = [
 ];
 
 export default function SimpleInterestCalculator() {
+  const breadcrumbs = getBreadcrumbsForTool('simple-interest-calculator');
   useToolTracking('simple-interest-calculator', 'Simple Interest Calculator');
   const [principal, setPrincipal] = useState('');
   const [rate, setRate] = useState('');
@@ -82,8 +85,11 @@ export default function SimpleInterestCalculator() {
 
   return (
     <PageTransition className="page-medium">
-      <SEO title="Free Simple Interest Calculator" description="Calculate simple interest earned and final balance over time with this free online financial calculator." path="/simple-interest-calculator" faqSchema={simpleInterestCalculatorFAQ} />
-      <Link to="/" className="back-link">← Back to tools</Link>
+      <SEO
+        title="Free Simple Interest Calculator" description="Calculate simple interest earned and final balance over time with this free online financial calculator." path="/simple-interest-calculator" faqSchema={simpleInterestCalculatorFAQ} 
+        breadcrumbSchema={breadcrumbs?.schema}
+      />
+      <Breadcrumbs items={breadcrumbs?.visual || []} />
       <div className="tool-header">
         <div className="eyebrow">Financial</div>
         <h1 className="page-title">Simple Interest Calculator</h1>

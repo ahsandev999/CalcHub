@@ -1,5 +1,7 @@
+import Breadcrumbs from '@/components/ui/Breadcrumbs';
+import { getBreadcrumbsForTool } from '@/lib/tools';
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
+
 import FAQAccordion, { type FAQItem } from '@/components/ui/FAQAccordion';
 import PageTransition from '@/components/ui/PageTransition';
 import SEO from '@/components/ui/SEO';
@@ -43,6 +45,7 @@ const numberBaseConverterFAQ: FAQItem[] = [
 ];
 
 export default function NumberBaseConverter() {
+  const breadcrumbs = getBreadcrumbsForTool('number-base-converter');
   useToolTracking('number-base-converter', 'Base Converter');
   const [fromBase, setFromBase] = useState<Base>(10);
   const [input, setInput] = useState('');
@@ -79,8 +82,11 @@ export default function NumberBaseConverter() {
 
   return (
     <PageTransition className="page-medium">
-      <SEO title="Free Number Base Converter" description="Convert numbers between binary, octal, decimal, and hexadecimal bases online for free." path="/number-base-converter" faqSchema={numberBaseConverterFAQ} />
-      <Link to="/" className="back-link">← Back to tools</Link>
+      <SEO
+        title="Free Number Base Converter" description="Convert numbers between binary, octal, decimal, and hexadecimal bases online for free." path="/number-base-converter" faqSchema={numberBaseConverterFAQ} 
+        breadcrumbSchema={breadcrumbs?.schema}
+      />
+      <Breadcrumbs items={breadcrumbs?.visual || []} />
       <div className="tool-header">
         <div className="eyebrow">Converter</div>
         <h1 className="page-title">Base Converter</h1>

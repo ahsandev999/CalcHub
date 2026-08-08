@@ -1,5 +1,7 @@
+import Breadcrumbs from '@/components/ui/Breadcrumbs';
+import { getBreadcrumbsForTool } from '@/lib/tools';
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
+
 import FAQAccordion, { type FAQItem } from '@/components/ui/FAQAccordion';
 import PageTransition from '@/components/ui/PageTransition';
 import SEO from '@/components/ui/SEO';
@@ -36,6 +38,7 @@ const loanCalculatorFAQ: FAQItem[] = [
 ];
 
 export default function LoanCalculator() {
+  const breadcrumbs = getBreadcrumbsForTool('loan-calculator');
   useToolTracking('loan-calculator', 'Loan Calculator');
   const [amount, setAmount] = useState('');
   const [rate, setRate] = useState('');
@@ -90,8 +93,11 @@ export default function LoanCalculator() {
 
   return (
     <PageTransition className="page-medium">
-      <SEO title="Free Loan Calculator" description="Calculate monthly payments, interest, and total repayment for any amortized loan with this free online tool." path="/loan-calculator" faqSchema={loanCalculatorFAQ} />
-      <Link to="/" className="back-link">← Back to tools</Link>
+      <SEO
+        title="Free Loan Calculator" description="Calculate monthly payments, interest, and total repayment for any amortized loan with this free online tool." path="/loan-calculator" faqSchema={loanCalculatorFAQ} 
+        breadcrumbSchema={breadcrumbs?.schema}
+      />
+      <Breadcrumbs items={breadcrumbs?.visual || []} />
       <div className="tool-header">
         <div className="eyebrow">Financial</div>
         <h1 className="page-title">Loan Calculator</h1>

@@ -1,5 +1,7 @@
+import Breadcrumbs from '@/components/ui/Breadcrumbs';
+import { getBreadcrumbsForTool } from '@/lib/tools';
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
+
 import FAQAccordion, { type FAQItem } from '@/components/ui/FAQAccordion';
 import PageTransition from '@/components/ui/PageTransition';
 import SEO from '@/components/ui/SEO';
@@ -35,6 +37,7 @@ const hoursCalculatorFAQ: FAQItem[] = [
 ];
 
 export default function HoursCalculator() {
+  const breadcrumbs = getBreadcrumbsForTool('hours-calculator');
   useToolTracking('hours-calculator', 'Hours Calculator');
   const [start, setStart] = useState('');
   const [end, setEnd] = useState('');
@@ -98,8 +101,11 @@ export default function HoursCalculator() {
 
   return (
     <PageTransition className="page-medium">
-      <SEO title="Free Hours Calculator" description="Calculate total work hours and decimal time between two times, including break subtraction, online for free." path="/hours-calculator" faqSchema={hoursCalculatorFAQ} />
-      <Link to="/" className="back-link">← Back to tools</Link>
+      <SEO
+        title="Free Hours Calculator" description="Calculate total work hours and decimal time between two times, including break subtraction, online for free." path="/hours-calculator" faqSchema={hoursCalculatorFAQ} 
+        breadcrumbSchema={breadcrumbs?.schema}
+      />
+      <Breadcrumbs items={breadcrumbs?.visual || []} />
       <div className="tool-header">
         <div className="eyebrow">Time</div>
         <h1 className="page-title">Hours Calculator</h1>

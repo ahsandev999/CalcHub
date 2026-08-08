@@ -1,18 +1,23 @@
 import { Helmet } from 'react-helmet-async';
 
+export interface BreadcrumbSchemaItem {
+  name: string;
+  path: string;
+}
+
 interface SEOProps {
   title: string;
   description: string;
   path?: string;
   type?: string;
   faqSchema?: { question: string; answer: string }[];
+  breadcrumbSchema?: BreadcrumbSchemaItem[];
 }
 
 const SITE_URL = 'https://calccode.com';
 const SITE_NAME = 'CalcHub';
 
-
-export default function SEO({ title, description, path = '', type = 'website', faqSchema }: SEOProps) {
+export default function SEO({ title, description, path = '', type = 'website', faqSchema, breadcrumbSchema }: SEOProps) {
   const url = `${SITE_URL}${path}`;
   const fullTitle = path === '/' || path === '' ? title : `${title} — ${SITE_NAME}`;
 
@@ -40,6 +45,17 @@ export default function SEO({ title, description, path = '', type = 'website', f
     })),
   } : null;
 
+  const breadcrumbJsonLd = breadcrumbSchema && breadcrumbSchema.length > 0 ? {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: breadcrumbSchema.map((item, index) => ({
+      '@type': 'ListItem',
+      position: index + 1,
+      name: item.name,
+      item: `${SITE_URL}${item.path}`,
+    })),
+  } : null;
+
   return (
     <Helmet>
       <title>{fullTitle}</title>
@@ -59,6 +75,9 @@ export default function SEO({ title, description, path = '', type = 'website', f
       <script type="application/ld+json">{JSON.stringify(jsonLd)}</script>
       {faqJsonLd && (
         <script type="application/ld+json">{JSON.stringify(faqJsonLd)}</script>
+      )}
+      {breadcrumbJsonLd && (
+        <script type="application/ld+json">{JSON.stringify(breadcrumbJsonLd)}</script>
       )}
     </Helmet>
   );

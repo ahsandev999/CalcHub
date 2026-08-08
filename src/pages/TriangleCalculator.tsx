@@ -1,5 +1,7 @@
+import Breadcrumbs from '@/components/ui/Breadcrumbs';
+import { getBreadcrumbsForTool } from '@/lib/tools';
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
+
 import FAQAccordion, { type FAQItem } from '@/components/ui/FAQAccordion';
 import PageTransition from '@/components/ui/PageTransition';
 import SEO from '@/components/ui/SEO';
@@ -38,6 +40,7 @@ const triangleCalculatorFAQ: FAQItem[] = [
 ];
 
 export default function TriangleCalculator() {
+  const breadcrumbs = getBreadcrumbsForTool('triangle-calculator');
   useToolTracking('triangle-calculator', 'Triangle Calculator');
   const [a, setA] = useState('');
   const [b, setB] = useState('');
@@ -125,8 +128,11 @@ export default function TriangleCalculator() {
 
   return (
     <PageTransition className="page-medium">
-      <SEO title="Free Triangle Calculator" description="Solve unknown triangle sides, angles, area, and perimeter online with this free geometry tool." path="/triangle-calculator" faqSchema={triangleCalculatorFAQ} />
-      <Link to="/" className="back-link">← Back to tools</Link>
+      <SEO
+        title="Free Triangle Calculator" description="Solve unknown triangle sides, angles, area, and perimeter online with this free geometry tool." path="/triangle-calculator" faqSchema={triangleCalculatorFAQ} 
+        breadcrumbSchema={breadcrumbs?.schema}
+      />
+      <Breadcrumbs items={breadcrumbs?.visual || []} />
       <div className="tool-header">
         <div className="eyebrow">Math</div>
         <h1 className="page-title">Triangle Calculator</h1>
