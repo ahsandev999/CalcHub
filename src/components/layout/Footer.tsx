@@ -34,7 +34,7 @@ export default function Footer() {
         <div className="footer-cols">
           {grouped.map((group) => (
             <div className="footer-col" key={group.title}>
-              <h4>{group.title}</h4>
+              <div className="footer-col-title">{group.title}</div>
               <ul>
                 {group.tools.map((t) => (
                   <li key={t.slug}><Link to={`/${t.slug}`}>{t.name}</Link></li>
@@ -47,7 +47,7 @@ export default function Footer() {
           ))}
 
           <div className="footer-col">
-            <h4>Company</h4>
+            <div className="footer-col-title">Company</div>
             <ul>
               <li><Link to="/about">About</Link></li>
               <li><Link to="/privacy">Privacy Policy</Link></li>

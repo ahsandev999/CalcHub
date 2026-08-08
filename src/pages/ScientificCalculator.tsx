@@ -262,14 +262,22 @@ export default function ScientificCalculator() {
             ['0', () => press('0'), ' wide'], ['.', () => press('.'), ''], ['=', doEquals, 'equals'],
           ].map(([label, action, cls]) => {
             let iconElement = null;
-            if (label === '⌫') iconElement = <Delete size={16} />;
-            if (label === 'C') iconElement = <RotateCcw size={16} />;
+            let ariaLabel = undefined;
+            if (label === '⌫') { iconElement = <Delete size={16} />; ariaLabel = 'Backspace'; }
+            if (label === 'C') { iconElement = <RotateCcw size={16} />; ariaLabel = 'Clear all'; }
+            if (label === '=') { ariaLabel = 'Equals'; }
+            if (label === '±') { ariaLabel = 'Plus or minus'; }
+            if (label === '÷') { ariaLabel = 'Divide'; }
+            if (label === '×') { ariaLabel = 'Multiply'; }
+            if (label === '−') { ariaLabel = 'Subtract'; }
+            if (label === '+') { ariaLabel = 'Add'; }
 
             return (
               <motion.button
                 key={label as string}
                 className={`calc-key ${cls || ''}`}
                 onClick={action as () => void}
+                aria-label={ariaLabel || (typeof label === 'string' ? label : undefined)}
                 whileTap={{ scale: 0.94 }}
               >
                 {iconElement || label as string}
