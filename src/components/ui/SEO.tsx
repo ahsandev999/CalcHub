@@ -10,6 +10,7 @@ interface SEOProps {
   description: string;
   path?: string;
   type?: string;
+  image?: string;
   faqSchema?: { question: string; answer: string }[];
   breadcrumbSchema?: BreadcrumbSchemaItem[];
 }
@@ -17,9 +18,10 @@ interface SEOProps {
 const SITE_URL = 'https://calccode.com';
 const SITE_NAME = 'CalcHub';
 
-export default function SEO({ title, description, path = '', type = 'website', faqSchema, breadcrumbSchema }: SEOProps) {
+export default function SEO({ title, description, path = '', type = 'website', image, faqSchema, breadcrumbSchema }: SEOProps) {
   const url = `${SITE_URL}${path}`;
   const fullTitle = path === '/' || path === '' ? title : `${title} — ${SITE_NAME}`;
+  const imageUrl = image ? (image.startsWith('http') ? image : `${SITE_URL}${image}`) : `${SITE_URL}/og-image.png`;
 
   const jsonLd = {
     '@context': 'https://schema.org',
@@ -67,10 +69,15 @@ export default function SEO({ title, description, path = '', type = 'website', f
       <meta property="og:description" content={description} />
       <meta property="og:url" content={url} />
       <meta property="og:site_name" content={SITE_NAME} />
+      <meta property="og:image" content={imageUrl} />
+      <meta property="og:image:width" content="1200" />
+      <meta property="og:image:height" content="630" />
+      <meta property="og:image:alt" content={fullTitle} />
 
       <meta name="twitter:card" content="summary_large_image" />
       <meta name="twitter:title" content={fullTitle} />
       <meta name="twitter:description" content={description} />
+      <meta name="twitter:image" content={imageUrl} />
 
       <script type="application/ld+json">{JSON.stringify(jsonLd)}</script>
       {faqJsonLd && (
