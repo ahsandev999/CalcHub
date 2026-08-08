@@ -1,3 +1,4 @@
+import RelatedTools from '../components/ui/RelatedTools';
 import Breadcrumbs from '@/components/ui/Breadcrumbs';
 import { getBreadcrumbsForTool } from '@/lib/tools';
 import { useState } from 'react';
@@ -127,6 +128,8 @@ export default function CalorieCalculator() {
           slots={result !== null ? [{ label: 'Daily Calories', value: `${result} kcal` }] : []}
         />
       </Card>
+
+      <RelatedTools currentSlug="calorie-calculator" />
           {/* ── SEO Content Sections ── */}
       <div className="seo-content">
 

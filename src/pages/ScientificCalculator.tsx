@@ -1,3 +1,4 @@
+import RelatedTools from '../components/ui/RelatedTools';
 import Breadcrumbs from '@/components/ui/Breadcrumbs';
 import { getBreadcrumbsForTool } from '@/lib/tools';
 import { useState, useCallback, useEffect } from 'react';
@@ -352,6 +353,8 @@ export default function ScientificCalculator() {
           <strong>Keyboard Guide:</strong> Number keys, standard operations (+, -, *, /), parentheses, and decimals are mapped. Press <code>Enter</code> to evaluate, <code>Backspace</code> to delete, and <code>Ctrl+C</code> to copy result.
         </p>
       </Card>
+
+      <RelatedTools currentSlug="scientific-calculator" />
             {/* ── SEO Content Sections ── */}
       <div className="seo-content">
 

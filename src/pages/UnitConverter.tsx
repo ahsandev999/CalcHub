@@ -1,3 +1,4 @@
+import RelatedTools from '../components/ui/RelatedTools';
 import Breadcrumbs from '@/components/ui/Breadcrumbs';
 import { getBreadcrumbsForTool } from '@/lib/tools';
 import { useState, useMemo } from 'react';
@@ -166,6 +167,8 @@ export default function UnitConverter() {
           <p className="result-subtitle">{value} {units[fromUnit as keyof typeof units].label} = {result} {units[toUnit as keyof typeof units].label}</p>
         </div>
       </Card>
+
+      <RelatedTools currentSlug="unit-converter" />
           {/* ── SEO Content Sections ── */}
       <div className="seo-content">
 

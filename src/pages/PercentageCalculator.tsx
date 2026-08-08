@@ -1,3 +1,4 @@
+import RelatedTools from '../components/ui/RelatedTools';
 import Breadcrumbs from '@/components/ui/Breadcrumbs';
 import { getBreadcrumbsForTool } from '@/lib/tools';
 import { useState } from 'react';
@@ -119,6 +120,8 @@ export default function PercentageCalculator() {
         <button className="btn-demo-fill" onClick={fillExample}>Try Example</button>
         <ResultDisplay visible={!!result} highlight={result || undefined} slots={[]} />
       </Card>
+
+      <RelatedTools currentSlug="percentage-calculator" />
             {/* ── SEO Content Sections ── */}
       <div className="seo-content">
 

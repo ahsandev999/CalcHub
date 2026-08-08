@@ -1,3 +1,4 @@
+import RelatedTools from '../components/ui/RelatedTools';
 import Breadcrumbs from '@/components/ui/Breadcrumbs';
 import { getBreadcrumbsForTool } from '@/lib/tools';
 import { useState, useMemo } from 'react';
@@ -176,6 +177,8 @@ export default function ColorConverter() {
           <p className="result-subtitle">CSS: <code>{preview}</code></p>
         </div>
       </Card>
+
+      <RelatedTools currentSlug="color-converter" />
           {/* ── SEO Content Sections ── */}
       <div className="seo-content">
 

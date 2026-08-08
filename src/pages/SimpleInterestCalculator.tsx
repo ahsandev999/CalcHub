@@ -1,3 +1,4 @@
+import RelatedTools from '../components/ui/RelatedTools';
 import Breadcrumbs from '@/components/ui/Breadcrumbs';
 import { getBreadcrumbsForTool } from '@/lib/tools';
 import { useState } from 'react';
@@ -112,6 +113,8 @@ export default function SimpleInterestCalculator() {
           ] : []}
         />
       </Card>
+
+      <RelatedTools currentSlug="simple-interest-calculator" />
           {/* ── SEO Content Sections ── */}
       <div className="seo-content">
 

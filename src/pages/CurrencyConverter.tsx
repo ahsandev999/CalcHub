@@ -1,3 +1,4 @@
+import RelatedTools from '../components/ui/RelatedTools';
 import Breadcrumbs from '@/components/ui/Breadcrumbs';
 import { getBreadcrumbsForTool } from '@/lib/tools';
 import { useState, useEffect, useMemo, useCallback } from 'react';
@@ -333,6 +334,8 @@ export default function CurrencyConverter() {
           )}
         </AnimatePresence>
       </Card>
+
+      <RelatedTools currentSlug="currency-converter" />
           {/* ── SEO Content Sections ── */}
       <div className="seo-content">
 

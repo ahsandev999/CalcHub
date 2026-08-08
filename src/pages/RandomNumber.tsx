@@ -1,3 +1,4 @@
+import RelatedTools from '../components/ui/RelatedTools';
 import Breadcrumbs from '@/components/ui/Breadcrumbs';
 import { getBreadcrumbsForTool } from '@/lib/tools';
 import { useState } from 'react';
@@ -101,6 +102,8 @@ export default function RandomNumber() {
           </div>
         )}
       </Card>
+
+      <RelatedTools currentSlug="random-number" />
           {/* ── SEO Content Sections ── */}
       <div className="seo-content">
 

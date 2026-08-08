@@ -1,3 +1,4 @@
+import RelatedTools from '../components/ui/RelatedTools';
 import Breadcrumbs from '@/components/ui/Breadcrumbs';
 import { getBreadcrumbsForTool } from '@/lib/tools';
 import { useState } from 'react';
@@ -154,6 +155,8 @@ export default function FractionCalculator() {
           ] : []}
         />
       </Card>
+
+      <RelatedTools currentSlug="fraction-calculator" />
           {/* ── SEO Content Sections ── */}
       <div className="seo-content">
 

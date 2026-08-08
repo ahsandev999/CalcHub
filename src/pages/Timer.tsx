@@ -1,3 +1,4 @@
+import RelatedTools from '../components/ui/RelatedTools';
 import Breadcrumbs from '@/components/ui/Breadcrumbs';
 import { getBreadcrumbsForTool } from '@/lib/tools';
 import { useState, useRef, useEffect, useCallback } from 'react';
@@ -120,6 +121,8 @@ export default function Timer() {
         <Button onClick={() => applyCustom()} variant="secondary" style={{ width: '100%' }}>Set Custom Time</Button>
         <button className="btn-demo-fill" onClick={fillExample}>Try Example</button>
       </Card>
+
+      <RelatedTools currentSlug="timer" />
           {/* ── SEO Content Sections ── */}
       <div className="seo-content">
 

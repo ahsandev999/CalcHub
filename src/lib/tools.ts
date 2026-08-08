@@ -74,3 +74,26 @@ export function getBreadcrumbsForTool(slug: string) {
     ],
   };
 }
+
+export function getRelatedTools(currentSlug: string, limit = 3): Tool[] {
+  const currentTool = getToolBySlug(currentSlug);
+  if (!currentTool) {
+    return TOOLS.filter((t) => t.slug !== currentSlug).slice(0, limit);
+  }
+
+  // 1. Get tools in the same category
+  const sameCategory = TOOLS.filter(
+    (t) => t.category === currentTool.category && t.slug !== currentSlug
+  );
+
+  if (sameCategory.length >= limit) {
+    return sameCategory.slice(0, limit);
+  }
+
+  // 2. Fill remaining slots with featured or other tools
+  const fillOthers = TOOLS.filter(
+    (t) => t.slug !== currentSlug && !sameCategory.some((sc) => sc.slug === t.slug)
+  );
+
+  return [...sameCategory, ...fillOthers].slice(0, limit);
+}

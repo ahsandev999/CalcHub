@@ -1,3 +1,4 @@
+import RelatedTools from '../components/ui/RelatedTools';
 import Breadcrumbs from '@/components/ui/Breadcrumbs';
 import { getBreadcrumbsForTool } from '@/lib/tools';
 import { useState, useCallback } from 'react';
@@ -142,6 +143,8 @@ export default function PasswordGenerator() {
           Try Example
         </button>
       </Card>
+
+      <RelatedTools currentSlug="password-generator" />
           {/* ── SEO Content Sections ── */}
       <div className="seo-content">
 

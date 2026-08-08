@@ -1,3 +1,4 @@
+import RelatedTools from '../components/ui/RelatedTools';
 import Breadcrumbs from '@/components/ui/Breadcrumbs';
 import { getBreadcrumbsForTool } from '@/lib/tools';
 import { useState } from 'react';
@@ -142,6 +143,8 @@ export default function BodyFatCalculator() {
           slots={result ? [{ label: 'Body Fat Category', value: result.category }] : []}
         />
       </Card>
+
+      <RelatedTools currentSlug="body-fat-calculator" />
           {/* ── SEO Content Sections ── */}
       <div className="seo-content">
 

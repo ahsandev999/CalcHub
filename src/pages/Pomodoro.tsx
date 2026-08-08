@@ -1,3 +1,4 @@
+import RelatedTools from '../components/ui/RelatedTools';
 import Breadcrumbs from '@/components/ui/Breadcrumbs';
 import { getBreadcrumbsForTool } from '@/lib/tools';
 import { useState, useRef, useEffect, useCallback } from 'react';
@@ -146,6 +147,8 @@ export default function Pomodoro() {
           Try Example
         </button>
       </Card>
+
+      <RelatedTools currentSlug="pomodoro" />
           {/* ── SEO Content Sections ── */}
       <div className="seo-content">
 
