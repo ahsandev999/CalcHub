@@ -6,7 +6,7 @@ const DIST_DIR = path.join(ROOT_DIR, 'dist');
 const TOOLS_PATH = path.join(ROOT_DIR, 'src/lib/tools.ts');
 const VERCEL_CONFIG_PATH = path.join(ROOT_DIR, 'vercel.json');
 const LLMS_OUTPUT_PATH = path.join(ROOT_DIR, 'public', 'llms.txt');
-const STATIC_PAGES = ['/about', '/privacy', '/all-calculators'];
+const STATIC_PAGES = ['/about', '/privacy', '/all-calculators', '/watch/scientific-calculator'];
 const SITEMAP_HOST = 'https://calccode.com';
 
 function parseTools() {

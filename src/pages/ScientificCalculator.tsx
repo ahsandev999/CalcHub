@@ -12,7 +12,8 @@ import Button from '@/components/ui/Button';
 import { useToolTracking } from '@/hooks/useScroll';
 import { formatDisplay, formatResult, evaluate, pressKey } from '@/lib/calculators/scientific';
 import { addHistory } from '@/lib/storage';
-import { Copy, Check, History, RotateCcw, Delete } from 'lucide-react';
+import { Copy, Check, History, RotateCcw, Delete, Play } from 'lucide-react';
+import { Link } from 'react-router-dom';
 import '@/styles/components.css';
 
 const scientificCalculatorFAQ: FAQItem[] = [
@@ -171,7 +172,12 @@ export default function ScientificCalculator() {
       <Breadcrumbs items={breadcrumbs?.visual || []} />
 
       <div className="tool-header">
-        <div className="eyebrow">Math</div>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '10px', marginBottom: '8px' }}>
+          <div className="eyebrow" style={{ margin: 0 }}>Math</div>
+          <Link to="/watch/scientific-calculator" className="watch-video-link-badge" title="Watch 45s Scientific Calculator Video Tutorial">
+            <Play size={11} fill="currentColor" /> Watch Video Tutorial
+          </Link>
+        </div>
         <h1 className="page-title text-gradient">Scientific Calculator</h1>
         <p className="page-lede">Precision arithmetic, trigonometric functions, memory settings & live calculation history.</p>
       </div>
@@ -390,6 +396,19 @@ export default function ScientificCalculator() {
           <FAQAccordion items={scientificCalculatorFAQ} />
         </section>
 
+        {/* VIDEO TUTORIAL BANNER */}
+        <div className="tool-video-banner">
+          <div className="tool-video-banner-info">
+            <span className="tool-video-badge">🎬 45s VIDEO TUTORIAL</span>
+            <h3>Need help using trigonometric or memory functions?</h3>
+            <p>Watch our quick 45-second video guide to master all scientific calculator features.</p>
+          </div>
+          <Link to="/watch/scientific-calculator" className="tool-video-banner-btn">
+            Watch Video Guide &rarr;
+          </Link>
+        </div>
+
+        <RelatedTools currentSlug="scientific-calculator" />
       </div>
     </PageTransition>
   );

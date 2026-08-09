@@ -5,6 +5,15 @@ export interface BreadcrumbSchemaItem {
   path: string;
 }
 
+export interface VideoObjectSchema {
+  name: string;
+  description: string;
+  thumbnailUrl: string;
+  uploadDate: string;
+  contentUrl?: string;
+  embedUrl: string;
+}
+
 interface SEOProps {
   title: string;
   description: string;
@@ -13,12 +22,13 @@ interface SEOProps {
   image?: string;
   faqSchema?: { question: string; answer: string }[];
   breadcrumbSchema?: BreadcrumbSchemaItem[];
+  videoSchema?: VideoObjectSchema;
 }
 
 const SITE_URL = 'https://calccode.com';
 const SITE_NAME = 'CalcHub';
 
-export default function SEO({ title, description, path = '', type = 'website', image, faqSchema, breadcrumbSchema }: SEOProps) {
+export default function SEO({ title, description, path = '', type = 'website', image, faqSchema, breadcrumbSchema, videoSchema }: SEOProps) {
   const url = `${SITE_URL}${path}`;
   const fullTitle = path === '/' || path === '' ? title : `${title} — ${SITE_NAME}`;
   const imageUrl = image ? (image.startsWith('http') ? image : `${SITE_URL}${image}`) : `${SITE_URL}/og-image.png`;
@@ -58,6 +68,17 @@ export default function SEO({ title, description, path = '', type = 'website', i
     })),
   } : null;
 
+  const videoJsonLd = videoSchema ? {
+    '@context': 'https://schema.org',
+    '@type': 'VideoObject',
+    name: videoSchema.name,
+    description: videoSchema.description,
+    thumbnailUrl: videoSchema.thumbnailUrl,
+    uploadDate: videoSchema.uploadDate,
+    embedUrl: videoSchema.embedUrl,
+    contentUrl: videoSchema.contentUrl || videoSchema.embedUrl,
+  } : null;
+
   return (
     <Helmet>
       <title>{fullTitle}</title>
@@ -85,6 +106,9 @@ export default function SEO({ title, description, path = '', type = 'website', i
       )}
       {breadcrumbJsonLd && (
         <script type="application/ld+json">{JSON.stringify(breadcrumbJsonLd)}</script>
+      )}
+      {videoJsonLd && (
+        <script type="application/ld+json">{JSON.stringify(videoJsonLd)}</script>
       )}
     </Helmet>
   );

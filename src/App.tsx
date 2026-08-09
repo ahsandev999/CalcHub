@@ -44,6 +44,7 @@ const HoursCalculator = lazy(() => import('./pages/HoursCalculator'));
 const About = lazy(() => import('./pages/About'));
 const Privacy = lazy(() => import('./pages/Privacy'));
 const AllCalculators = lazy(() => import('./pages/AllCalculators'));
+const ScientificCalculatorWatch = lazy(() => import('./pages/ScientificCalculatorWatch'));
 
 
 export default function App() {
@@ -232,6 +233,7 @@ export default function App() {
             <Route path="/about" element={<About />} />
             <Route path="/privacy" element={<Privacy />} />
             <Route path="/all-calculators" element={<AllCalculators />} />
+            <Route path="/watch/scientific-calculator" element={<ScientificCalculatorWatch />} />
           </Routes>
         </Suspense>
         <PWAInstallPrompt />
