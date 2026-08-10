@@ -177,7 +177,7 @@ async function prerender() {
       const response = await page.goto(url, waitOptions);
       console.log(`  response status=${response ? response.status() : 'no response'}`);
 
-      const selector = 'h1.page-title, h1.hero-title';
+      const selector = 'h1.page-title, h1.hero-title, h1.watch-title, h1';
       console.log(`  waiting for selector ${selector}`);
       await page.waitForSelector(selector, { timeout: 120000 });
 

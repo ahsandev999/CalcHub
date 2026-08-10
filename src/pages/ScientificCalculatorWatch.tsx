@@ -27,8 +27,17 @@ export default function ScientificCalculatorWatch() {
           description: 'Learn how to use CalcHub\'s free online scientific calculator for trigonometry, logarithms, powers, roots, memory recall, and scientific notation.',
           thumbnailUrl: thumbnailUrl,
           uploadDate: '2026-08-09',
+          duration: 'PT0M45S',
           embedUrl: embedUrl,
           contentUrl: `https://youtu.be/${youtubeId}`,
+          clips: [
+            { name: 'Meet CalcHub — a smarter way to calculate.', startOffset: 0, endOffset: 4 },
+            { name: 'Calculate with precision, without the complexity.', startOffset: 4, endOffset: 8 },
+            { name: 'Go beyond basic math with powerful scientific functions.', startOffset: 8, endOffset: 12 },
+            { name: 'Everything you need — trigonometry, memory, history.', startOffset: 12, endOffset: 16 },
+            { name: 'Powerful, without the complexity — a clean interface.', startOffset: 16, endOffset: 20 },
+            { name: 'Calculate smarter. CalcHub — simplified.', startOffset: 20, endOffset: 45 },
+          ]
         }}
       />
 
@@ -43,7 +52,7 @@ export default function ScientificCalculatorWatch() {
 
         <div className="watch-page-header">
           <span className="watch-badge">VIDEO TUTORIAL</span>
-          <h1 className="watch-title">How to Use the Free Scientific Calculator</h1>
+          <h1 className="watch-title page-title">How to Use the Free Scientific Calculator</h1>
           <p className="watch-subtitle">
             Master trigonometric functions, logarithms, powers, roots, and memory recall in under 1 minute.
           </p>

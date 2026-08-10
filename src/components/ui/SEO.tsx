@@ -5,13 +5,22 @@ export interface BreadcrumbSchemaItem {
   path: string;
 }
 
+export interface VideoObjectClip {
+  name: string;
+  startOffset: number;
+  endOffset?: number;
+  url?: string;
+}
+
 export interface VideoObjectSchema {
   name: string;
   description: string;
   thumbnailUrl: string;
   uploadDate: string;
+  duration?: string;
   contentUrl?: string;
   embedUrl: string;
+  clips?: VideoObjectClip[];
 }
 
 interface SEOProps {
@@ -75,8 +84,18 @@ export default function SEO({ title, description, path = '', type = 'website', i
     description: videoSchema.description,
     thumbnailUrl: videoSchema.thumbnailUrl,
     uploadDate: videoSchema.uploadDate,
+    duration: videoSchema.duration || 'PT0M45S',
     embedUrl: videoSchema.embedUrl,
     contentUrl: videoSchema.contentUrl || videoSchema.embedUrl,
+    ...(videoSchema.clips && videoSchema.clips.length > 0 ? {
+      hasPart: videoSchema.clips.map(clip => ({
+        '@type': 'Clip',
+        name: clip.name,
+        startOffset: clip.startOffset,
+        endOffset: clip.endOffset,
+        url: clip.url || `${videoSchema.contentUrl || videoSchema.embedUrl}?t=${clip.startOffset}`
+      }))
+    } : {})
   } : null;
 
   return (
@@ -99,6 +118,17 @@ export default function SEO({ title, description, path = '', type = 'website', i
       <meta name="twitter:title" content={fullTitle} />
       <meta name="twitter:description" content={description} />
       <meta name="twitter:image" content={imageUrl} />
+
+      {videoSchema && (
+        <>
+          <meta name="thumbnail" content={videoSchema.thumbnailUrl} />
+          <meta property="og:video" content={videoSchema.embedUrl} />
+          <meta property="og:video:secure_url" content={videoSchema.embedUrl} />
+          <meta property="og:video:type" content="text/html" />
+          <meta property="og:video:width" content="1280" />
+          <meta property="og:video:height" content="720" />
+        </>
+      )}
 
       <script type="application/ld+json">{JSON.stringify(jsonLd)}</script>
       {faqJsonLd && (
