@@ -84,7 +84,7 @@ export default function SEO({ title, description, path = '', type = 'website', i
     description: videoSchema.description,
     thumbnailUrl: videoSchema.thumbnailUrl,
     uploadDate: videoSchema.uploadDate,
-    duration: videoSchema.duration || 'PT0M45S',
+    duration: videoSchema.duration || 'PT0M26S',
     embedUrl: videoSchema.embedUrl,
     contentUrl: videoSchema.contentUrl || videoSchema.embedUrl,
     ...(videoSchema.clips && videoSchema.clips.length > 0 ? {
